@@ -1,0 +1,228 @@
+'use client'
+
+import { Image, LogOut, Settings, User } from 'lucide-react'
+import { ReactNode, useRef } from 'react'
+import { useForm } from 'react-hook-form'
+import CustomInput from '~/components/custom-input'
+import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar'
+import { Button } from '~/components/ui/button'
+import { Form, FormField } from '~/components/ui/form'
+import { Switch } from '~/components/ui/switch'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs'
+import { cn } from '~/lib/utils'
+
+enum Tab {
+  Profile = 'PROFILE',
+  Access = 'ACCESS'
+}
+
+const tabs = [
+  {
+    key: Tab.Profile,
+    label: 'My Profile',
+    icon: <User />
+  },
+  {
+    key: Tab.Access,
+    label: 'Manage Access',
+    icon: <Settings />
+  }
+]
+
+function ActionTabs() {
+  return (
+    <Tabs defaultValue={Tab.Access} className='flex gap-10'>
+      <TabsList className='flex h-fit w-full max-w-[320px] flex-col rounded-[10px] bg-[#292C2D] px-5 py-[30px] text-white'>
+        {tabs.map((tab) => (
+          <TabsTrigger
+            key={tab.key}
+            className='w-full justify-start gap-4 px-10 py-[14px] text-base data-[state=active]:bg-[#FAC1D9]'
+            value={tab.key}
+          >
+            {tab.icon}
+            <span>{tab.label}</span>
+          </TabsTrigger>
+        ))}
+
+        <Button
+          className='flex h-auto w-full items-center justify-start gap-4 border border-transparent bg-transparent px-10 py-[14px] hover:bg-transparent active:border-white'
+          value='logout'
+        >
+          <LogOut />
+          <span>Logout</span>
+        </Button>
+      </TabsList>
+      <LayoutTabContent tab={Tab.Profile}>
+        <Profile />
+      </LayoutTabContent>
+      <LayoutTabContent tab={Tab.Access}>
+        <ManageAccess />
+      </LayoutTabContent>
+    </Tabs>
+  )
+}
+
+function LayoutTabContent({ children, className, tab }: { children: ReactNode; className?: string; tab: Tab }) {
+  return (
+    <TabsContent
+      value={tab}
+      className={cn('mt-0 w-full rounded-[10px] bg-[#292C2D] px-10 pb-20 pt-10 text-white', className)}
+    >
+      {children}
+    </TabsContent>
+  )
+}
+
+function Profile() {
+  const ref = useRef<HTMLInputElement | null>(null)
+  const form = useForm({
+    defaultValues: {
+      name: '',
+      email: '',
+      address: '',
+      newPassword: '',
+      confirmPassword: ''
+    }
+  })
+  const openFileDialog = () => {
+    ref.current?.click()
+  }
+  return (
+    <div>
+      <h3 className='text-xl'>Personal Information</h3>
+      <div className='mb-8 flex items-center gap-6'>
+        <div className='relative mt-8 h-fit w-fit'>
+          <Avatar className='relative h-[140px] w-[140px]'>
+            <AvatarImage src='https://github.com/shadcn.png' alt='avatar' />
+            <AvatarFallback className='text-black'>LQV</AvatarFallback>
+          </Avatar>
+          <button className='absolute bottom-0 right-5 z-10' onClick={openFileDialog}>
+            <Image className='size-5' />
+            <input ref={ref} type='file' accept='image/*' hidden />
+          </button>
+        </div>
+        <div>
+          <p className='text-2xl font-medium'>John Doe</p>
+          <span className='text-[#FAC1D9]'>Manager</span>
+        </div>
+      </div>
+      <div className='space-y-5'>
+        <Form {...form}>
+          <FormField
+            control={form.control}
+            name='email'
+            render={({ field }) => <CustomInput field={field} label='Email' />}
+          />
+          <FormField
+            control={form.control}
+            name='name'
+            render={({ field }) => <CustomInput label='Name' field={field} />}
+          />
+          <FormField
+            control={form.control}
+            name='address'
+            render={({ field }) => <CustomInput label='Address' field={field} />}
+          />
+          <div className='flex w-full items-center gap-5'>
+            <FormField
+              control={form.control}
+              name='newPassword'
+              render={({ field }) => (
+                <CustomInput className='flex-grow' label='New Password' type='password' field={field} />
+              )}
+            />
+            <FormField
+              control={form.control}
+              name='confirmPassword'
+              render={({ field }) => (
+                <CustomInput className='flex-grow' label='Confirm Password' type='password' field={field} />
+              )}
+            />
+          </div>
+          <div className='!mt-9 flex items-center justify-end gap-5'>
+            <Button className='h-auto bg-transparent px-12 py-3 text-base underline transition-all hover:bg-transparent hover:text-[#FAC1D9]'>
+              Discard Changes
+            </Button>
+            <Button className='h-auto bg-[#FAC1D9] px-12 py-3 text-base text-black transition-all hover:bg-[#FAC1D9] hover:shadow-md hover:shadow-[#FAC1D9]'>
+              Save Changes
+            </Button>
+          </div>
+        </Form>
+      </div>
+    </div>
+  )
+}
+
+const permissions = [
+  {
+    label: 'Dashboard',
+    key: 'dashboard'
+  },
+  {
+    label: 'Reports',
+    key: 'reports'
+  },
+  {
+    label: 'Inventory',
+    key: 'inventory'
+  },
+  {
+    label: 'Orders',
+    key: 'orders'
+  },
+  {
+    label: 'Customers',
+    key: 'customers'
+  },
+  {
+    label: 'Settings',
+    key: 'settings'
+  }
+]
+
+function ManageAccess() {
+  return (
+    <div>
+      <div className='border-b border-b-slate-500'>
+        <div className='flex items-start gap-8'>
+          <div>
+            <h3 className='text-xl font-medium'>LOUIS</h3>
+            <span className='text-[#FAC1D9]'>louis@gmail.com</span>
+          </div>
+          <span className='inline-block rounded-sm bg-[#FAC1D9] px-5 py-1 text-black'>Admin</span>
+        </div>
+        <ul className='my-8 flex flex-wrap items-center gap-10'>
+          {permissions.map(({ key, label }) => (
+            <li className='flex flex-grow flex-col justify-center gap-4' key={key}>
+              <span>{label}</span>
+              <Switch
+                checked
+                disabled
+                className='data-[state=checked]:bg-[#FAC1D9] data-[state=unchecked]:bg-[#3D4142]'
+              />
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div className='border-b border-b-slate-500'>
+        <div className='mt-6 flex items-start gap-8'>
+          <div>
+            <h3 className='text-xl font-medium'>Le Vu</h3>
+            <span className='text-[#FAC1D9]'>levu@gmail.com</span>
+          </div>
+          <span className='inline-block rounded-sm bg-[#FAC1D9] px-5 py-1 text-black'>Admin</span>
+        </div>
+        <ul className='my-8 flex flex-wrap items-center gap-10'>
+          {permissions.map(({ key, label }) => (
+            <li className='flex flex-grow flex-col justify-center gap-4' key={key}>
+              <span>{label}</span>
+              <Switch disabled className='data-[state=checked]:bg-[#FAC1D9] data-[state=unchecked]:bg-[#3D4142]' />
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  )
+}
+
+export default ActionTabs
