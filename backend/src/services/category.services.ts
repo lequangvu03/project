@@ -2,8 +2,8 @@ import { ObjectId } from 'mongodb'
 import databaseService from '~/services/database.services'
 
 class CategoryService {
-  async checkCategoryExist(category_id: string) {
-    const category = await databaseService.categories.findOne({ _id: new ObjectId(category_id) })
+  async checkCategoryExist(categoryName: string) {
+    const category = await databaseService.categories.findOne({ name: categoryName })
     return category
   }
 

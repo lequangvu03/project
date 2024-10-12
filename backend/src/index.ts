@@ -8,6 +8,8 @@ import cors from 'cors'
 import { tableRouter } from '~/routes/table.routes'
 import { menuRouter } from '~/routes/menu.routes'
 import { ordersRouter } from './routes/orders.routes'
+import { variantRouter } from '~/routes/variant.routes'
+import { categoryRouter } from '~/routes/category.routes'
 
 databaseService.connect().then(() => {
   databaseService.indexUsers()
@@ -19,9 +21,11 @@ const port = envConfig.port
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use('/api/auth', authRouter)
-app.use('./api/table', tableRouter)
-app.use('./api/menu', menuRouter)
-app.use('/api/order/', ordersRouter)
+app.use('/api/table', tableRouter)
+app.use('/api/menu', menuRouter)
+app.use('/api/order', ordersRouter)
+app.use('/api/variant', variantRouter)
+app.use('/api/category', categoryRouter)
 app.use(defaultErrorHandler)
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)

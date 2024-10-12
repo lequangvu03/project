@@ -5,7 +5,7 @@ import {
   getAllMenuController,
   updateMenuItemController
 } from '~/controllers/menu.controllers'
-import { accessTokenValidator } from '~/middlewares/auth.middlewares'
+import { accessTokenValidator, isAdmin } from '~/middlewares/auth.middlewares'
 import { addMenuItemValidator, handleRequest } from '~/middlewares/menu.middlewares'
 import { wrapRequestHandler } from '~/utils/handlers'
 
@@ -31,6 +31,7 @@ menuRouter.get('/', accessTokenValidator, wrapRequestHandler(getAllMenuControlle
 menuRouter.post(
   '/',
   accessTokenValidator,
+  isAdmin,
   handleRequest,
   addMenuItemValidator,
   wrapRequestHandler(addMenuItemController)
@@ -44,7 +45,7 @@ menuRouter.post(
  * description: Update a menu item
  * response: {message: string, result: MenuItemType}
  * */
-menuRouter.put('/:id', accessTokenValidator, handleRequest, wrapRequestHandler(updateMenuItemController))
+menuRouter.put('/:id', accessTokenValidator, isAdmin, handleRequest, wrapRequestHandler(updateMenuItemController))
 
 /**
  * path: api/menu/
@@ -54,4 +55,4 @@ menuRouter.put('/:id', accessTokenValidator, handleRequest, wrapRequestHandler(u
  * description: Delete a menu item
  * response: {message: string, result: MenuItemType}
  * */
-menuRouter.delete('/:id', accessTokenValidator, wrapRequestHandler(deleteMenuItemController))
+menuRouter.delete('/:id', accessTokenValidator, isAdmin, wrapRequestHandler(deleteMenuItemController))

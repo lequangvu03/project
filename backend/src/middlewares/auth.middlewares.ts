@@ -1,9 +1,9 @@
-import { Request } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import { checkSchema, ParamSchema } from 'express-validator'
 import { JsonWebTokenError } from 'jsonwebtoken'
 import { capitalize } from 'lodash'
 import { ObjectId } from 'mongodb'
-import { ForgotPasswordVerifyStatus, UserVerifyStatus } from '~/constants/enums'
+import { ForgotPasswordVerifyStatus, RoleType, UserVerifyStatus } from '~/constants/enums'
 import HTTP_STATUS from '~/constants/httpStatus'
 import { AUTH_MESSAGES } from '~/constants/messages'
 import { ErrorWithStatus } from '~/models/Errors'
@@ -71,15 +71,21 @@ const confirmPasswordSchema: ParamSchema = {
     }
   }
 }
-const dateOfBirthSchema: ParamSchema = {
-  isISO8601: {
-    options: {
-      strict: true,
-      strictSeparator: true
-    },
-    errorMessage: AUTH_MESSAGES.DATE_OF_BIRTH_MUST_BE_ISO8601
+export const isAdmin = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { user } = req
+    if (user?.role !== RoleType.Admin) {
+      throw new ErrorWithStatus({
+        message: AUTH_MESSAGES.PERMISSION_DENIED,
+        status: HTTP_STATUS.FORBIDDEN
+      })
+    }
+    next()
+  } catch (error) {
+    next(error)
   }
 }
+
 export const registerValidator = validate(
   checkSchema(
     {
@@ -185,6 +191,7 @@ export const accessTokenValidator = validate(
                 secretOrPublicKey: process.env.JWT_SECRET_ACCESS_TOKEN as string
               })
               ;(req as Request).decoded_authorization = decoded_authorization
+              req.user = await databaseService.users.findOne({ _id: new ObjectId(decoded_authorization.user_id) })
             } catch (error) {
               throw new ErrorWithStatus({
                 message: capitalize((error as JsonWebTokenError).message),
