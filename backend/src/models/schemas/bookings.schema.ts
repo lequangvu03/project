@@ -9,7 +9,7 @@ interface BookingType {
   details: string
 }
 
-export class Booking {
+export default class Booking {
   booking_id: ObjectId
   customer_name: string
   customer_phone: string

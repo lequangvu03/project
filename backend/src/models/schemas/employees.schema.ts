@@ -8,7 +8,7 @@ interface EmployeeType {
   contact_info: string
 }
 
-export class Employee {
+export default class Employee {
   employee_id: ObjectId
   name: string
   position: string

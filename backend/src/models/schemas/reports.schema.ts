@@ -18,7 +18,7 @@ interface ReportType {
   updated_at: Date
 }
 
-export class Report {
+export default class Report {
   report_id: ObjectId
   report_type: string
   start_date: Date

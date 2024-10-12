@@ -11,7 +11,7 @@ interface InventoryItemType {
   perishable: boolean
 }
 
-export class InventoryItem {
+export default class InventoryItem {
   item_id: ObjectId
   name: string
   category_id: ObjectId

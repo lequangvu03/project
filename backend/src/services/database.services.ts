@@ -3,7 +3,7 @@ import { Collection, Db, MongoClient } from 'mongodb'
 import { envConfig } from '~/constants/config'
 import Category from '~/models/schemas/categorys.schema'
 import MenuItem from '~/models/schemas/menuItems.schema'
-import MenuItemVariant from '~/models/schemas/menuItemVariant.schema'
+import OrderItem from '~/models/schemas/orderItems.schema'
 import Order from '~/models/schemas/orders.schema'
 import Otp from '~/models/schemas/otps.chema'
 import RefreshToken from '~/models/schemas/refreshtoken.schema'
@@ -67,11 +67,11 @@ class DatabaseService {
   get categories(): Collection<Category> {
     return this.db.collection('categories')
   }
-  get variants(): Collection<MenuItemVariant> {
-    return this.db.collection('variants')
-  }
   get orders(): Collection<Order> {
     return this.db.collection('orders')
+  }
+  get orderItems(): Collection<OrderItem> {
+    return this.db.collection('order_items')
   }
 }
 
