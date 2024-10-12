@@ -24,7 +24,6 @@ app.use('/api/auth', authRouter)
 app.use('/api/table', tableRouter)
 app.use('/api/menu', menuRouter)
 app.use('/api/order', ordersRouter)
-app.use('/api/variant', variantRouter)
 app.use('/api/category', categoryRouter)
 app.use(defaultErrorHandler)
 app.listen(port, () => {

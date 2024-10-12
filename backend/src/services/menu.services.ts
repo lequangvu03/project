@@ -27,50 +27,42 @@ class MenuService {
   }
   async addMenuItem({ data, dir }: { data: MenuItem; dir: string }) {
     data.image = dir
+    const variantIds = data.variant_ids.map((id) => new ObjectId(id))
     const newMenuItem = new MenuItem({
+      item_id: new ObjectId(),
       name: data.name,
       description: data.description,
-      base_price: +data.base_price,
+      price: +data.price,
       image: data.image,
-      category_id: data.category_id,
-      variant_ids: data.variant_ids,
-      count: +data.count
+      category_id: new ObjectId(data.category_id),
+      variant_ids: variantIds,
+      availability: data.availability,
+      stock: data.stock
     })
     await databaseService.menuItems.insertOne(newMenuItem)
     return newMenuItem
   }
   async updateMenuItem({ menuItemId, data, dir }: { menuItemId: string; data: MenuItem; dir: string }) {
-    if (dir == '') {
-      await databaseService.menuItems.updateOne(
-        { _id: new ObjectId(menuItemId) },
-        {
-          $set: {
-            name: data.name,
-            description: data.description,
-            base_price: +data.base_price,
-            category_id: new ObjectId(data.category_id),
-            variant_ids: data.variant_ids,
-            updated_at: Date.now()
-          }
-        }
-      )
-    } else {
-      await databaseService.menuItems.updateOne(
-        { _id: new ObjectId(menuItemId) },
-        {
-          $set: {
-            name: data.name,
-            description: data.description,
-            base_price: +data.base_price,
-            category_id: new ObjectId(data.category_id),
-            variant_ids: data.variant_ids,
-            image: dir,
-            updated_at: Date.now()
-          }
-        }
-      )
+    const variantIds = data.variant_ids.map((id) => new ObjectId(id))
+
+    const updateData: any = {
+      name: data.name,
+      description: data.description,
+      price: +data.price,
+      category_id: new ObjectId(data.category_id),
+      variant_ids: variantIds, 
+      updated_at: Date.now()
     }
+
+    // Nếu có đường dẫn ảnh mới, thêm vào đối tượng cập nhật
+    if (dir !== '') {
+      updateData.image = dir
+    }
+
+    // Thực hiện cập nhật trong cơ sở dữ liệu
+    await databaseService.menuItems.updateOne({ _id: new ObjectId(menuItemId) }, { $set: updateData })
   }
+
   async deleteMenuItem(menuItemId: string) {
     await databaseService.menuItems.deleteOne({ _id: new ObjectId(menuItemId) })
   }

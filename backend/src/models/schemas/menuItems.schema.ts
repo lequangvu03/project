@@ -1,4 +1,4 @@
-import { ObjectId } from "mongodb"
+import { ObjectId } from 'mongodb'
 
 interface MenuItemType {
   item_id: ObjectId
@@ -10,9 +10,11 @@ interface MenuItemType {
   stock: number
   variant_ids: ObjectId[]
   image?: string
+  created_at?: number
+  updated_at?: number
 }
 
-export class MenuItem {
+export default class MenuItem {
   item_id: ObjectId
   name: string
   description: string
@@ -22,8 +24,11 @@ export class MenuItem {
   stock: number
   variant_ids: ObjectId[]
   image?: string
+  created_at?: number
+  updated_at?: number
 
   constructor(menuItem: MenuItemType) {
+    const date = Date.now()
     this.item_id = menuItem.item_id
     this.name = menuItem.name
     this.description = menuItem.description
@@ -33,5 +38,7 @@ export class MenuItem {
     this.stock = menuItem.stock
     this.variant_ids = menuItem.variant_ids
     this.image = menuItem.image || ''
+    this.created_at = menuItem.created_at || date
+    this.updated_at = menuItem.updated_at || date
   }
 }

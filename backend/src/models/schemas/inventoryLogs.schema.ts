@@ -8,7 +8,7 @@ interface InventoryLogType {
   change_date: Date
 }
 
-export class InventoryLog {
+export default class InventoryLog {
   log_id: ObjectId
   item_id: ObjectId
   change_type: string
