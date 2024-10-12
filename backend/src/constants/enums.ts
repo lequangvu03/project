@@ -16,7 +16,7 @@ export enum TokenType {
 }
 export enum RoleType {
   Admin,
-  User
+  Employee
 }
 export enum TableStatus {
   Empty,

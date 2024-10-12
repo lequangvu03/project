@@ -60,35 +60,38 @@ export const addMenuItemValidator = validate(
         }
       },
       category_id: {
-        custom: {
-          options: async (value) => {
-            if (!value) {
-              throw new Error(MENU_MESSAGES.CATEGORY_ID_IS_REQUIRED)
-            }
-            const isExistCategory = await categoryService.checkCategoryExist(value)
-            if (!isExistCategory) {
-              throw new Error(MENU_MESSAGES.CATEGORY_NOT_EXIST)
-            }
-            return true
-          }
+        isString: {
+          errorMessage: MENU_MESSAGES.CATEGORY_ID_MUST_BE_A_STRING
         }
+        // custom: {
+        //   options: async (value) => {
+        //     if (!value) {
+        //       throw new Error(MENU_MESSAGES.CATEGORY_ID_IS_REQUIRED)
+        //     }
+        //     const isExistCategory = await categoryService.checkCategoryExist(value)
+        //     if (!isExistCategory) {
+        //       throw new Error(MENU_MESSAGES.CATEGORY_NOT_EXIST)
+        //     }
+        //     return true
+        //   }
+        // }
       },
-      variant_ids: {
+      variant: {
         isArray: {
           errorMessage: MENU_MESSAGES.VARIANT_IDS_MUST_BE_AN_ARRAY
-        },
-        custom: {
-          options: (value) => {
-            if (value.length > 0) {
-              for (const variantId of value) {
-                if (!variantId) {
-                  throw new Error(MENU_MESSAGES.VARIANT_IDS_MUST_BE_AN_ARRAY)
-                }
-                const isExistVariant = variantService.checkVariantExist(variantId)
-              }
-            }
-          }
         }
+        // custom: {
+        //   options: (value) => {
+        //     if (value.length > 0) {
+        //       for (const variantId of value) {
+        //         if (!variantId) {
+        //           throw new Error(MENU_MESSAGES.VARIANT_IDS_MUST_BE_AN_ARRAY)
+        //         }
+        //         const isExistVariant = variantService.checkVariantExist(variantId)
+        //       }
+        //     }
+        //   }
+        // }
       }
     },
     ['body']
