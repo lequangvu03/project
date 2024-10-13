@@ -10,17 +10,16 @@ import menuService from '~/services/menu.services'
 export const handleRequest = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const form = formidable({
-      uploadDir: UPLOAD_IMAGE_TEMP_DIR,
       maxFiles: 1,
       keepExtensions: true,
-      maxFileSize: 3000 * 1024 // 300KB
-      // filter: function ({ name, originalFilename, mimetype }) {
-      //   const valid = name === 'image' && Boolean(mimetype?.startsWith('image/'))
-      //   if (!valid) {
-      //     form.emit('error' as any, new Error('File type is not valid') as any)
-      //   }
-      //   return valid
-      // }
+      maxFileSize: 3000 * 1024, // 300KB
+      filter: function ({ name, originalFilename, mimetype }) {
+        const valid = name === 'image' && Boolean(mimetype?.startsWith('image/'))
+        if (!valid) {
+          form.emit('error' as any, new Error('File type is not valid') as any)
+        }
+        return valid
+      }
     })
     const result = await new Promise<any>((resolve, reject) => {
       form.parse(req, (err, fields, files) => {
