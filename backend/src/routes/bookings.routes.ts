@@ -30,7 +30,7 @@ bookingRouter.get('/', accessTokenValidator, wrapRequestHandler(getAllBookingsCo
  * */
 
 // TODO: addBookingValidator
-bookingRouter.post('/', wrapRequestHandler(addBookingController))
+bookingRouter.post('/', accessTokenValidator, wrapRequestHandler(addBookingController))
 
 /**
  * path: api/table/
