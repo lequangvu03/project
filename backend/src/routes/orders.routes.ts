@@ -6,7 +6,7 @@ import {
   deleteOrderController
 } from '~/controllers/order.controllers'
 import { accessTokenValidator, isAdmin } from '~/middlewares/auth.middlewares'
-import { addOrderValidator, updateOrderValidator } from '~/middlewares/order.middlewares'
+import { addOrderValidator, deleteOrderValidator, updateOrderValidator } from '~/middlewares/order.middlewares'
 import { wrapRequestHandler } from '~/utils/handlers'
 
 export const ordersRouter = Router()
@@ -64,13 +64,7 @@ ordersRouter.post('/', accessTokenValidator, isAdmin, addOrderValidator, wrapReq
  *
  * Note: Only fields provided will be updated. If a field is omitted, it won't be changed.
  */
-ordersRouter.put(
-  '/:orderId',
-  accessTokenValidator,
-  isAdmin,
-  updateOrderValidator,
-  wrapRequestHandler(updateOrderController)
-)
+ordersRouter.put('/:id', accessTokenValidator, isAdmin, updateOrderValidator, wrapRequestHandler(updateOrderController))
 
 /**
  * path: /orders/:orderId
@@ -84,4 +78,10 @@ ordersRouter.put(
  * Response:
  * - { deleted: boolean } indicates whether the deletion was successful.
  */
-ordersRouter.delete('/:orderId', accessTokenValidator, isAdmin, wrapRequestHandler(deleteOrderController))
+ordersRouter.delete(
+  '/:id',
+  accessTokenValidator,
+  isAdmin,
+  deleteOrderValidator,
+  wrapRequestHandler(deleteOrderController)
+)

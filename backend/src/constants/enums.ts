@@ -22,3 +22,12 @@ export enum TableStatus {
   Empty,
   Busy
 }
+export enum OrderStatus {
+  Pending,
+  Completed,
+  Cancelled
+}
+export enum PaymentStatus {
+  Unpaid,
+  Paid
+}

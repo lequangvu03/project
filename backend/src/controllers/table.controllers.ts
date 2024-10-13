@@ -11,7 +11,8 @@ export const addTableController = async (req: Request, res: Response, error: Nex
   return res.status(201).json({ message: TABLE_MESSAGES.ADD_TABLE_SUCCESS, result })
 }
 export const updateTableController = async (req: Request, res: Response, error: NextFunction) => {
-  const result = await tableService.updateTable(req.params.id, req.body.seat_number)
+  const data = req.body
+  const result = await tableService.updateTable(req.params.id, data)
   return res.status(200).json({ message: TABLE_MESSAGES.UPDATE_TABLE_SUCCESS, result })
 }
 export const deleteTableController = async (req: Request, res: Response, error: NextFunction) => {

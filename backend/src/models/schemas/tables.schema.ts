@@ -1,7 +1,7 @@
 import { ObjectId } from 'mongodb'
 
 interface TableType {
-  table_id: ObjectId
+  _id: ObjectId
   table_number: number
   status: number
   capacity: number
@@ -11,7 +11,7 @@ interface TableType {
 }
 
 export default class Table {
-  table_id: ObjectId
+  _id: ObjectId
   table_number: number
   status: number
   capacity: number
@@ -21,7 +21,7 @@ export default class Table {
 
   constructor(table: TableType) {
     const date = Date.now()
-    this.table_id = table.table_id
+    this._id = table._id
     this.table_number = table.table_number
     this.status = table.status
     this.capacity = table.capacity

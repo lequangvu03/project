@@ -14,7 +14,7 @@ class TableService {
   }
   async addTable(tableNumber: number, capacity: number, location: string) {
     const table = await databaseService.tables.insertOne({
-      table_id: new ObjectId(),
+      _id: new ObjectId(),
       table_number: tableNumber,
       status: TableStatus.Empty,
       capacity: capacity,
@@ -22,12 +22,12 @@ class TableService {
     })
     return table
   }
-  async updateTable(id: string, seatNumber: number) {
+  async updateTable(id: string, data: any) {
     const table = await databaseService.tables.updateOne(
       { _id: new ObjectId(id) },
       {
         $set: {
-          seat_number: seatNumber,
+          ...data,
           updated_at: Date.now()
         }
       }
