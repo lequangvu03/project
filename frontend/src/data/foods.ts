@@ -3,12 +3,6 @@ import { orderIcon } from "~/assets/images"
 
 export const foods = [
     {
-        id: 1,
-        icon: orderIcon.pizza,
-        name: "Pizza",
-        amount: "20"
-    },
-    {
         id: 2,
         icon: orderIcon.burger,
         name: "Burger",
