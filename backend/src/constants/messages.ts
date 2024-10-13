@@ -59,7 +59,13 @@ export const TABLE_MESSAGES = {
   GET_ALL_TABLE_SUCCESS: 'Get all table success',
   ADD_TABLE_SUCCESS: 'Add table success',
   UPDATE_TABLE_SUCCESS: 'Update table success',
-  DELETE_TABLE_SUCCESS: 'Delete table success'
+  DELETE_TABLE_SUCCESS: 'Delete table success',
+  TABLE_STATUS_MUST_BE_0_OR_1: 'Table status must be 0 or 1',
+  TABLE_CAPACITY_MUST_BE_NUMBER: 'Table capacity must be number',
+  TABLE_CAPACITY_MUST_BE_POSITIVE: 'Table capacity must be positive',
+  TABLE_LOCATION_MUST_BE_STRING: 'Table location must be string',
+  TABLE_LOCATION_MUST_BE_BETWEEN_1_AND_100_CHARACTERS: 'Table location must be between 1 and 100 characters',
+  TABLE_IS_NOT_FOUND: 'Table is not found'
 } as const
 export const MENU_MESSAGES = {
   GET_ALL_MENU_ITEM_SUCCESS: 'Get menu success',
@@ -126,7 +132,10 @@ export const ORDER_MESSAGE = {
   PAYMENT_STATUS_IS_REQUIRED: 'Payment status is required',
   ORDER_STATUS_MUST_BE_A_STRING: 'Order status must be a string',
   ORDER_STATUS_MUST_BE_VALID: 'Order status must be valid',
-  ORDER_STATUS_IS_REQUIRED: 'Order status is required'
+  ORDER_STATUS_IS_REQUIRED: 'Order status is required',
+  PAYMENT_STATUS_MUST_BE_A_NUMBER: 'Payment status must be a number',
+  ORDER_STATUS_MUST_BE_A_NUMBER: 'Order status must be a number',
+  ORDER_IS_NOT_FOUND: 'Order is not found',
 }
 export const BOOKING_MESSAGE = {
   GET_ALL_BOOKING_SUCCESS: 'Get all bookings success',

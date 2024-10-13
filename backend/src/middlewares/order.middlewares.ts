@@ -1,5 +1,9 @@
 import { checkSchema } from 'express-validator'
-import { ORDER_MESSAGE } from '~/constants/messages'
+import { ObjectId } from 'mongodb'
+import { ORDER_MESSAGE, TABLE_MESSAGES } from '~/constants/messages'
+import Order from '~/models/schemas/orders.schema'
+import databaseService from '~/services/database.services'
+import tableService from '~/services/table.services'
 import { validate } from '~/utils/validation'
 
 /**
@@ -14,6 +18,15 @@ export const addOrderValidator = validate(
         },
         notEmpty: {
           errorMessage: ORDER_MESSAGE.TABLE_NUMBER_IS_REQUIRED
+        },
+        custom: {
+          options: async (value) => {
+            const tableExists = await tableService.checkTableExist(value)
+            if (!tableExists) {
+              throw new Error(TABLE_MESSAGES.TABLE_IS_NOT_FOUND)
+            }
+            return true
+          }
         }
       },
       order_items: {
@@ -41,30 +54,6 @@ export const addOrderValidator = validate(
         notEmpty: {
           errorMessage: ORDER_MESSAGE.TOTAL_PRICE_IS_REQUIRED
         }
-      },
-      payment_status: {
-        isString: {
-          errorMessage: ORDER_MESSAGE.PAYMENT_STATUS_MUST_BE_A_STRING
-        },
-        isIn: {
-          options: [['paid', 'unpaid']],
-          errorMessage: ORDER_MESSAGE.PAYMENT_STATUS_MUST_BE_VALID
-        },
-        notEmpty: {
-          errorMessage: ORDER_MESSAGE.PAYMENT_STATUS_IS_REQUIRED
-        }
-      },
-      order_status: {
-        isString: {
-          errorMessage: ORDER_MESSAGE.ORDER_STATUS_MUST_BE_A_STRING
-        },
-        isIn: {
-          options: [['pending', 'completed', 'cancelled']],
-          errorMessage: ORDER_MESSAGE.ORDER_STATUS_MUST_BE_VALID
-        },
-        notEmpty: {
-          errorMessage: ORDER_MESSAGE.ORDER_STATUS_IS_REQUIRED
-        }
       }
     },
     ['body']
@@ -81,6 +70,15 @@ export const updateOrderValidator = validate(
       table_number: {
         isNumeric: {
           errorMessage: ORDER_MESSAGE.TABLE_NUMBER_MUST_BE_A_NUMBER
+        },
+        custom: {
+          options: async (value) => {
+            const tableExists = await tableService.checkTableExist(value)
+            if (!tableExists) {
+              throw new Error(TABLE_MESSAGES.TABLE_IS_NOT_FOUND)
+            }
+            return true
+          }
         },
         optional: true
       },
@@ -110,26 +108,43 @@ export const updateOrderValidator = validate(
         optional: true
       },
       payment_status: {
-        isString: {
-          errorMessage: ORDER_MESSAGE.PAYMENT_STATUS_MUST_BE_A_STRING
+        isNumeric: {
+          errorMessage: ORDER_MESSAGE.PAYMENT_STATUS_MUST_BE_A_NUMBER
         },
         isIn: {
-          options: [['paid', 'unpaid']],
+          options: [[0, 1]],
           errorMessage: ORDER_MESSAGE.PAYMENT_STATUS_MUST_BE_VALID
         },
         optional: true
       },
       order_status: {
-        isString: {
-          errorMessage: ORDER_MESSAGE.ORDER_STATUS_MUST_BE_A_STRING
+        isNumeric: {
+          errorMessage: ORDER_MESSAGE.ORDER_STATUS_MUST_BE_A_NUMBER
         },
         isIn: {
-          options: [['pending', 'completed', 'cancelled']],
+          options: [[0, 1, 2]],
           errorMessage: ORDER_MESSAGE.ORDER_STATUS_MUST_BE_VALID
         },
         optional: true
       }
     },
     ['body']
+  )
+)
+export const deleteOrderValidator = validate(
+  checkSchema(
+    {
+      id: {
+        custom: {
+          options: async (value) => {
+            const order = await databaseService.orders.findOne({ _id: new ObjectId(value as string) })
+            if (!order) {
+              throw new Error(ORDER_MESSAGE.ORDER_IS_NOT_FOUND)
+            }
+          }
+        }
+      }
+    },
+    ['params']
   )
 )
