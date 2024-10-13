@@ -8,7 +8,6 @@ import cors from 'cors'
 import { tableRouter } from '~/routes/table.routes'
 import { menuRouter } from '~/routes/menu.routes'
 import { ordersRouter } from './routes/orders.routes'
-import { variantRouter } from '~/routes/variant.routes'
 import { categoryRouter } from '~/routes/category.routes'
 
 databaseService.connect().then(() => {
