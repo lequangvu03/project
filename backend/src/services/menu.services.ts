@@ -8,6 +8,10 @@ import MenuItem from '~/models/schemas/menuItems.schema'
 import { ObjectId } from 'mongodb'
 
 class MenuService {
+  async checkNameExists(name: string) {
+    const menuItem = await databaseService.menuItems.findOne({ name })
+    return menuItem
+  }
   async getMenu() {
     return await databaseService.menuItems.find().toArray()
   }
@@ -27,15 +31,13 @@ class MenuService {
   }
   async addMenuItem({ data, dir }: { data: MenuItem; dir: string }) {
     data.image = dir
-    const variantIds = data.variant_ids.map((id) => new ObjectId(id))
     const newMenuItem = new MenuItem({
-      item_id: new ObjectId(),
+      _id: new ObjectId(),
       name: data.name,
       description: data.description,
       price: +data.price,
       image: data.image,
       category_id: new ObjectId(data.category_id),
-      variant_ids: variantIds,
       availability: data.availability,
       stock: data.stock
     })
@@ -43,14 +45,11 @@ class MenuService {
     return newMenuItem
   }
   async updateMenuItem({ menuItemId, data, dir }: { menuItemId: string; data: MenuItem; dir: string }) {
-    const variantIds = data.variant_ids.map((id) => new ObjectId(id))
-
     const updateData: any = {
       name: data.name,
       description: data.description,
       price: +data.price,
       category_id: new ObjectId(data.category_id),
-      variant_ids: variantIds, 
       updated_at: Date.now()
     }
 

@@ -15,7 +15,7 @@ export const addCategoryValidator = validate(
         },
         custom: {
           options: async (value) => {
-            const isExistCategory = await categoryService.checkCategoryExist(value)
+            const isExistCategory = await categoryService.checkCategoryNameExist(value)
             if (isExistCategory) {
               throw new Error(CATEGORY_MESSAGES.NAME_IS_EXIST)
             }
@@ -37,14 +37,18 @@ export const addCategoryValidator = validate(
 export const updateCategoryValidator = validate(
   checkSchema(
     {
-      id: {
-        isMongoId: {
-          errorMessage: CATEGORY_MESSAGES.INVALID_ID
-        }
-      },
       name: {
         isString: {
           errorMessage: CATEGORY_MESSAGES.NAME_MUST_BE_STRING
+        },
+        custom: {
+          options: async (value) => {
+            const isExistCategory = await categoryService.checkCategoryNameExist(value)
+            if (isExistCategory) {
+              throw new Error(CATEGORY_MESSAGES.NAME_IS_EXIST)
+            }
+            return true
+          }
         },
         optional: true
       },
@@ -53,19 +57,6 @@ export const updateCategoryValidator = validate(
           errorMessage: CATEGORY_MESSAGES.DESCRIPTION_MUST_BE_STRING
         },
         optional: true
-      }
-    },
-    ['body']
-  )
-)
-
-export const deleteCategoryValidator = validate(
-  checkSchema(
-    {
-      id: {
-        isMongoId: {
-          errorMessage: CATEGORY_MESSAGES.INVALID_ID
-        }
       }
     },
     ['body']

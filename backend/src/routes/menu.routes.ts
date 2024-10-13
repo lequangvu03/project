@@ -6,28 +6,48 @@ import {
   updateMenuItemController
 } from '~/controllers/menu.controllers'
 import { accessTokenValidator, isAdmin } from '~/middlewares/auth.middlewares'
-import { addMenuItemValidator, handleRequest } from '~/middlewares/menu.middlewares'
+import { addMenuItemValidator, handleRequest, updateMenuItemValidator } from '~/middlewares/menu.middlewares'
 import { wrapRequestHandler } from '~/utils/handlers'
 
 export const menuRouter = Router()
 
 /**
- * path: api/menu/
- * method: GET
- * header: {Authorization: Bearer <access_token>}
- * description: Get all menu items
- * response: {message: string, result: {menuItems: MenuItemType[], total: number}}
- * */
+ * @route   GET api/menu/
+ * @desc    Get all menu items
+ * @access  Private (Admin or Employee)
+ * @headers {Authorization: Bearer <access_token>} - access token required
+ * @response
+ *  {
+ *    message: string,
+ *    result: {
+ *      menuItems: MenuItemType[],  // List of menu items
+ *      total: number               // Total count of menu items
+ *    }
+ *  }
+ */
 menuRouter.get('/', accessTokenValidator, wrapRequestHandler(getAllMenuController))
 
 /**
- * path: api/menu/
- * method: POST
- * header: {Authorization: Bearer <access_token>}
- * body: {name: string, price: number, description: string,base_price: number, category: string, variant_ids: ObjectId[], image: string}
- * description: Add a new menu item
- * response: {message: string, result: MenuItemType}
- * */
+ * @route   POST api/menu/
+ * @desc    Add a new menu item
+ * @access  Private (Admin)
+ * @headers {Authorization: Bearer <access_token>} - access token required
+ * @body
+ *  {
+ *    name: string,              // Name of the menu item
+ *    price: number,             // Selling price of the menu item
+ *    description: string,       // Description of the menu item
+ *    category_id: string,       // ID of the category to which the item belongs
+ *    availability: boolean,     // Whether the item is available or not
+ *    stock: number,             // Number of items in stock
+ *    image?: string             // Optional: URL of the image of the menu item
+ *  }
+ * @response
+ *  {
+ *    message: string,
+ *    result: MenuItemType       // Newly created menu item
+ *  }
+ */
 menuRouter.post(
   '/',
   accessTokenValidator,
@@ -38,21 +58,46 @@ menuRouter.post(
 )
 
 /**
- * path: api/menu/
- * method: PUT
- * header: {Authorization: Bearer <access_token>}
- * body: {id: string, name?: string, price?: number, description?: string, base_price?: number, category?: string, variant_ids?: ObjectId[], image?: string}
- * description: Update a menu item
- * response: {message: string, result: MenuItemType}
- * */
-menuRouter.put('/:id', accessTokenValidator, isAdmin, handleRequest, wrapRequestHandler(updateMenuItemController))
+ * @route   PUT api/menu/:id
+ * @desc    Update a menu item by its ID
+ * @access  Private (Admin)
+ * @headers {Authorization: Bearer <access_token>} - access token required
+ * @params  {id: string} - ID of the menu item to be updated
+ * @body
+ *  {
+ *    name?: string,             // Optional: Name of the menu item
+ *    price?: number,            // Optional: Updated selling price
+ *    description?: string,      // Optional: Updated description
+ *    category_id?: string,      // Optional: Updated category ID
+ *    availability?: boolean,    // Optional: Availability status
+ *    stock?: number,            // Optional: Updated stock count
+ *    image?: string             // Optional: Updated image URL
+ *  }
+ * @response
+ *  {
+ *    message: string,
+ *    result: MenuItemType       // Updated menu item
+ *  }
+ */
+menuRouter.put(
+  '/:id',
+  accessTokenValidator,
+  isAdmin,
+  handleRequest,
+  updateMenuItemValidator,
+  wrapRequestHandler(updateMenuItemController)
+)
 
 /**
- * path: api/menu/
- * method: DELETE
- * header: {Authorization: Bearer <access_token>}
- * body: {id: string}
- * description: Delete a menu item
- * response: {message: string, result: MenuItemType}
- * */
+ * @route   DELETE api/menu/:id
+ * @desc    Delete a menu item by its ID
+ * @access  Private (Admin)
+ * @headers {Authorization: Bearer <access_token>} - access token required
+ * @params  {id: string} - ID of the menu item to be deleted
+ * @response
+ *  {
+ *    message: string,
+ *    result: MenuItemType       // Deleted menu item
+ *  }
+ */
 menuRouter.delete('/:id', accessTokenValidator, isAdmin, wrapRequestHandler(deleteMenuItemController))

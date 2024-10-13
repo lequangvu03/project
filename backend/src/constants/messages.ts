@@ -72,7 +72,13 @@ export const MENU_MESSAGES = {
   CATEGORY_ID_IS_REQUIRED: 'Category id is required',
   CATEGORY_NOT_EXIST: 'Category not exist',
   VARIANT_IDS_MUST_BE_AN_ARRAY: 'Variant ids must be an array',
-  CATEGORY_ID_MUST_BE_A_STRING: 'Category id must be a string'
+  CATEGORY_ID_MUST_BE_A_STRING: 'Category id must be a string',
+  AVAILABILITY_MUST_BE_A_BOOLEAN: 'Availability must be a boolean',
+  STOCK_MUST_BE_A_NUMBER: 'Stock must be a number',
+  STOCK_IS_REQUIRED: 'Stock is required',
+  MENU_ITEM_NAME_IS_REQUIRED: 'Menu item name is required',
+  MENU_ITEM_NAME_IS_EXIST: 'Menu item name is exist',
+  MENU_ITEM_PRICE_MUST_BE_GREATER_THAN_ZERO: 'Menu item price must be greater than zero'
 } as const
 export const CATEGORY_MESSAGES = {
   NAME_MUST_BE_STRING: 'Category name must be a string.',
