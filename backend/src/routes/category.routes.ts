@@ -6,11 +6,7 @@ import {
   updateCategoryController
 } from '~/controllers/category.controllers'
 import { accessTokenValidator } from '~/middlewares/auth.middlewares'
-import {
-  addCategoryValidator,
-  deleteCategoryValidator,
-  updateCategoryValidator
-} from '~/middlewares/category.middlewares'
+import { addCategoryValidator, updateCategoryValidator } from '~/middlewares/category.middlewares'
 import { wrapRequestHandler } from '~/utils/handlers'
 
 export const categoryRouter = Router()
@@ -42,7 +38,7 @@ categoryRouter.post('/', accessTokenValidator, addCategoryValidator, wrapRequest
  * description: Update a category
  * response: {message: string, result: CategoryType}
  * */
-categoryRouter.put('/', accessTokenValidator, updateCategoryValidator, wrapRequestHandler(updateCategoryController))
+categoryRouter.put('/:id', accessTokenValidator, updateCategoryValidator, wrapRequestHandler(updateCategoryController))
 
 /**
  * path: api/categories/
@@ -52,4 +48,4 @@ categoryRouter.put('/', accessTokenValidator, updateCategoryValidator, wrapReque
  * description: Delete a category
  * response: {message: string, result: CategoryType}
  * */
-categoryRouter.delete('/', accessTokenValidator, deleteCategoryValidator, wrapRequestHandler(deleteCategoryController))
+categoryRouter.delete('/:id', accessTokenValidator, wrapRequestHandler(deleteCategoryController))

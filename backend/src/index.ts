@@ -9,11 +9,13 @@ import { tableRouter } from '~/routes/table.routes'
 import { menuRouter } from '~/routes/menu.routes'
 import { ordersRouter } from './routes/orders.routes'
 import { categoryRouter } from '~/routes/category.routes'
+import { initFolder } from '~/utils/file'
 
 databaseService.connect().then(() => {
   databaseService.indexUsers()
   databaseService.indexRefreshTokens()
 })
+initFolder()
 const app = express()
 app.use(cors())
 const port = envConfig.port
