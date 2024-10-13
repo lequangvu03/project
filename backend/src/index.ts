@@ -9,6 +9,7 @@ import { tableRouter } from '~/routes/table.routes'
 import { menuRouter } from '~/routes/menu.routes'
 import { ordersRouter } from './routes/orders.routes'
 import { categoryRouter } from '~/routes/category.routes'
+import { initFolder } from '~/utils/file'
 import { bookingRouter } from './routes/bookings.routes'
 
 databaseService.connect().then(() => {
@@ -21,7 +22,7 @@ const port = envConfig.port
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use('/api/auth', authRouter)
-app.use('/api/table', tableRouter)
+app.use('/api/c', tableRouter)
 app.use('/api/menu', menuRouter)
 app.use('/api/order', ordersRouter)
 app.use('/api/category', categoryRouter)
