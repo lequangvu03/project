@@ -7,13 +7,14 @@ import { cn } from '~/lib/utils'
 
 type Props = {
   className?: string
+  classNameInput?: string
   placeholder?: string
   label?: string
   field: any
   type?: 'text' | 'password'
 }
 
-function CustomInput({ className, placeholder, field, label, type = 'text' }: Props) {
+function CustomInput({ className, placeholder, field, label, classNameInput, type = 'text' }: Props) {
   const [visible, setVisible] = useState<boolean>(false)
 
   const togglePasswordVisibility = () => {
@@ -22,14 +23,15 @@ function CustomInput({ className, placeholder, field, label, type = 'text' }: Pr
 
   return (
     <FormItem className={className}>
-      <FormLabel>{label}</FormLabel>
+      <FormLabel className='truncate'>{label}</FormLabel>
       <FormControl>
         <div className='relative'>
           <Input
             type={type === 'password' ? (visible ? 'text' : 'password') : 'text'}
-            className={
-              'h-auto border-none bg-[#3D4142] px-6 py-4 text-base outline-none focus-visible:ring-0 focus-visible:ring-offset-0'
-            }
+            className={cn(
+              'h-auto border-none bg-[#3D4142] px-6 py-4 text-base outline-none focus-visible:ring-0 focus-visible:ring-offset-0',
+              classNameInput
+            )}
             placeholder={placeholder}
             {...field}
           />
