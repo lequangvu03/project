@@ -1,6 +1,7 @@
 import 'dotenv/config'
 import { Collection, Db, MongoClient } from 'mongodb'
 import { envConfig } from '~/constants/config'
+import Booking from '~/models/schemas/bookings.schema'
 import Category from '~/models/schemas/categorys.schema'
 import MenuItem from '~/models/schemas/menuItems.schema'
 import OrderItem from '~/models/schemas/orderItems.schema'
@@ -72,6 +73,9 @@ class DatabaseService {
   }
   get orderItems(): Collection<OrderItem> {
     return this.db.collection('order_items')
+  }
+  get bookings(): Collection<Booking> {
+    return this.db.collection('bookings')
   }
 }
 

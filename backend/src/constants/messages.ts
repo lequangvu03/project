@@ -122,3 +122,23 @@ export const ORDER_MESSAGE = {
   ORDER_STATUS_MUST_BE_VALID: 'Order status must be valid',
   ORDER_STATUS_IS_REQUIRED: 'Order status is required'
 }
+
+export const BOOKING_MESSAGE = {
+  GET_ALL_BOOKING_SUCCESS: 'Get all bookings success',
+  ADD_NEW_BOOKING_SUCCESS: 'Add new booking success',
+  UPDATE_BOOKING_SUCCESS: 'Update booking success',
+  DELETE_BOOKING_SUCCESS: 'Delete booking success',
+  TABLE_NUMBER_MUST_BE_A_NUMBER: 'Table number must be a number',
+  TABLE_NUMBER_IS_REQUIRED: 'Table number is required',
+  ORDER_ITEMS_MUST_BE_AN_ARRAY: 'Order items must be an array',
+  ORDER_ITEMS_CANNOT_BE_EMPTY: 'Order items cannot be empty',
+  ORDER_ITEM_FIELDS_MUST_BE_PRESENT: 'Order item fields must be present',
+  TOTAL_PRICE_MUST_BE_A_NUMBER: 'Total price must be a number',
+  TOTAL_PRICE_IS_REQUIRED: 'Total price is required',
+  PAYMENT_STATUS_MUST_BE_A_STRING: 'Payment status must be a string',
+  PAYMENT_STATUS_MUST_BE_VALID: 'Payment status must be valid',
+  PAYMENT_STATUS_IS_REQUIRED: 'Payment status is required',
+  ORDER_STATUS_MUST_BE_A_STRING: 'Order status must be a string',
+  ORDER_STATUS_MUST_BE_VALID: 'Order status must be valid',
+  ORDER_STATUS_IS_REQUIRED: 'Order status is required'
+}

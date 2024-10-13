@@ -9,6 +9,7 @@ import { tableRouter } from '~/routes/table.routes'
 import { menuRouter } from '~/routes/menu.routes'
 import { ordersRouter } from './routes/orders.routes'
 import { categoryRouter } from '~/routes/category.routes'
+import { bookingRouter } from './routes/bookings.routes'
 
 databaseService.connect().then(() => {
   databaseService.indexUsers()
@@ -24,6 +25,7 @@ app.use('/api/table', tableRouter)
 app.use('/api/menu', menuRouter)
 app.use('/api/order', ordersRouter)
 app.use('/api/category', categoryRouter)
+app.use('/api/booking', bookingRouter)
 app.use(defaultErrorHandler)
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
