@@ -1,6 +1,7 @@
 'use client'
 
 import { Image, LogOut, Settings, User } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import { ReactNode, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import CustomInput from '~/components/custom-input'
@@ -9,6 +10,7 @@ import { Button } from '~/components/ui/button'
 import { Form, FormField } from '~/components/ui/form'
 import { Switch } from '~/components/ui/switch'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs'
+import useQueryParams from '~/hooks/useQueryParams'
 import { cn } from '~/lib/utils'
 
 enum Tab {
@@ -30,28 +32,93 @@ const tabs = [
 ]
 
 function ActionTabs() {
-  return (
-    <Tabs defaultValue={Tab.Access} className='flex gap-10'>
-      <TabsList className='flex h-fit w-full max-w-[320px] flex-col rounded-[10px] bg-[#292C2D] px-5 py-[30px] text-white'>
-        {tabs.map((tab) => (
-          <TabsTrigger
-            key={tab.key}
-            className='w-full justify-start gap-4 px-10 py-[14px] text-base data-[state=active]:bg-[#FAC1D9]'
-            value={tab.key}
-          >
-            {tab.icon}
-            <span>{tab.label}</span>
-          </TabsTrigger>
-        ))}
+  const searchParams = useQueryParams()
+  const router = useRouter()
+  const { tab = Tab.Profile } = searchParams
 
-        <Button
-          className='flex h-auto w-full items-center justify-start gap-4 border border-transparent bg-transparent px-10 py-[14px] hover:bg-transparent active:border-white'
-          value='logout'
-        >
-          <LogOut />
-          <span>Logout</span>
-        </Button>
-      </TabsList>
+  const form = useForm({
+    defaultValues: {
+      name: '',
+      email: '',
+      role: '',
+      password: '',
+      confirmPassword: ''
+    }
+  })
+
+  const handleActiveTab = (tab: Tab) => {
+    const params = new URLSearchParams(searchParams)
+    params.set('tab', tab)
+    router.push(`?${params.toString()}`)
+  }
+
+  return (
+    <Tabs defaultValue={tab} className='flex gap-10'>
+      <div className='flex flex-col gap-8'>
+        <TabsList className='flex h-[fit] w-[360px] max-w-[360px] flex-col rounded-[10px] bg-[#292C2D] px-5 py-[30px] text-white'>
+          {tabs.map((tab) => (
+            <TabsTrigger
+              key={tab.key}
+              className='w-full justify-start gap-4 px-10 py-[14px] text-base data-[state=active]:bg-[#FAC1D9]'
+              value={tab.key}
+              onClick={() => handleActiveTab(tab.key)}
+            >
+              {tab.icon}
+              <span>{tab.label}</span>
+            </TabsTrigger>
+          ))}
+
+          <Button
+            className='flex h-auto w-full items-center justify-start gap-4 border border-transparent bg-transparent px-10 py-[14px] hover:bg-transparent active:border-white'
+            value='logout'
+          >
+            <LogOut />
+            <span>Logout </span>
+          </Button>
+        </TabsList>
+        {tab === Tab.Access && (
+          <TabsList className='flex h-fit w-[360px] max-w-[360px] flex-col rounded-[10px] bg-[#292C2D] px-5 py-[30px] text-white'>
+            <h3 className='mb-6 w-full text-left text-2xl font-medium'>Add new sub account</h3>
+            <div className='w-full space-y-5'>
+              <Form {...form}>
+                <FormField
+                  control={form.control}
+                  name='email'
+                  render={({ field }) => <CustomInput className='w-full' field={field} placeholder='Email' />}
+                />
+                <FormField
+                  control={form.control}
+                  name='name'
+                  render={({ field }) => <CustomInput className='w-full' placeholder='Name' field={field} />}
+                />
+                <FormField
+                  control={form.control}
+                  name='role'
+                  render={({ field }) => <CustomInput className='w-full' placeholder='Role' field={field} />}
+                />
+                <FormField
+                  control={form.control}
+                  name='password'
+                  render={({ field }) => (
+                    <CustomInput className='w-full' placeholder='Password' type='password' field={field} />
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name='confirmPassword'
+                  render={({ field }) => (
+                    <CustomInput className='w-full' placeholder='Confirm Password' type='password' field={field} />
+                  )}
+                />
+
+                <Button className='h-auto w-full bg-[#FAC1D9] px-12 py-3 text-base text-black transition-all hover:bg-[#FAC1D9] hover:shadow-md hover:shadow-[#FAC1D9]'>
+                  Add
+                </Button>
+              </Form>
+            </div>
+          </TabsList>
+        )}
+      </div>
       <LayoutTabContent tab={Tab.Profile}>
         <Profile />
       </LayoutTabContent>
@@ -84,9 +151,11 @@ function Profile() {
       confirmPassword: ''
     }
   })
+
   const openFileDialog = () => {
     ref.current?.click()
   }
+
   return (
     <div>
       <h3 className='text-xl'>Personal Information</h3>
@@ -216,7 +285,7 @@ function ManageAccess() {
           {permissions.map(({ key, label }) => (
             <li className='flex flex-grow flex-col justify-center gap-4' key={key}>
               <span>{label}</span>
-              <Switch disabled className='data-[state=checked]:bg-[#FAC1D9] data-[state=unchecked]:bg-[#3D4142]' />
+              <Switch className='data-[state=checked]:bg-[#FAC1D9] data-[state=unchecked]:bg-[#3D4142]' />
             </li>
           ))}
         </ul>

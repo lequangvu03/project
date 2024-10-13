@@ -35,7 +35,7 @@ export default function FormLogin({ className, ...props }: Props) {
   return (
     <Card
       className={cn(
-        'w-full max-w-[756px] rounded-2xl border-none bg-[#1F1D2B] text-white md:rounded-[50px] md:p-[50px]',
+        'w-full max-w-[756px] rounded-2xl border-none bg-[#292C2D] text-white md:rounded-[50px] md:p-[50px]',
         className
       )}
       {...props}
@@ -104,7 +104,7 @@ export default function FormLogin({ className, ...props }: Props) {
               </label>
             </div>
             <div>
-              <Link href={'/'} className='underline'>
+              <Link href={'/'} className='text-[var(--primary-color)] underline'>
                 Forgot Password?
               </Link>
             </div>
