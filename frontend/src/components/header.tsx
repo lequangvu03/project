@@ -16,8 +16,8 @@ export default function Header() {
             <AvatarFallback>Nguyen Duy Khanh</AvatarFallback>
           </Avatar>
           <div className='flex flex-col'>
-            <h2 className='text-[16px] font-normal text-gray-400'>Nguyen Duy Khanh</h2>
-            <p className='text-[12px] font-light text-gray-400'>Blockchain Engineer</p>
+            <h2 className='text-[14px] font-normal text-gray-400'>Nguyen Duy Khanh</h2>
+            <p className='text-[10px] font-light text-gray-400'>Blockchain Engineer</p>
           </div>
         </div>
       </section>
