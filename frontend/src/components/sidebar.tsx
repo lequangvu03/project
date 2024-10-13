@@ -1,8 +1,8 @@
 export default function Sidebar() {
   return (
-    <main className='h-screen w-[70px] bg-[#1F1D2B]'>
+    <main className='h-screen rounded-br-[30px] rounded-tr-[30px] bg-[#1F1D2B]'>
       <aside className='flex h-full flex-col items-center justify-between gap-4 p-2'>
-        <section className='p-2'>
+        <section className='mt-6 rounded-[12px] bg-[#EB966A30] p-3'>
           <svg width='40' height='40' viewBox='0 0 60 53' fill='none' xmlns='http://www.w3.org/2000/svg'>
             <path
               d='M50.4154 0.617188H9.58203C4.75786 0.617188 0.832031 4.30266 0.832031 8.83147V16.583C0.832031 19.4662 1.9462 22.0866 3.7487 24.1018V49.9029C3.7487 50.6291 4.05599 51.3255 4.60297 51.839C5.14995 52.3525 5.89182 52.641 6.66536 52.641H29.9987C30.7722 52.641 31.5141 52.3525 32.0611 51.839C32.6081 51.3255 32.9154 50.6291 32.9154 49.9029V36.2124H44.582V49.9029C44.582 50.6291 44.8893 51.3255 45.4363 51.839C45.9833 52.3525 46.7251 52.641 47.4987 52.641H53.332C54.1056 52.641 54.8474 52.3525 55.3944 51.839C55.9414 51.3255 56.2487 50.6291 56.2487 49.9029V24.0991C58.0512 22.0866 59.1654 19.4662 59.1654 16.5803V8.83147C59.1654 4.30266 55.2395 0.617188 50.4154 0.617188ZM53.332 8.83147V16.583C53.332 19.7044 50.8558 22.3659 47.8166 22.5165L47.4987 22.5219C44.2816 22.5219 41.6654 20.0659 41.6654 17.0458V6.09338H50.4154C52.0254 6.09338 53.332 7.32278 53.332 8.83147ZM24.1654 17.0458V6.09338H35.832V17.0458C35.832 20.0659 33.2158 22.5219 29.9987 22.5219C26.7816 22.5219 24.1654 20.0659 24.1654 17.0458ZM6.66536 8.83147C6.66536 7.32278 7.97203 6.09338 9.58203 6.09338H18.332V17.0458C18.332 20.0659 15.7158 22.5219 12.4987 22.5219L12.1808 22.5137C9.14161 22.3659 6.66536 19.7044 6.66536 16.583V8.83147ZM24.1654 38.9505H12.4987V30.7362H24.1654V38.9505Z'
@@ -24,18 +24,18 @@ export default function Sidebar() {
           </svg>
         </section>
         <section className='flex-1 items-start'>
-          <section className='flex flex-col items-center justify-center rounded-md p-2 hover:bg-slate-800'>
-            <svg width='18' height='18' viewBox='0 0 31 33' fill='none' xmlns='http://www.w3.org/2000/svg'>
+          <section className='flex flex-col items-center justify-center gap-2 rounded-md p-2 hover:bg-slate-800'>
+            <svg width='24' height='24' viewBox='0 0 31 33' fill='none' xmlns='http://www.w3.org/2000/svg'>
               <path
                 d='M3.875 2.75H6.45833V30.25H3.875V2.75ZM24.5417 2.75H7.75V30.25H24.5417C25.9664 30.25 27.125 29.0166 27.125 27.5V5.5C27.125 3.98337 25.9664 2.75 24.5417 2.75ZM23.25 16.5H11.625V13.75H23.25V16.5ZM23.25 11H11.625V8.25H23.25V11Z'
                 fill='#EA7C69'
               />
             </svg>
 
-            <span className='text-[12px] font-normal text-gray-200'>Menu</span>
+            <span className='text-base font-normal text-gray-200'>Menu</span>
           </section>
-          <section className='flex flex-col items-center justify-center rounded-md p-2 hover:bg-slate-800'>
-            <svg width='18' height='18' viewBox='0 0 32 34' fill='none' xmlns='http://www.w3.org/2000/svg'>
+          <section className='flex flex-col items-center justify-center gap-2 rounded-md p-2 hover:bg-slate-800'>
+            <svg width='24' height='24' viewBox='0 0 32 34' fill='none' xmlns='http://www.w3.org/2000/svg'>
               <path
                 opacity='0.983'
                 fill-rule='evenodd'
@@ -66,10 +66,10 @@ export default function Sidebar() {
               />
             </svg>
 
-            <span className='text-[12px] font-normal text-gray-200'>Inventory</span>
+            <span className='text-base font-normal text-gray-200'>Inventory</span>
           </section>
-          <section className='flex flex-col items-center justify-center rounded-md p-2 hover:bg-slate-800'>
-            <svg width='18' height='18' viewBox='0 0 33 33' fill='none' xmlns='http://www.w3.org/2000/svg'>
+          <section className='flex flex-col items-center justify-center gap-2 rounded-md p-2 hover:bg-slate-800'>
+            <svg width='24' height='24' viewBox='0 0 33 33' fill='none' xmlns='http://www.w3.org/2000/svg'>
               <path
                 opacity='0.969'
                 fill-rule='evenodd'
@@ -93,10 +93,10 @@ export default function Sidebar() {
               />
             </svg>
 
-            <span className='text-[12px] font-normal text-gray-200'>Report</span>
+            <span className='text-base font-normal text-gray-200'>Report</span>
           </section>
-          <section className='flex flex-col items-center justify-center rounded-md p-2 hover:bg-slate-800'>
-            <svg width='18' height='18' viewBox='0 0 33 33' fill='none' xmlns='http://www.w3.org/2000/svg'>
+          <section className='flex flex-col items-center justify-center gap-2 rounded-md p-2 hover:bg-slate-800'>
+            <svg width='24' height='24' viewBox='0 0 33 33' fill='none' xmlns='http://www.w3.org/2000/svg'>
               <path
                 opacity='0.955'
                 fill-rule='evenodd'
@@ -183,10 +183,10 @@ export default function Sidebar() {
               />
             </svg>
 
-            <span className='text-[12px] font-normal text-gray-200'>Order</span>
+            <span className='text-base font-normal text-gray-200'>Order</span>
           </section>
-          <section className='flex flex-col items-center justify-center rounded-md p-2 hover:bg-slate-800'>
-            <svg width='18' height='18' viewBox='0 0 33 33' fill='none' xmlns='http://www.w3.org/2000/svg'>
+          <section className='flex flex-col items-center justify-center gap-2 rounded-md p-2 hover:bg-slate-800'>
+            <svg width='24' height='24' viewBox='0 0 33 33' fill='none' xmlns='http://www.w3.org/2000/svg'>
               <path
                 opacity='0.982'
                 fill-rule='evenodd'
@@ -238,37 +238,37 @@ export default function Sidebar() {
               />
             </svg>
 
-            <span className='text-[12px] font-normal text-gray-200'>Reservation</span>
+            <span className='text-base font-normal text-gray-200'>Reservation</span>
           </section>
-          <section className='flex flex-col items-center justify-center rounded-md p-2 hover:bg-slate-800'>
-            <svg width='18' height='18' viewBox='0 0 48 44' fill='none' xmlns='http://www.w3.org/2000/svg'>
+          <section className='flex flex-col items-center justify-center gap-2 rounded-md p-2 hover:bg-slate-800'>
+            <svg width='48' height='48' viewBox='0 0 48 44' fill='none' xmlns='http://www.w3.org/2000/svg'>
               <path
                 d='M23.1447 14.9845V18.8142C23.1447 19.1313 23.0764 19.4453 22.9437 19.7382C22.811 20.031 22.6165 20.297 22.3714 20.5207C22.1263 20.7445 21.8355 20.9217 21.5155 21.0421C21.1955 21.1626 20.8527 21.2239 20.5068 21.2226H16.3508C16.0058 21.2245 15.664 21.1626 15.3457 21.0405C15.0275 20.9184 14.7395 20.7386 14.4989 20.512C14.2551 20.2895 14.0619 20.0249 13.9307 19.7335C13.7995 19.442 13.7327 19.1295 13.7344 18.8142V14.9943C13.7344 14.3573 14.0097 13.7462 14.5001 13.2948C14.9904 12.8434 15.6559 12.5885 16.3508 12.5859H20.5176C20.8622 12.5862 21.2033 12.6492 21.5212 12.7712C21.8391 12.8932 22.1274 13.0718 22.3695 13.2966C22.6149 13.5164 22.8099 13.7789 22.9431 14.0688C23.0762 14.3586 23.1448 14.67 23.1447 14.9845ZM34.7192 14.9943V18.8142C34.7136 19.4497 34.4365 20.0578 33.9473 20.5081C33.4582 20.9584 32.796 21.2149 32.1028 21.2226H27.9252C27.2288 21.2187 26.5612 20.9675 26.0626 20.5218C25.8189 20.2973 25.626 20.0308 25.4948 19.7378C25.3636 19.4448 25.2968 19.131 25.2981 18.8142V14.9943C25.2966 14.6782 25.3645 14.365 25.4977 14.0733C25.6308 13.7817 25.8266 13.5175 26.0733 13.2966C26.3154 13.0718 26.6037 12.8932 26.9216 12.7712C27.2395 12.6492 27.5806 12.5862 27.9252 12.5859H32.092C32.7871 12.5911 33.452 12.8465 33.9435 13.297C34.435 13.7476 34.7135 14.3572 34.7192 14.9943ZM34.7192 25.6051V29.425C34.7136 30.0605 34.4365 30.6686 33.9473 31.1189C33.4582 31.5692 32.796 31.8257 32.1028 31.8334H27.9252C27.2244 31.8399 26.5484 31.5956 26.041 31.1524C25.7964 30.9284 25.6028 30.6621 25.4716 30.369C25.3404 30.0758 25.2741 29.7616 25.2766 29.4448V25.6249C25.2752 25.3087 25.343 24.9955 25.4762 24.7039C25.6094 24.4122 25.8051 24.1481 26.0518 23.9271C26.2939 23.7023 26.5822 23.5238 26.9001 23.4018C27.218 23.2798 27.5591 23.2168 27.9037 23.2165H32.0705C32.7655 23.2216 33.4305 23.477 33.922 23.9276C34.4134 24.3781 34.692 24.9877 34.6976 25.6249L34.7192 25.6051ZM23.1447 25.615V29.4349C23.1362 30.072 22.8549 30.6806 22.3614 31.1293C21.868 31.578 21.2019 31.8309 20.5068 31.8334H16.3508C16.0068 31.8347 15.6659 31.7736 15.3478 31.6535C15.0298 31.5334 14.7408 31.3568 14.4975 31.1338C14.2543 30.9108 14.0616 30.6459 13.9307 30.3543C13.7997 30.0627 13.733 29.7502 13.7344 29.4349V25.615C13.7372 24.9778 14.013 24.3672 14.5025 23.9148C14.992 23.4624 15.6558 23.2045 16.3508 23.1967H20.5176C21.2157 23.2022 21.884 23.4572 22.3803 23.9074C22.8713 24.3616 23.1462 24.9755 23.1447 25.615Z'
                 fill='#EA7C69'
               />
             </svg>
 
-            <span className='text-[12px] font-normal text-gray-200'>Dashboard</span>
+            <span className='text-base font-normal text-gray-200'>Dashboard</span>
           </section>
-          <section className='flex flex-col items-center justify-center rounded-md p-2 hover:bg-slate-800'>
-            <svg width='18' height='18' viewBox='0 0 29 28' fill='none' xmlns='http://www.w3.org/2000/svg'>
+          <section className='flex flex-col items-center justify-center gap-2 rounded-md p-2 hover:bg-slate-800'>
+            <svg width='24' height='24' viewBox='0 0 29 28' fill='none' xmlns='http://www.w3.org/2000/svg'>
               <path
                 d='M11.1876 17.4776L11.6273 17.4795C18.0134 17.5353 21.6266 18.8299 21.6266 22.3659C21.6266 25.827 18.1637 27.1622 12.0568 27.2741L11.1876 27.2818C4.52666 27.2818 0.75 26.0109 0.75 22.3935C0.75 18.7714 4.54169 17.4776 11.1876 17.4776ZM11.1876 19.5478C5.66377 19.5478 2.8125 20.5207 2.8125 22.3935C2.8125 24.2545 5.65693 25.2117 11.1876 25.2117C16.7119 25.2117 19.5641 24.2387 19.5641 22.3659C19.5641 20.5059 16.7171 19.5478 11.1876 19.5478ZM22.1817 16.5003C22.98 16.5548 23.7736 16.6696 24.5363 16.8394C26.1699 17.1655 27.3844 17.7744 27.9409 18.9463C28.3518 19.8139 28.3518 20.8235 27.9409 21.691C27.3876 22.86 26.1857 23.4644 24.5429 23.8036C23.985 23.9188 23.4397 23.5582 23.325 22.9983C23.2103 22.4384 23.5695 21.8911 24.1273 21.7759C25.1845 21.5577 25.8881 21.2038 26.0781 20.8025C26.2227 20.4971 26.2227 20.1403 26.0786 19.8359C25.8873 19.4331 25.18 19.0786 24.1122 18.8651C23.4283 18.7132 22.7369 18.6131 22.0417 18.5657C21.4735 18.5269 21.0442 18.0331 21.0829 17.4627C21.1215 16.8924 21.6135 16.4615 22.1817 16.5003ZM11.1876 0.976562C15.1037 0.976562 18.2483 4.13229 18.2483 8.06196C18.2483 11.9928 15.1039 15.1487 11.1876 15.1487C7.27152 15.1487 4.12838 11.9929 4.12838 8.06196C4.12838 4.1321 7.27177 0.976562 11.1876 0.976562ZM20.0271 2.45271C23.1001 2.45271 25.5917 4.95409 25.5917 8.03794C25.5917 11.1227 23.1005 13.6232 20.0271 13.6232C19.4575 13.6232 18.9958 13.1598 18.9958 12.5881C18.9958 12.0165 19.4575 11.553 20.0271 11.553C21.9614 11.553 23.5292 9.97944 23.5292 8.03794C23.5292 6.0973 21.9609 4.52285 20.0271 4.52285C19.4575 4.52285 18.9958 4.05943 18.9958 3.48778C18.9958 2.91613 19.4575 2.45271 20.0271 2.45271ZM11.1876 3.0467C8.41093 3.0467 6.19088 5.27533 6.19088 8.06196C6.19088 10.8498 8.41076 13.0786 11.1876 13.0786C13.9648 13.0786 16.1858 10.8495 16.1858 8.06196C16.1858 5.27567 13.9647 3.0467 11.1876 3.0467Z'
                 fill='#EA7C69'
               />
             </svg>
-            <span className='text-[12px] font-normal text-gray-200'>Staff</span>
+            <span className='text-base font-normal text-gray-200'>Staff</span>
           </section>
         </section>
 
-        <section className='flex flex-col items-center justify-center rounded-md p-2 hover:bg-slate-800'>
-          <svg width='18' height='18' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
+        <section className='flex w-full flex-col items-center justify-center gap-2 rounded-md p-2 hover:bg-slate-800'>
+          <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
             <path
               d='M20.3443 17.1563H18.6966C18.5841 17.1563 18.4786 17.2055 18.4083 17.2922C18.2443 17.4914 18.0685 17.6836 17.8833 17.8664C17.1261 18.6245 16.229 19.2286 15.2419 19.6453C14.2192 20.0773 13.1201 20.2989 12.0099 20.2969C10.8872 20.2969 9.79974 20.0766 8.77787 19.6453C7.79074 19.2286 6.89374 18.6245 6.13646 17.8664C5.37782 17.111 4.77291 16.2155 4.35521 15.2297C3.92162 14.2078 3.70365 13.1227 3.70365 12C3.70365 10.8774 3.92396 9.79222 4.35521 8.77035C4.7724 7.78363 5.3724 6.89535 6.13646 6.13363C6.90052 5.37191 7.7888 4.77191 8.77787 4.35472C9.79974 3.92347 10.8872 3.70316 12.0099 3.70316C13.1326 3.70316 14.2201 3.92113 15.2419 4.35472C16.231 4.77191 17.1193 5.37191 17.8833 6.13363C18.0685 6.31879 18.2419 6.51097 18.4083 6.70785C18.4786 6.79457 18.5865 6.84379 18.6966 6.84379H20.3443C20.4919 6.84379 20.5833 6.67972 20.5013 6.5555C18.7036 3.76175 15.5583 1.91254 11.9841 1.92191C6.36849 1.93597 1.86615 6.49457 1.9224 12.1032C1.97865 17.6227 6.47396 22.0782 12.0099 22.0782C15.5747 22.0782 18.706 20.2313 20.5013 17.4446C20.581 17.3203 20.4919 17.1563 20.3443 17.1563ZM22.4279 11.8524L19.1021 9.22738C18.9779 9.12894 18.7974 9.21801 18.7974 9.37504V11.1563H11.438C11.3349 11.1563 11.2505 11.2407 11.2505 11.3438V12.6563C11.2505 12.7594 11.3349 12.8438 11.438 12.8438H18.7974V14.625C18.7974 14.7821 18.9802 14.8711 19.1021 14.7727L22.4279 12.1477C22.4503 12.1302 22.4684 12.1077 22.4809 12.0822C22.4933 12.0566 22.4998 12.0285 22.4998 12C22.4998 11.9716 22.4933 11.9435 22.4809 11.9179C22.4684 11.8923 22.4503 11.8699 22.4279 11.8524Z'
               fill='#EA7C69'
             />
           </svg>
-          <span className='text-[12px] font-normal text-gray-200'>Logout</span>
+          <span className='text-base font-normal text-gray-200'>Logout</span>
         </section>
       </aside>
     </main>
