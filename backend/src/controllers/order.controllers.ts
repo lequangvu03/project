@@ -26,13 +26,8 @@ export const addOrderController = async (
   next: NextFunction
 ) => {
   //ep kieu customer_id và cái list order item_id
-  const result = await orderServices.addOrder(
-    req.body.table_number,
-    req.body.order_items,
-    req.body.total_price,
-    req.body.payment_status,
-    req.body.order_status
-  )
+  const data = req.body
+  const result = await orderServices.addOrder(data)
   return res.status(200).json({ message: ORDER_MESSAGE.ADD_MENU_ITEM_SUCCESS, result })
 }
 export const updateOrderController = async (
@@ -41,11 +36,8 @@ export const updateOrderController = async (
   next: NextFunction
 ) => {
   try {
-    const { orderId } = req.params // OrderId from URL
-    const order_data = req.body // Data to update from request body
-
-    const updatedOrder = await orderServices.updateOrder(orderId, order_data)
-
+    const order_data = req.body
+    const updatedOrder = await orderServices.updateOrder(req.params.id, order_data)
     return res.status(200).json({
       message: ORDER_MESSAGE.UPDATE_ORDER_SUCCESS,
       result: updatedOrder
@@ -60,13 +52,10 @@ export const deleteOrderController = async (
   next: NextFunction
 ) => {
   try {
-    const { orderId } = req.params // OrderId from URL
-
-    const result = await orderServices.deleteOrder(orderId)
-
+    const { id } = req.params
+    await orderServices.deleteOrder(id)
     return res.status(200).json({
-      message: ORDER_MESSAGE.DELETE_ORDER_SUCCESS,
-      result
+      message: ORDER_MESSAGE.DELETE_ORDER_SUCCESS
     })
   } catch (error) {
     next(error)

@@ -1,11 +1,11 @@
-import path from 'path'
-import { UPLOAD_IMAGE_DIR } from '~/constants/dir'
-import databaseService from '~/services/database.services'
-import sharp from 'sharp'
-import { Request } from 'express'
-import { getNameFromFullname, processFields } from '~/utils/file'
-import MenuItem from '~/models/schemas/menuItems.schema'
+import fs from 'fs'
 import { ObjectId } from 'mongodb'
+import path from 'path'
+import sharp from 'sharp'
+import { UPLOAD_IMAGE_DIR } from '~/constants/dir'
+import MenuItem from '~/models/schemas/menuItems.schema'
+import databaseService from '~/services/database.services'
+import { getNameFromFullname } from '~/utils/file'
 
 class MenuService {
   async checkNameExists(name: string) {
@@ -19,11 +19,11 @@ class MenuService {
     const newName = getNameFromFullname(file.newFilename)
     const newPath = path.resolve(UPLOAD_IMAGE_DIR, `${newName}.jpg`)
     await sharp(file.filepath).jpeg().toFile(newPath)
-    // try {
-    //   fs.unlinkSync(file.filepath);
-    // } catch (error) {
-    //   console.log('err', error)
-    // }
+    try {
+      fs.unlinkSync(file.filepath)
+    } catch (error) {
+      console.log('err', error)
+    }
     return `${newName}.jpg`
   }
   async getMenuItemById(menuItemId: string) {
