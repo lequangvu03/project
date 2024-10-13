@@ -5,7 +5,6 @@ import { validate } from '~/utils/validation'
 import { checkSchema } from 'express-validator'
 import { MENU_MESSAGES } from '~/constants/messages'
 import categoryService from '~/services/category.services'
-import variantService from '~/services/variant.services'
 
 export const handleRequest = async (req: Request, res: Response, next: NextFunction) => {
   try {
