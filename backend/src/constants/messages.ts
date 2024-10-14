@@ -135,7 +135,7 @@ export const ORDER_MESSAGE = {
   ORDER_STATUS_IS_REQUIRED: 'Order status is required',
   PAYMENT_STATUS_MUST_BE_A_NUMBER: 'Payment status must be a number',
   ORDER_STATUS_MUST_BE_A_NUMBER: 'Order status must be a number',
-  ORDER_IS_NOT_FOUND: 'Order is not found',
+  ORDER_IS_NOT_FOUND: 'Order is not found'
 }
 export const BOOKING_MESSAGE = {
   GET_ALL_BOOKING_SUCCESS: 'Get all bookings success',
@@ -150,6 +150,16 @@ export const BOOKING_MESSAGE = {
 export const INVENTORY_MESSAGE = {
   GET_ALL_INVENTORY_SUCCESS: 'Get all inventories success',
   ADD_NEW_INVENTORY_SUCCESS: 'Add new inventory success',
+  UPDATE_BOOKING_SUCCESS: 'Update booking success',
+  DELETE_BOOKING_SUCCESS: 'Delete booking success',
+  TABLE_NUMBER_MUST_BE_NUMBER: 'Table number must be a number',
+  TABLE_NUMBER_IS_REQUIRED: 'Table number is required',
+  NAME_MUST_BE_STRING: 'Category name must be a string.'
+}
+
+export const EMPLOYEE_MESSAGE = {
+  GET_ALL_EMPLOYEE_SUCCESS: 'Get all employees success',
+  ADD_NEW_EMPLOYEE_SUCCESS: 'Add new employee success',
   UPDATE_BOOKING_SUCCESS: 'Update booking success',
   DELETE_BOOKING_SUCCESS: 'Delete booking success',
   TABLE_NUMBER_MUST_BE_NUMBER: 'Table number must be a number',
