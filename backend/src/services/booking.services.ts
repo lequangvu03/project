@@ -18,10 +18,8 @@ class BookingService {
     detailsInput: string
   ) {
     // Bước 1 insert 1 đặt bàn vào DB (do nhân viên thực hiện)
-    const bookingId = new ObjectId()
     const newBooking = await databaseService.bookings.insertOne({
-      _id: bookingId,
-      booking_id: bookingId,
+      _id: new ObjectId(),
       customer_name: customerName,
       customer_phone: customerPhone,
       table_number: tableNumber,
