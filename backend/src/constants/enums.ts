@@ -31,3 +31,18 @@ export enum PaymentStatus {
   Unpaid,
   Paid
 }
+export enum NotificationType {
+  OrderCreated,
+  OrderUpdated,
+  OrderCompleted,
+  OrderCancelled,
+  ItemAdded,
+  ItemUpdated,
+  ItemRemoved,
+  EmployeeAssigned,
+  EmployeeRemoved
+}
+export enum NotificationStatus {
+  Unread,
+  Read
+}

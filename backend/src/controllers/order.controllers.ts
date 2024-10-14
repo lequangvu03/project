@@ -3,6 +3,11 @@ import { ORDER_MESSAGE } from '~/constants/messages'
 import orderServices from '~/services/order.services'
 import { ParamsDictionary } from 'express-serve-static-core'
 import { AddOrderReqBody, UpdateOrderReqBody } from '~/models/requests/order.requests'
+import { io } from '~/utils/socket'
+import { ObjectId } from 'mongodb'
+import Notification from '~/models/schemas/notifications.schema'
+import databaseService from '~/services/database.services'
+import { NotificationStatus, NotificationType } from '~/constants/enums'
 
 /**
  * @description: returns a list of all orders for admin to show on the tablet screen
@@ -28,6 +33,20 @@ export const addOrderController = async (
   //ep kieu customer_id và cái list order item_id
   const data = req.body
   const result = await orderServices.addOrder(data)
+  io.emit('new_order', {
+    message: 'Có đơn hàng mới!',
+    order: result
+  })
+
+  await databaseService.notifications.insertOne(
+    new Notification({
+      _id: new ObjectId(),
+      recipient_id: new ObjectId('6708780f6d7474a209b66137'),
+      message: `Đơn hàng mới số bàn: ${result.table_number} giá tiền ${result.total_price}`,
+      type: NotificationType.OrderCreated,
+      status: NotificationStatus.Unread
+    })
+  )
   return res.status(200).json({ message: ORDER_MESSAGE.ADD_MENU_ITEM_SUCCESS, result })
 }
 export const updateOrderController = async (

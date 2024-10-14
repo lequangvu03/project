@@ -5,7 +5,7 @@ import Booking from '~/models/schemas/bookings.schema'
 import Category from '~/models/schemas/categorys.schema'
 import InventoryItem from '~/models/schemas/inventoryItems.schema'
 import MenuItem from '~/models/schemas/menuItems.schema'
-import OrderItem from '~/models/schemas/orderItems.schema'
+import Notification from '~/models/schemas/notifications.schema'
 import Order from '~/models/schemas/orders.schema'
 import Otp from '~/models/schemas/otps.chema'
 import RefreshToken from '~/models/schemas/refreshtoken.schema'
@@ -72,8 +72,8 @@ class DatabaseService {
   get orders(): Collection<Order> {
     return this.db.collection('orders')
   }
-  get orderItems(): Collection<OrderItem> {
-    return this.db.collection('order_items')
+  get notifications(): Collection<Notification> {
+    return this.db.collection('notifications')
   }
   get bookings(): Collection<Booking> {
     return this.db.collection('bookings')
