@@ -5,45 +5,35 @@ import tableService from './table.services'
 
 class InventoryItemsService {
   async getAllInventoryItems() {
-    const inventoryItems = await databaseService.bookings.find().toArray()
-    const total = await databaseService.bookings.countDocuments()
+    const inventoryItems = await databaseService.inventoryItems.find().toArray()
+    const total = await databaseService.inventoryItems.countDocuments()
     return { inventoryItems, total }
   }
 
-  async addBooking(
-    customerName: string,
-    customerPhone: string,
-    tableNumber: number,
-    bookingTime: Date,
-    detailsInput: string
+  async addInventoryItem(
+    name: string,
+    category_id: ObjectId,
+    quantity: number,
+    stock: string,
+    unit_price: number,
+    status: string,
+    perishable: boolean
   ) {
-    // Bước 1 insert 1 đặt bàn vào DB (do nhân viên thực hiện)
-    const bookingId = new ObjectId()
-    const newBooking = await databaseService.bookings.insertOne({
-      _id: bookingId,
-      booking_id: bookingId,
-      customer_name: customerName,
-      customer_phone: customerPhone,
-      table_number: tableNumber,
-      booking_time: bookingTime,
-      details: detailsInput
+    // 1. Nhập kho (tạo 1 inventory Item mới VD: gá)
+    const itemId = new ObjectId()
+    const newInventoryItem = await databaseService.inventoryItems.insertOne({
+      _id: itemId,
+      item_id: itemId,
+      name: name,
+      category_id: category_id,
+      quantity: quantity,
+      stock: stock,
+      unit_price: unit_price,
+      status: status,
+      perishable: perishable
     })
-    // check xem bàn đã có người đặt hay ngồi chưa ?
-    const foundTable = await tableService.checkTableExist(tableNumber)
-    if (foundTable?.status == 1) throw new Error('Table is reserved! Please book a different table')
-    // Bước 2: Cập nhật trạng thái bàn thành "Reserved" hoặc busy
-    const updatedStatusTable = await databaseService.tables.updateOne(
-      {
-        table_number: tableNumber
-      },
-      {
-        $set: {
-          status: TableStatus.Busy
-        }
-      }
-    )
 
-    return { newBooking, updatedStatusTable }
+    return newInventoryItem
   }
   async updateBooking(id: string, seatNumber: number) {
     const table = await databaseService.tables.updateOne(
