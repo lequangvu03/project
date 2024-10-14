@@ -32,5 +32,5 @@ class InventoryLogService {
     return inventoryLog
   }
 }
-const inventoryItemsService = new InventoryLogService()
-export default inventoryItemsService
+const inventoryLogService = new InventoryLogService()
+export default inventoryLogService

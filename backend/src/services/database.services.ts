@@ -3,6 +3,7 @@ import { Collection, Db, MongoClient } from 'mongodb'
 import { envConfig } from '~/constants/config'
 import Booking from '~/models/schemas/bookings.schema'
 import Category from '~/models/schemas/categorys.schema'
+import Employee from '~/models/schemas/employees.schema'
 import InventoryItem from '~/models/schemas/inventoryItems.schema'
 import InventoryLog from '~/models/schemas/inventoryLogs.schema'
 import MenuItem from '~/models/schemas/menuItems.schema'
@@ -84,6 +85,9 @@ class DatabaseService {
   }
   get inventoryLogs(): Collection<InventoryLog> {
     return this.db.collection('inventory_logs')
+  }
+  get employees(): Collection<Employee> {
+    return this.db.collection('employees')
   }
 }
 
