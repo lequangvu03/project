@@ -1,7 +1,6 @@
-import { ObjectId } from "mongodb"
+import { ObjectId } from 'mongodb'
 
 interface InventoryItemType {
-  item_id: ObjectId
   name: string
   category_id: ObjectId
   quantity: number
@@ -12,7 +11,6 @@ interface InventoryItemType {
 }
 
 export default class InventoryItem {
-  item_id: ObjectId
   name: string
   category_id: ObjectId
   quantity: number
@@ -22,7 +20,6 @@ export default class InventoryItem {
   perishable: boolean
 
   constructor(item: InventoryItemType) {
-    this.item_id = item.item_id
     this.name = item.name
     this.category_id = item.category_id
     this.quantity = item.quantity
