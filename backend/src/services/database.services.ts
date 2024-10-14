@@ -3,6 +3,7 @@ import { Collection, Db, MongoClient } from 'mongodb'
 import { envConfig } from '~/constants/config'
 import Booking from '~/models/schemas/bookings.schema'
 import Category from '~/models/schemas/categorys.schema'
+import InventoryItem from '~/models/schemas/inventoryItems.schema'
 import MenuItem from '~/models/schemas/menuItems.schema'
 import OrderItem from '~/models/schemas/orderItems.schema'
 import Order from '~/models/schemas/orders.schema'
@@ -76,6 +77,9 @@ class DatabaseService {
   }
   get bookings(): Collection<Booking> {
     return this.db.collection('bookings')
+  }
+  get inventoryItems(): Collection<InventoryItem> {
+    return this.db.collection('inventoryItems')
   }
 }
 

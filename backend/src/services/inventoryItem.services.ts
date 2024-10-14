@@ -3,11 +3,11 @@ import { TableStatus } from '~/constants/enums'
 import databaseService from '~/services/database.services'
 import tableService from './table.services'
 
-class BookingService {
-  async getAllBookings() {
-    const bookings = await databaseService.bookings.find().toArray()
+class InventoryItemsService {
+  async getAllInventoryItems() {
+    const inventoryItems = await databaseService.bookings.find().toArray()
     const total = await databaseService.bookings.countDocuments()
-    return { bookings, total }
+    return { inventoryItems, total }
   }
 
   async addBooking(
@@ -62,5 +62,5 @@ class BookingService {
     return table
   }
 }
-const bookingService = new BookingService()
-export default bookingService
+const inventoryItemsService = new InventoryItemsService()
+export default inventoryItemsService
