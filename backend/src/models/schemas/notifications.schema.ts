@@ -4,8 +4,8 @@ interface NotificationType {
   _id?: ObjectId
   recipient_id: ObjectId
   message: string
-  type: string
-  status: string
+  type: number
+  status: number
   created_at?: number
   updated_at?: number
 }
@@ -14,8 +14,8 @@ export default class Notification {
   _id?: ObjectId
   recipient_id: ObjectId
   message: string
-  type: string
-  status: string
+  type: number
+  status: number
   created_at: number
   updated_at: number
 

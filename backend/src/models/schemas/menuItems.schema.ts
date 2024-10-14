@@ -1,42 +1,39 @@
 import { ObjectId } from 'mongodb'
 
 interface MenuItemType {
-  _id?: ObjectId
+  _id: ObjectId
   name: string
   description: string
-  base_price: number
+  price: number
   category_id: ObjectId
-  availability?: boolean
-  count?: number
-  variant_ids?: ObjectId[]
+  availability: boolean
+  stock: number
   image?: string
   created_at?: number
   updated_at?: number
 }
 
 export default class MenuItem {
-  _id?: ObjectId
+  _id: ObjectId
   name: string
   description: string
-  base_price: number
+  price: number
   category_id: ObjectId
   availability: boolean
-  count: number
-  variant_ids: ObjectId[]
+  stock: number
   image?: string
-  created_at: number
-  updated_at: number
+  created_at?: number
+  updated_at?: number
 
   constructor(menuItem: MenuItemType) {
     const date = Date.now()
     this._id = menuItem._id
     this.name = menuItem.name
     this.description = menuItem.description
-    this.base_price = menuItem.base_price
+    this.price = menuItem.price
     this.category_id = menuItem.category_id
-    this.availability = menuItem.availability || true
-    this.count = menuItem.count || 0
-    this.variant_ids = menuItem.variant_ids || []
+    this.availability = menuItem.availability
+    this.stock = menuItem.stock
     this.image = menuItem.image || ''
     this.created_at = menuItem.created_at || date
     this.updated_at = menuItem.updated_at || date

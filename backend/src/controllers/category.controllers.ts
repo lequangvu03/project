@@ -14,13 +14,12 @@ export const addCategoryController = async (req: Request, res: Response, next: N
 }
 
 export const updateCategoryController = async (req: Request, res: Response, next: NextFunction) => {
-  const { id, name, description } = req.body
-  const result = await categoryService.updateCategory(id, name, description)
+  const { name, description } = req.body
+  const result = await categoryService.updateCategory(req.params.id, name, description)
   return res.status(200).json({ message: CATEGORY_MESSAGES.UPDATE_CATEGORY_SUCCESS, result })
 }
 
 export const deleteCategoryController = async (req: Request, res: Response, next: NextFunction) => {
-  const { id } = req.body
-  const result = await categoryService.deleteCategory(id)
+  const result = await categoryService.deleteCategory(req.params.id)
   return res.status(200).json({ message: CATEGORY_MESSAGES.DELETE_CATEGORY_SUCCESS, result })
 }

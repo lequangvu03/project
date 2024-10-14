@@ -16,9 +16,33 @@ export enum TokenType {
 }
 export enum RoleType {
   Admin,
-  User
+  Employee
 }
 export enum TableStatus {
   Empty,
   Busy
+}
+export enum OrderStatus {
+  Pending,
+  Completed,
+  Cancelled
+}
+export enum PaymentStatus {
+  Unpaid,
+  Paid
+}
+export enum NotificationType {
+  OrderCreated,
+  OrderUpdated,
+  OrderCompleted,
+  OrderCancelled,
+  ItemAdded,
+  ItemUpdated,
+  ItemRemoved,
+  EmployeeAssigned,
+  EmployeeRemoved
+}
+export enum NotificationStatus {
+  Unread,
+  Read
 }

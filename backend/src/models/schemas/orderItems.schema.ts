@@ -1,40 +1,22 @@
 import { ObjectId } from 'mongodb'
 
-interface OrderVariantType {
-  variant_name: string
-  selected_option: string
-  price_adjustment: number
-}
-
 interface OrderItemType {
   _id?: ObjectId
-  order_id: ObjectId
   item_id: ObjectId
-  item_name: string
-  selected_variants: OrderVariantType[]
   quantity: number
-  final_price: number
-  status: string
+  price_per_item: number
 }
 
 export default class OrderItem {
   _id?: ObjectId
-  order_id: ObjectId
   item_id: ObjectId
-  item_name: string
-  selected_variants: OrderVariantType[]
   quantity: number
-  final_price: number
-  status: string
+  price_per_item: number
 
   constructor(orderItem: OrderItemType) {
     this._id = orderItem._id
-    this.order_id = orderItem.order_id
     this.item_id = orderItem.item_id
-    this.item_name = orderItem.item_name
-    this.selected_variants = orderItem.selected_variants
     this.quantity = orderItem.quantity
-    this.final_price = orderItem.final_price
-    this.status = orderItem.status
+    this.price_per_item = orderItem.price_per_item // Assuming price_per_item is a number field in your schema. If it's a string, you'll need to convert it to a number before assigning it.  // Example: this.price_per_item = Number(orderItem.price_per_item)  // or parseInt() or parseFloat() if it's a string representation of a number.  // If you want to add
   }
 }

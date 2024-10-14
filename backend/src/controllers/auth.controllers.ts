@@ -19,9 +19,13 @@ import authService from '~/services/auth.services'
 export const loginController = async (req: Request<ParamsDictionary, any, LoginReqBody>, res: Response) => {
   const user = req.user as User
   const result = await authService.login(user)
+  const response = {
+    ...result,
+    role: user.role
+  }
   return res.json({
     message: AUTH_MESSAGES.LOGIN_SUCCESS,
-    result
+    result: response
   })
 }
 export const registerController = async (

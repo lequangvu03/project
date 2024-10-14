@@ -59,7 +59,13 @@ export const TABLE_MESSAGES = {
   GET_ALL_TABLE_SUCCESS: 'Get all table success',
   ADD_TABLE_SUCCESS: 'Add table success',
   UPDATE_TABLE_SUCCESS: 'Update table success',
-  DELETE_TABLE_SUCCESS: 'Delete table success'
+  DELETE_TABLE_SUCCESS: 'Delete table success',
+  TABLE_STATUS_MUST_BE_0_OR_1: 'Table status must be 0 or 1',
+  TABLE_CAPACITY_MUST_BE_NUMBER: 'Table capacity must be number',
+  TABLE_CAPACITY_MUST_BE_POSITIVE: 'Table capacity must be positive',
+  TABLE_LOCATION_MUST_BE_STRING: 'Table location must be string',
+  TABLE_LOCATION_MUST_BE_BETWEEN_1_AND_100_CHARACTERS: 'Table location must be between 1 and 100 characters',
+  TABLE_IS_NOT_FOUND: 'Table is not found'
 } as const
 export const MENU_MESSAGES = {
   GET_ALL_MENU_ITEM_SUCCESS: 'Get menu success',
@@ -71,7 +77,14 @@ export const MENU_MESSAGES = {
   MENU_ITEM_DESCRIPTION_MUST_BE_A_STRING: 'Menu item description must be a string',
   CATEGORY_ID_IS_REQUIRED: 'Category id is required',
   CATEGORY_NOT_EXIST: 'Category not exist',
-  VARIANT_IDS_MUST_BE_AN_ARRAY: 'Variant ids must be an array'
+  VARIANT_IDS_MUST_BE_AN_ARRAY: 'Variant ids must be an array',
+  CATEGORY_ID_MUST_BE_A_STRING: 'Category id must be a string',
+  AVAILABILITY_MUST_BE_A_BOOLEAN: 'Availability must be a boolean',
+  STOCK_MUST_BE_A_NUMBER: 'Stock must be a number',
+  STOCK_IS_REQUIRED: 'Stock is required',
+  MENU_ITEM_NAME_IS_REQUIRED: 'Menu item name is required',
+  MENU_ITEM_NAME_IS_EXIST: 'Menu item name is exist',
+  MENU_ITEM_PRICE_MUST_BE_GREATER_THAN_ZERO: 'Menu item price must be greater than zero'
 } as const
 export const CATEGORY_MESSAGES = {
   NAME_MUST_BE_STRING: 'Category name must be a string.',
@@ -104,5 +117,59 @@ export const VARIANT_MESSAGES = {
 
 export const ORDER_MESSAGE = {
   GET_ALL_ORDERS_SUCCESS: 'Get all orders success',
-  ADD_MENU_ITEM_SUCCESS: 'Add new order success'
+  ADD_MENU_ITEM_SUCCESS: 'Add new order success',
+  UPDATE_ORDER_SUCCESS: 'Update order success',
+  DELETE_ORDER_SUCCESS: 'Delete order success',
+  TABLE_NUMBER_MUST_BE_A_NUMBER: 'Table number must be a number',
+  TABLE_NUMBER_IS_REQUIRED: 'Table number is required',
+  ORDER_ITEMS_MUST_BE_AN_ARRAY: 'Order items must be an array',
+  ORDER_ITEMS_CANNOT_BE_EMPTY: 'Order items cannot be empty',
+  ORDER_ITEM_FIELDS_MUST_BE_PRESENT: 'Order item fields must be present',
+  TOTAL_PRICE_MUST_BE_A_NUMBER: 'Total price must be a number',
+  TOTAL_PRICE_IS_REQUIRED: 'Total price is required',
+  PAYMENT_STATUS_MUST_BE_A_STRING: 'Payment status must be a string',
+  PAYMENT_STATUS_MUST_BE_VALID: 'Payment status must be valid',
+  PAYMENT_STATUS_IS_REQUIRED: 'Payment status is required',
+  ORDER_STATUS_MUST_BE_A_STRING: 'Order status must be a string',
+  ORDER_STATUS_MUST_BE_VALID: 'Order status must be valid',
+  ORDER_STATUS_IS_REQUIRED: 'Order status is required',
+  PAYMENT_STATUS_MUST_BE_A_NUMBER: 'Payment status must be a number',
+  ORDER_STATUS_MUST_BE_A_NUMBER: 'Order status must be a number',
+  ORDER_IS_NOT_FOUND: 'Order is not found'
+}
+export const BOOKING_MESSAGE = {
+  GET_ALL_BOOKING_SUCCESS: 'Get all bookings success',
+  ADD_NEW_BOOKING_SUCCESS: 'Add new booking success',
+  UPDATE_BOOKING_SUCCESS: 'Update booking success',
+  DELETE_BOOKING_SUCCESS: 'Delete booking success',
+  TABLE_NUMBER_MUST_BE_NUMBER: 'Table number must be a number',
+  TABLE_NUMBER_IS_REQUIRED: 'Table number is required',
+  TABLE_IS_BUSY: 'This table is Reserved, please book other table!',
+  CUSTOMER_NAME_MUST_BE_STRING: 'Customer name must be a string',
+  CUSTOMER_NAME_IS_REQUIRED: 'Customer name is required',
+  CUSTOMER_PHONE_MUST_BE_STRING: 'Customer phone must be a string',
+  CUSTOMER_PHONE_IS_REQUIRED: 'Customer phone is required',
+  BOOKING_TIME_MUST_BE_VALID_DATE: 'booking time must be valid date',
+  BOOKING_TIME_IS_REQUIRED: 'booking time is required',
+  BOOKING_IS_NOT_FOUND: 'booking is not found'
+}
+
+export const INVENTORY_MESSAGE = {
+  GET_ALL_INVENTORY_SUCCESS: 'Get all inventories success',
+  ADD_NEW_INVENTORY_SUCCESS: 'Add new inventory success',
+  UPDATE_BOOKING_SUCCESS: 'Update booking success',
+  DELETE_BOOKING_SUCCESS: 'Delete booking success',
+  TABLE_NUMBER_MUST_BE_NUMBER: 'Table number must be a number',
+  TABLE_NUMBER_IS_REQUIRED: 'Table number is required',
+  NAME_MUST_BE_STRING: 'Category name must be a string.'
+}
+
+export const EMPLOYEE_MESSAGE = {
+  GET_ALL_EMPLOYEE_SUCCESS: 'Get all employees success',
+  ADD_NEW_EMPLOYEE_SUCCESS: 'Add new employee success',
+  UPDATE_BOOKING_SUCCESS: 'Update booking success',
+  DELETE_BOOKING_SUCCESS: 'Delete booking success',
+  TABLE_NUMBER_MUST_BE_NUMBER: 'Table number must be a number',
+  TABLE_NUMBER_IS_REQUIRED: 'Table number is required',
+  NAME_MUST_BE_STRING: 'Category name must be a string.'
 }

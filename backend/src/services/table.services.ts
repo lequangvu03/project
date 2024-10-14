@@ -12,22 +12,22 @@ class TableService {
     const total = await databaseService.tables.countDocuments()
     return { tables, total }
   }
-  async addTable(tableNumber: number, seatNumber: number) {
+  async addTable(tableNumber: number, capacity: number, location: string) {
     const table = await databaseService.tables.insertOne({
+      _id: new ObjectId(),
       table_number: tableNumber,
       status: TableStatus.Empty,
-      seat_number: seatNumber,
-      created_at: Date.now(),
-      updated_at: Date.now()
+      capacity: capacity,
+      location: location
     })
     return table
   }
-  async updateTable(id: string, seatNumber: number) {
+  async updateTable(id: string, data: any) {
     const table = await databaseService.tables.updateOne(
       { _id: new ObjectId(id) },
       {
         $set: {
-          seat_number: seatNumber,
+          ...data,
           updated_at: Date.now()
         }
       }
