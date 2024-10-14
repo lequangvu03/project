@@ -26,7 +26,7 @@ inventoryItemRouter.get('/', accessTokenValidator, wrapRequestHandler(getAllInve
  * method: POST
  * header: {Authorization: Bearer <access_token>}
  * body: {name: string, category_id: ObjectId, quantity: number, stock: string, unit_price: price, status: string, perishable: boolean}
- * description: Add a new table
+ * description: Add a new inventory
  * response: {message: string, result: InventoryItem}
  * */
 

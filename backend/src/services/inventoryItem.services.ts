@@ -19,37 +19,25 @@ class InventoryItemsService {
     status: string,
     perishable: boolean
   ) {
-    // 1. Nhập kho (tạo 1 inventory Item mới VD: gá)
-    const itemId = new ObjectId()
+    // 1. Nhập kho (tạo 1 inventory Item mới VD: gà)
     const newInventoryItem = await databaseService.inventoryItems.insertOne({
-      _id: itemId,
-      item_id: itemId,
+      _id: new ObjectId(),
       name: name,
-      category_id: category_id,
+      category_id: new ObjectId(category_id),
       quantity: quantity,
       stock: stock,
       unit_price: unit_price,
       status: status,
       perishable: perishable
     })
-
+    // 2. Ghi nhận log nhập kho
     return newInventoryItem
   }
-  async updateBooking(id: string, seatNumber: number) {
-    const table = await databaseService.tables.updateOne(
-      { _id: new ObjectId(id) },
-      {
-        $set: {
-          seat_number: seatNumber,
-          updated_at: Date.now()
-        }
-      }
-    )
-    return table
-  }
-  async deleteBooking(id: string) {
-    const table = await databaseService.tables.deleteOne({ _id: new ObjectId(id) })
-    return table
+
+  async updateInventoryItem() {}
+  async deleteInventoryItem(id: string) {
+    const inventoryItem = await databaseService.inventoryItems.deleteOne({ _id: new ObjectId(id) })
+    return inventoryItem
   }
 }
 const inventoryItemsService = new InventoryItemsService()
