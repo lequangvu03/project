@@ -14,7 +14,6 @@ class EmployeeService {
     const newEmployee = await databaseService.employees.insertOne({
       _id: new ObjectId(),
       name: nameInput,
-      employee_id: new ObjectId(),
       contact_info: contactInfo,
       position: positionInput,
       salary: salaryInput
