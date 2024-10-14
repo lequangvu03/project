@@ -6,6 +6,7 @@ import {
   updateBookingController
 } from '~/controllers/bookings.controllers'
 import { accessTokenValidator } from '~/middlewares/auth.middlewares'
+import { addBookingValidator, deleteBookingValidator, updateBookingValidator } from '~/middlewares/booking.middlewares'
 import { wrapRequestHandler } from '~/utils/handlers'
 
 export const bookingRouter = Router()
@@ -30,24 +31,26 @@ bookingRouter.get('/', accessTokenValidator, wrapRequestHandler(getAllBookingsCo
  * */
 
 // TODO: addBookingValidator
-bookingRouter.post('/', accessTokenValidator, wrapRequestHandler(addBookingController))
+bookingRouter.post('/', accessTokenValidator, addBookingValidator, wrapRequestHandler(addBookingController))
 
 /**
- * path: api/table/
+ * path: api/booking/
  * method: PUT
  * header: {Authorization: Bearer <access_token>}
- * body: {table_number: number, seat_number: number}
- * description: Update a table
- * response: {message: string, result: TableType}
+ * body: {customer_name: string, customer_phone: string, table_number: number, details: string}
+ * description: Update a booking
+ * response: {message: string, result: BookingType}
  * */
-bookingRouter.put('/:id', accessTokenValidator, wrapRequestHandler(updateBookingController))
+bookingRouter.put('/:id', accessTokenValidator, updateBookingValidator, wrapRequestHandler(updateBookingController))
 
 /**
- * path: api/table/
+ * path: api/booking/
  * method: DELETE
  * header: {Authorization: Bearer <access_token>}
- * body: {table_number: number}
- * description: Delete a table
- * response: {message: string, result: TableType}
+ * params: {booking_id: ObjectId}
+ * description: Delete a booking
+ * response: {message: string, result: BookingType}
+ * VD: http://localhost:4000/api/booking/670bf45207887ef825195797
  * */
-bookingRouter.delete('/:id', accessTokenValidator, wrapRequestHandler(deleteBookingController))
+
+bookingRouter.delete('/:id', accessTokenValidator, deleteBookingValidator, wrapRequestHandler(deleteBookingController))

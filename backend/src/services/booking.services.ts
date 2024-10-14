@@ -28,9 +28,6 @@ class BookingService {
       booking_time: bookingTime,
       details: detailsInput
     })
-    // check xem bàn đã có người đặt hay ngồi chưa ?
-    const foundTable = await tableService.checkTableExist(tableNumber)
-    if (foundTable?.status == 1) throw new Error('Table is reserved! Please book a different table')
     // Bước 2: Cập nhật trạng thái bàn thành "Reserved" hoặc busy
     const updatedStatusTable = await databaseService.tables.updateOne(
       {
@@ -48,7 +45,7 @@ class BookingService {
   async updateBooking() {}
   // Hủy booking
   // testing
-  async deleteBooking(id: string) {
+  async deleteBookingById(id: string) {
     // 1. xóa booking khỏi DB
     const foundBooking = await databaseService.bookings.findOne({ _id: new ObjectId(id) })
     const booking = await databaseService.bookings.deleteOne({ _id: new ObjectId(id) })

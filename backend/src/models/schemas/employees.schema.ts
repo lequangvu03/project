@@ -1,7 +1,6 @@
-import { ObjectId } from "mongodb"
+import { ObjectId } from 'mongodb'
 
 interface EmployeeType {
-  employee_id: ObjectId
   name: string
   position: string
   salary: number
@@ -9,14 +8,12 @@ interface EmployeeType {
 }
 
 export default class Employee {
-  employee_id: ObjectId
   name: string
   position: string
   salary: number
   contact_info: string
 
   constructor(employee: EmployeeType) {
-    this.employee_id = employee.employee_id
     this.name = employee.name
     this.position = employee.position
     this.salary = employee.salary

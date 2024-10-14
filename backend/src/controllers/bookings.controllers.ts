@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
-import { BOOKING_MESSAGE, TABLE_MESSAGES } from '~/constants/messages'
+import { BOOKING_MESSAGE } from '~/constants/messages'
 import bookingService from '~/services/booking.services'
 
 export const getAllBookingsController = async (req: Request, res: Response, error: NextFunction) => {
@@ -24,6 +24,6 @@ export const updateBookingController = async (req: Request, res: Response, error
   return res.status(200).json({ message: BOOKING_MESSAGE.UPDATE_BOOKING_SUCCESS, result })
 }
 export const deleteBookingController = async (req: Request, res: Response, error: NextFunction) => {
-  const result = await bookingService.deleteBooking(req.params.id)
+  const result = await bookingService.deleteBookingById(req.params.id)
   return res.status(200).json({ message: BOOKING_MESSAGE.DELETE_BOOKING_SUCCESS, result })
 }

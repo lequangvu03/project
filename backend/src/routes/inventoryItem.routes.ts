@@ -31,7 +31,7 @@ inventoryItemRouter.get('/', accessTokenValidator, wrapRequestHandler(getAllInve
  * */
 
 // TODO: addBookingValidator
-inventoryItemRouter.post('/', accessTokenValidator, wrapRequestHandler(addInventoryItemController))
+inventoryItemRouter.post('/', wrapRequestHandler(addInventoryItemController))
 
 /**
  * path: api/table/
