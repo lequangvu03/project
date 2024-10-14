@@ -20,7 +20,7 @@ export const addBookingController = async (req: Request, res: Response, error: N
   return res.status(201).json({ message: BOOKING_MESSAGE.ADD_NEW_BOOKING_SUCCESS, newBooking, updatedStatusTable })
 }
 export const updateBookingController = async (req: Request, res: Response, error: NextFunction) => {
-  const result = await bookingService.updateBooking(req.params.id, req.body.seat_number)
+  const result = await bookingService.updateBooking()
   return res.status(200).json({ message: BOOKING_MESSAGE.UPDATE_BOOKING_SUCCESS, result })
 }
 export const deleteBookingController = async (req: Request, res: Response, error: NextFunction) => {
