@@ -87,7 +87,7 @@ export const updateBookingValidator = validate(
         custom: {
           options: async (value) => {
             if (!value) {
-              throw new Error(BOOKING_MESSAGE.CUSTOMER_NAME_IS_REQUIRED)
+              throw new Error(BOOKING_MESSAGE.CUSTOMER_PHONE_IS_REQUIRED)
             }
             return true
           }
@@ -100,9 +100,6 @@ export const updateBookingValidator = validate(
         custom: {
           options: async (value) => {
             if (!value) throw new Error(BOOKING_MESSAGE.TABLE_NUMBER_IS_REQUIRED)
-            const table = await tableService.checkTableExist(value)
-            if (table?.status === TableStatus.Busy) throw new Error(BOOKING_MESSAGE.TABLE_IS_BUSY)
-            return true
           }
         }
       },
