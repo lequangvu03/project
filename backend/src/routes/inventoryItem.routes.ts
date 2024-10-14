@@ -12,22 +12,22 @@ import { wrapRequestHandler } from '~/utils/handlers'
 export const inventoryItemRouter = Router()
 
 /**
- * path: api/booking/
+ * path: api/inventory_item/
  * method: GET
  * header: {Authorization: Bearer <access_token>}
- * description: Get all bookings
- * response: {message: string, result: {bookings: BookingType[], total: number}}
+ * description: Get all inventory items
+ * response: {message: string, result: {bookings: InventoryItemType[], total: number}}
  * */
 
 inventoryItemRouter.get('/', accessTokenValidator, wrapRequestHandler(getAllInventoryItemsController))
 
 /**
- * path: api/booking/
+ * path: api/inventory_item/
  * method: POST
  * header: {Authorization: Bearer <access_token>}
- * body: {customer_name: string, customer_phone: string, table_number: number, details: string}
+ * body: {name: string, category_id: ObjectId, quantity: number, stock: string, unit_price: price, status: string, perishable: boolean}
  * description: Add a new table
- * response: {message: string, result: BookingType}
+ * response: {message: string, result: InventoryItem}
  * */
 
 // TODO: addBookingValidator
