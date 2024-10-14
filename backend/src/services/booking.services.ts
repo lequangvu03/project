@@ -45,21 +45,26 @@ class BookingService {
 
     return { newBooking, updatedStatusTable }
   }
-  async updateBooking(id: string, seatNumber: number) {
-    const table = await databaseService.tables.updateOne(
-      { _id: new ObjectId(id) },
+  async updateBooking() {}
+  // Hủy booking
+  // testing
+  async deleteBooking(id: string) {
+    // 1. xóa booking khỏi DB
+    const foundBooking = await databaseService.bookings.findOne({ _id: new ObjectId(id) })
+    const booking = await databaseService.bookings.deleteOne({ _id: new ObjectId(id) })
+    // 2. Cập nhật trạng thái table thành empty vì đã hủy booking
+    const tableNumber = foundBooking?.table_number as number
+    databaseService.tables.updateOne(
+      {
+        table_number: tableNumber
+      },
       {
         $set: {
-          seat_number: seatNumber,
-          updated_at: Date.now()
+          status: TableStatus.Empty
         }
       }
     )
-    return table
-  }
-  async deleteBooking(id: string) {
-    const table = await databaseService.tables.deleteOne({ _id: new ObjectId(id) })
-    return table
+    return booking
   }
 }
 const bookingService = new BookingService()
