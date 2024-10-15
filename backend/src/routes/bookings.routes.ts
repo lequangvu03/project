@@ -19,7 +19,7 @@ export const bookingRouter = Router()
  * response: {message: string, result: {bookings: BookingType[], total: number}}
  * */
 
-bookingRouter.get('/', accessTokenValidator, wrapRequestHandler(getAllBookingsController))
+bookingRouter.get('/', wrapRequestHandler(getAllBookingsController))
 
 /**
  * path: api/booking/
@@ -31,7 +31,7 @@ bookingRouter.get('/', accessTokenValidator, wrapRequestHandler(getAllBookingsCo
  * */
 
 // TODO: addBookingValidator
-bookingRouter.post('/', accessTokenValidator, addBookingValidator, wrapRequestHandler(addBookingController))
+bookingRouter.post('/', addBookingValidator, wrapRequestHandler(addBookingController))
 
 /**
  * path: api/booking/
@@ -41,7 +41,7 @@ bookingRouter.post('/', accessTokenValidator, addBookingValidator, wrapRequestHa
  * description: Update a booking
  * response: {message: string, result: BookingType}
  * */
-bookingRouter.put('/:id', accessTokenValidator, updateBookingValidator, wrapRequestHandler(updateBookingController))
+bookingRouter.put('/:id', updateBookingValidator, wrapRequestHandler(updateBookingController))
 
 /**
  * path: api/booking/
@@ -53,4 +53,4 @@ bookingRouter.put('/:id', accessTokenValidator, updateBookingValidator, wrapRequ
  * VD: http://localhost:4000/api/booking/670bf45207887ef825195797
  * */
 
-bookingRouter.delete('/:id', accessTokenValidator, deleteBookingValidator, wrapRequestHandler(deleteBookingController))
+bookingRouter.delete('/:id', deleteBookingValidator, wrapRequestHandler(deleteBookingController))

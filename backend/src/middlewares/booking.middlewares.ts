@@ -43,8 +43,6 @@ export const addBookingValidator = validate(
         custom: {
           options: async (value) => {
             if (!value) throw new Error(BOOKING_MESSAGE.TABLE_NUMBER_IS_REQUIRED)
-            const table = await tableService.checkTableExist(value)
-            if (table?.status === TableStatus.Busy) throw new Error(BOOKING_MESSAGE.TABLE_IS_BUSY)
             return true
           }
         }
@@ -110,8 +108,6 @@ export const updateBookingValidator = validate(
         custom: {
           options: async (value) => {
             if (!value) throw new Error(BOOKING_MESSAGE.TABLE_NUMBER_IS_REQUIRED)
-            const table = await tableService.checkTableExist(value)
-            if (table?.status === TableStatus.Busy) throw new Error(BOOKING_MESSAGE.TABLE_IS_BUSY)
             return true
           }
         }
@@ -128,7 +124,7 @@ export const updateBookingValidator = validate(
         }
       }
     },
-    ['body']
+    ['body', 'params']
   )
 )
 export const deleteBookingValidator = validate(

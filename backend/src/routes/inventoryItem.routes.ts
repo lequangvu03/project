@@ -35,7 +35,12 @@ inventoryItemRouter.get('/', accessTokenValidator, wrapRequestHandler(getAllInve
  * response: {message: string, result: InventoryItemType}
  * */
 
-inventoryItemRouter.post('/', addInventoryItemValidator, wrapRequestHandler(addInventoryItemController))
+inventoryItemRouter.post(
+  '/',
+  accessTokenValidator,
+  addInventoryItemValidator,
+  wrapRequestHandler(addInventoryItemController)
+)
 
 /**
  * path: api/inventory_item/
@@ -46,7 +51,12 @@ inventoryItemRouter.post('/', addInventoryItemValidator, wrapRequestHandler(addI
  * description: Update a table
  * response: {message: string, result: InventoryItemType}
  * */
-inventoryItemRouter.put('/:id', updateInventoryItemValidator, wrapRequestHandler(updateInventoryItemController))
+inventoryItemRouter.put(
+  '/:id',
+  accessTokenValidator,
+  updateInventoryItemValidator,
+  wrapRequestHandler(updateInventoryItemController)
+)
 
 /**
  * path: api/inventory_item/
@@ -56,4 +66,9 @@ inventoryItemRouter.put('/:id', updateInventoryItemValidator, wrapRequestHandler
  * description: Delete a inventory item
  * response: {message: string, result: InventoryItemType}
  * */
-inventoryItemRouter.delete('/:id', deleteInventoryItemValidator, wrapRequestHandler(deleteInventoryItemController))
+inventoryItemRouter.delete(
+  '/:id',
+  accessTokenValidator,
+  deleteInventoryItemValidator,
+  wrapRequestHandler(deleteInventoryItemController)
+)

@@ -3,13 +3,13 @@ import { BOOKING_MESSAGE, INVENTORY_MESSAGE, TABLE_MESSAGES } from '~/constants/
 import bookingService from '~/services/booking.services'
 import inventoryItemsService from '~/services/inventoryItem.services'
 
-// get oke
+// tested
 export const getAllInventoryItemsController = async (req: Request, res: Response, error: NextFunction) => {
   const result = await inventoryItemsService.getAllInventoryItems()
   return res.status(200).json({ message: INVENTORY_MESSAGE.GET_ALL_INVENTORY_SUCCESS, result })
 }
 
-// add oke
+// tested
 export const addInventoryItemController = async (req: Request, res: Response, error: NextFunction) => {
   const { name, category_id, quantity, stock, unit_price, status, perishable, import_date } = req.body
   const { newInventoryItem, log } = await inventoryItemsService.addInventoryItem(
@@ -24,6 +24,7 @@ export const addInventoryItemController = async (req: Request, res: Response, er
   )
   return res.status(201).json({ message: INVENTORY_MESSAGE.ADD_NEW_INVENTORY_SUCCESS, newInventoryItem, log })
 }
+// tested
 export const updateInventoryItemController = async (req: Request, res: Response, error: NextFunction) => {
   const id = req.params.id
   const { name, category_id, quantity, stock, unit_price, status, perishable, import_date } = req.body
@@ -42,6 +43,7 @@ export const updateInventoryItemController = async (req: Request, res: Response,
     .status(200)
     .json({ message: INVENTORY_MESSAGE.UPDATE_INVENTORY_SUCCESS, updatedInventoryItem, updatedInventoryLog })
 }
+// tested
 export const deleteInventoryItemController = async (req: Request, res: Response, error: NextFunction) => {
   const result = await inventoryItemsService.deleteInventoryItem(req.params.id)
   return res.status(200).json({ message: INVENTORY_MESSAGE.DELETE_INVENTORY_SUCCESS, result })
