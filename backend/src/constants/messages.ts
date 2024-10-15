@@ -166,5 +166,14 @@ export const EMPLOYEE_MESSAGE = {
   GET_ALL_EMPLOYEE_SUCCESS: 'Get all employees success',
   ADD_NEW_EMPLOYEE_SUCCESS: 'Add new employee success',
   UPDATE_EMPLOYEE_SUCCESS: 'Update employee success',
-  DELETE_EMPLOYEE_SUCCESS: 'Delete employee success'
+  DELETE_EMPLOYEE_SUCCESS: 'Delete employee success',
+  EMPLOYEE_NOT_FOUND: 'employee not found, try different id',
+  EMPLOYEE_NAME_MUST_BE_A_STRING: 'employee name must be a string',
+  EMPLOYEE_NAME_IS_REQUIRED: 'employee name is required',
+  POSITION_MUST_BE_A_STRING: 'employee position must be a string',
+  POSITION_IS_REQUIRED: 'employee position is required',
+  SALARY_MUST_BE_NUMBER: 'employee salary must be numeric value',
+  SALARY_IS_REQUIRED: 'employee salary is required',
+  CONTACT_INFO_IS_REQUIRED: 'contact info is required',
+  CONTACT_INFO_MUST_BE_STRING: 'contact info must be a string'
 }
