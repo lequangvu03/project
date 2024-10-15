@@ -21,7 +21,20 @@ class EmployeeService {
 
     return newEmployee
   }
-  async updateEmployee() {}
+  async updateEmployee(id: string, nameInput: string, contactInfo: string, positionInput: string, salaryInput: number) {
+    const updatedEmployee = await databaseService.employees.updateOne(
+      { _id: new ObjectId(id) },
+      {
+        $set: {
+          name: nameInput,
+          contact_info: contactInfo,
+          position: positionInput,
+          salary: salaryInput
+        }
+      }
+    )
+    return updatedEmployee
+  }
   // xóa nhân viên
   // testing
   async deleteEmployeeById(id: string) {

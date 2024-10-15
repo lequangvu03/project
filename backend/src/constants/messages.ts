@@ -165,9 +165,6 @@ export const INVENTORY_MESSAGE = {
 export const EMPLOYEE_MESSAGE = {
   GET_ALL_EMPLOYEE_SUCCESS: 'Get all employees success',
   ADD_NEW_EMPLOYEE_SUCCESS: 'Add new employee success',
-  UPDATE_BOOKING_SUCCESS: 'Update booking success',
-  DELETE_BOOKING_SUCCESS: 'Delete booking success',
-  TABLE_NUMBER_MUST_BE_NUMBER: 'Table number must be a number',
-  TABLE_NUMBER_IS_REQUIRED: 'Table number is required',
-  NAME_MUST_BE_STRING: 'Category name must be a string.'
+  UPDATE_EMPLOYEE_SUCCESS: 'Update employee success',
+  DELETE_EMPLOYEE_SUCCESS: 'Delete employee success'
 }
