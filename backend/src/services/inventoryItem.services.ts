@@ -82,8 +82,9 @@ class InventoryItemsService {
     return { updatedInventoryItem, updatedInventoryLog }
   }
   async deleteInventoryItem(id: string) {
-    const inventoryItem = await databaseService.inventoryItems.deleteOne({ _id: new ObjectId(id) })
-    return inventoryItem
+    const deletedInventoryItem = await databaseService.inventoryItems.deleteOne({ _id: new ObjectId(id) })
+    const deletedInventoryLog = await databaseService.inventoryLogs.deleteOne({ item_id: new ObjectId(id) })
+    return { deletedInventoryItem, deletedInventoryLog }
   }
 }
 const inventoryItemsService = new InventoryItemsService()

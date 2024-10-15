@@ -6,6 +6,11 @@ import {
   updateInventoryItemController
 } from '~/controllers/inventoryItem.controllers'
 import { accessTokenValidator } from '~/middlewares/auth.middlewares'
+import {
+  addInventoryItemValidator,
+  deleteInventoryItemValidator,
+  updateInventoryItemValidator
+} from '~/middlewares/inventory.item.middlewares'
 import { wrapRequestHandler } from '~/utils/handlers'
 
 // 1. Thêm hàng mới vào kho
@@ -27,28 +32,28 @@ inventoryItemRouter.get('/', accessTokenValidator, wrapRequestHandler(getAllInve
  * header: {Authorization: Bearer <access_token>}
  * body: {name: string, category_id: ObjectId, quantity: number, stock: string, unit_price: price, status: string, perishable: boolean, importDate: Date}
  * description: Add a new inventory
- * response: {message: string, result: InventoryItem}
+ * response: {message: string, result: InventoryItemType}
  * */
 
-// TODO: addBookingValidator
-inventoryItemRouter.post('/', wrapRequestHandler(addInventoryItemController))
+inventoryItemRouter.post('/', addInventoryItemValidator, wrapRequestHandler(addInventoryItemController))
 
 /**
- * path: api/table/
+ * path: api/inventory_item/
  * method: PUT
  * header: {Authorization: Bearer <access_token>}
- * body: {table_number: number, seat_number: number}
+ * params: id (inventory_item id)
+ * body: {name: string, category_id: ObjectId, quantity: number, stock: string, unit_price: price, status: string, perishable: boolean, importDate: Date}
  * description: Update a table
- * response: {message: string, result: TableType}
+ * response: {message: string, result: InventoryItemType}
  * */
-inventoryItemRouter.put('/:id', accessTokenValidator, wrapRequestHandler(updateInventoryItemController))
+inventoryItemRouter.put('/:id', updateInventoryItemValidator, wrapRequestHandler(updateInventoryItemController))
 
 /**
- * path: api/table/
+ * path: api/inventory_item/
  * method: DELETE
  * header: {Authorization: Bearer <access_token>}
  * body: {table_number: number}
- * description: Delete a table
- * response: {message: string, result: TableType}
+ * description: Delete a inventory item
+ * response: {message: string, result: InventoryItemType}
  * */
-inventoryItemRouter.delete('/:id', accessTokenValidator, wrapRequestHandler(deleteInventoryItemController))
+inventoryItemRouter.delete('/:id', deleteInventoryItemValidator, wrapRequestHandler(deleteInventoryItemController))
