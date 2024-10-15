@@ -83,6 +83,12 @@ class AuthService {
       }
     }, exp * 1000)
   }
+  private decodeAccessToken(Access_token: string) {
+    return verifyToken({
+      token: Access_token,
+      secretOrPublicKey: envConfig.jwtSecretAccessToken
+    })
+  }
   private decodeRefreshToken(refresh_token: string) {
     return verifyToken({
       token: refresh_token,
@@ -123,9 +129,11 @@ class AuthService {
     await databaseService.refreshTokens.insertOne(
       new RefreshToken({ user_id: new ObjectId(user._id), token: refresh_token })
     )
+    const { exp } = await this.decodeAccessToken(access_token)
     return {
       access_token,
-      refresh_token
+      refresh_token,
+      exp
     }
   }
   async verifyEmail(user_id: string) {
