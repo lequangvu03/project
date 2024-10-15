@@ -3,25 +3,19 @@
 import { ReactNode } from 'react'
 import { useForm } from 'react-hook-form'
 import { Form, FormField } from '~/components/ui/form'
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger
-} from '~/components/ui/sheet'
+import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '~/components/ui/sheet'
 
 import { X } from 'lucide-react'
 import Image from 'next/image'
 import PlaceholderImage from '~/assets/images/inventory-placeholder.png'
 import CustomInput from '~/components/custom-input'
 import { Button } from '~/components/ui/button'
+
 type Props = {
   children: ReactNode
 }
 
-function SheetInventory({ children }: Props) {
+function SheetReservation({ children }: Props) {
   const form = useForm({
     defaultValues: {
       name: '',
@@ -135,4 +129,4 @@ function SheetInventory({ children }: Props) {
   )
 }
 
-export default SheetInventory
+export default SheetReservation
