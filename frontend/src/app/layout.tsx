@@ -3,6 +3,7 @@ import localFont from 'next/font/local'
 import './globals.css'
 import { ReactNode } from 'react'
 import { ThemeProvider } from '~/providers/theme-provider'
+import QueryProvider from '~/providers/query-provider'
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -29,7 +30,7 @@ export default function RootLayout({
     <html lang='en' suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ThemeProvider attribute='class' defaultTheme='dark' enableSystem disableTransitionOnChange>
-          {children}
+          <QueryProvider>{children}</QueryProvider>
         </ThemeProvider>
       </body>
     </html>

@@ -2,6 +2,7 @@ import Image from 'next/image'
 import TempImage from '~/assets/images/temp.jpg'
 import { Button } from '~/components/ui/button'
 import { Table, TableBody, TableCell, TableRow } from '~/components/ui/table'
+import SheetReservation from '../sheet-reservation'
 
 type Props = {
   params: {
@@ -98,9 +99,11 @@ function ReservationDetailPage({ params }: Props) {
         <Button className='h-auto bg-transparent px-12 py-3 text-base text-white underline transition-all hover:bg-transparent hover:text-[var(--primary-color)]'>
           Edit Reservation
         </Button>
-        <Button className='h-auto bg-[var(--primary-color)] px-12 py-3 text-base text-white transition-all hover:bg-[#FAC1D9] hover:text-black hover:shadow-md hover:shadow-[#FAC1D9]'>
-          Edit Reservation
-        </Button>
+        <SheetReservation>
+          <Button className='h-auto bg-[var(--primary-color)] px-12 py-3 text-base text-white transition-all hover:bg-[#FAC1D9] hover:text-black hover:shadow-md hover:shadow-[#FAC1D9]'>
+            Edit Reservation
+          </Button>
+        </SheetReservation>
       </div>
     </div>
   )
