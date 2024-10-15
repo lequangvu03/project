@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
-import { BOOKING_MESSAGE, EMPLOYEE_MESSAGE, TABLE_MESSAGES } from '~/constants/messages'
+import { EMPLOYEE_MESSAGE } from '~/constants/messages'
 import employeeService from '~/services/employee.services'
 
 export const getAllEmployeesController = async (req: Request, res: Response, error: NextFunction) => {

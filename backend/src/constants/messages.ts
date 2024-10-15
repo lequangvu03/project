@@ -159,7 +159,20 @@ export const INVENTORY_MESSAGE = {
   GET_ALL_INVENTORY_SUCCESS: 'Get all inventories success',
   ADD_NEW_INVENTORY_SUCCESS: 'Add new inventory success',
   UPDATE_INVENTORY_SUCCESS: 'Update inventory success',
-  DELETE_INVENTORY_SUCCESS: 'Delete inventory success'
+  DELETE_INVENTORY_SUCCESS: 'Delete inventory success',
+  INVENTORY_NAME_MUST_BE_STRING: 'Inventory name must be a string',
+  INVENTORY_NAME_IS_REQUIRED: 'Inventory name is required',
+  CATEGORY_NAME_MUST_BE_STRING: 'Inventory name must be a string',
+  CATEGORY_NAME_IS_REQUIRED: 'Inventory name is required',
+  CATEGORY_NAME_NOT_EXIST: 'category name is not exist',
+  QUANTITY_MUST_BE_NUMBER: 'quantity must be a number',
+  QUANTITY_MUST_BE_VALID: 'quantity must be greater than 1 ',
+  STOCK_MUST_BE_STRING: 'stock must be a string',
+  STOCK_MUST_BE_REQUIRED: 'stock is required',
+  STATUS_MUST_BE_STRING: 'status must be a string ',
+  STATUS_MUST_BE_REQUIRED: 'status is required',
+  PERISHABLE_MUST_BE_0_OR_1: 'perishable  must be 0 or 1',
+  INVENTORY_ITEM_IS_NOT_FOUND: 'inventory item is not found, try other id'
 }
 
 export const EMPLOYEE_MESSAGE = {

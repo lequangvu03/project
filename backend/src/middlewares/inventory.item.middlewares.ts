@@ -1,57 +1,69 @@
 import { checkSchema } from 'express-validator'
 import { ObjectId } from 'mongodb'
-import { TABLE_MESSAGES } from '~/constants/messages'
+import { INVENTORY_MESSAGE, TABLE_MESSAGES } from '~/constants/messages'
 import databaseService from '~/services/database.services'
-import tableService from '~/services/table.services'
 import { validate } from '~/utils/validation'
 
 export const addInventoryItemValidator = validate(
   checkSchema(
     {
-      table_number: {
-        isNumeric: {
-          errorMessage: TABLE_MESSAGES.TABLE_NUMBER_MUST_BE_NUMBER
+      name: {
+        notEmpty: {
+          errorMessage: INVENTORY_MESSAGE.INVENTORY_NAME_IS_REQUIRED
+        },
+        isString: {
+          errorMessage: INVENTORY_MESSAGE.INVENTORY_NAME_MUST_BE_STRING
+        }
+      },
+      category_id: {
+        notEmpty: {
+          errorMessage: INVENTORY_MESSAGE.CATEGORY_NAME_IS_REQUIRED
+        },
+        isString: {
+          errorMessage: INVENTORY_MESSAGE.CATEGORY_NAME_MUST_BE_STRING
         },
         custom: {
           options: async (value) => {
-            if (value < 1) {
-              throw new Error(TABLE_MESSAGES.TABLE_NUMBER_LENGHT_MUST_BE_FROM_1_TO_100)
-            }
-            const isExistTable = await tableService.checkTableExist(value)
-            if (isExistTable) {
-              throw new Error(TABLE_MESSAGES.TABLE_NUMBER_IS_EXIST)
-            }
-            return true
+            const isExistCategory = databaseService.categories.findOne({ _id: new ObjectId(value) })
+            if (!isExistCategory) throw new Error(INVENTORY_MESSAGE.CATEGORY_NAME_NOT_EXIST)
           }
+        }
+      },
+      quantity: {
+        isNumeric: {
+          errorMessage: INVENTORY_MESSAGE.QUANTITY_MUST_BE_NUMBER
+        },
+        custom: {
+          options: async (value) => {
+            if (value < 1) throw new Error(INVENTORY_MESSAGE.QUANTITY_MUST_BE_VALID)
+          }
+        }
+      },
+      stock: {
+        notEmpty: {
+          errorMessage: INVENTORY_MESSAGE.STOCK_MUST_BE_REQUIRED
+        },
+        isString: {
+          errorMessage: INVENTORY_MESSAGE.STOCK_MUST_BE_STRING
+        }
+      },
+      unit_price: {
+        isNumeric: {
+          errorMessage: INVENTORY_MESSAGE.QUANTITY_MUST_BE_NUMBER
         }
       },
       status: {
-        isIn: {
-          options: [['0', '1']], // Assuming 0 is "Unavailable" and 1 is "Available"
-          errorMessage: TABLE_MESSAGES.TABLE_STATUS_MUST_BE_0_OR_1
+        notEmpty: {
+          errorMessage: INVENTORY_MESSAGE.STATUS_MUST_BE_REQUIRED
         },
-        optional: { options: { nullable: true } }
-      },
-      capacity: {
-        isNumeric: {
-          errorMessage: TABLE_MESSAGES.TABLE_CAPACITY_MUST_BE_NUMBER
-        },
-        custom: {
-          options: (value) => {
-            if (typeof value !== 'number' || value < 1) {
-              throw new Error(TABLE_MESSAGES.TABLE_CAPACITY_MUST_BE_POSITIVE)
-            }
-            return true
-          }
+        isString: {
+          errorMessage: INVENTORY_MESSAGE.STATUS_MUST_BE_STRING
         }
       },
-      location: {
-        isString: {
-          errorMessage: TABLE_MESSAGES.TABLE_LOCATION_MUST_BE_STRING
-        },
-        isLength: {
-          options: { min: 1, max: 100 },
-          errorMessage: TABLE_MESSAGES.TABLE_LOCATION_MUST_BE_BETWEEN_1_AND_100_CHARACTERS
+      perishable: {
+        isIn: {
+          options: [['0', '1']], // 0: không dễ vỡ, 1: dễ vỡ
+          errorMessage: INVENTORY_MESSAGE.PERISHABLE_MUST_BE_0_OR_1
         }
       }
     },
@@ -62,57 +74,77 @@ export const addInventoryItemValidator = validate(
 export const updateInventoryItemValidator = validate(
   checkSchema(
     {
-      table_number: {
-        isNumeric: {
-          errorMessage: TABLE_MESSAGES.TABLE_NUMBER_MUST_BE_NUMBER
+      id: {
+        custom: {
+          options: async (value) => {
+            const table = await databaseService.inventoryItems.findOne({ _id: new ObjectId(value as string) })
+            if (!table) {
+              throw new Error(INVENTORY_MESSAGE.INVENTORY_ITEM_IS_NOT_FOUND)
+            }
+          }
+        }
+      },
+      name: {
+        notEmpty: {
+          errorMessage: INVENTORY_MESSAGE.INVENTORY_NAME_IS_REQUIRED
+        },
+        isString: {
+          errorMessage: INVENTORY_MESSAGE.INVENTORY_NAME_MUST_BE_STRING
+        }
+      },
+      category_id: {
+        notEmpty: {
+          errorMessage: INVENTORY_MESSAGE.CATEGORY_NAME_IS_REQUIRED
+        },
+        isString: {
+          errorMessage: INVENTORY_MESSAGE.CATEGORY_NAME_MUST_BE_STRING
         },
         custom: {
           options: async (value) => {
-            if (value < 1) {
-              throw new Error(TABLE_MESSAGES.TABLE_NUMBER_LENGHT_MUST_BE_FROM_1_TO_100)
-            }
-            const isExistTable = await tableService.checkTableExist(value)
-            if (isExistTable) {
-              throw new Error(TABLE_MESSAGES.TABLE_NUMBER_IS_EXIST)
-            }
-            return true
+            const isExistCategory = databaseService.categories.findOne({ _id: new ObjectId(value) })
+            if (!isExistCategory) throw new Error(INVENTORY_MESSAGE.CATEGORY_NAME_NOT_EXIST)
           }
-        },
-        optional: { options: { nullable: true } }
+        }
       },
-      status: {
-        isIn: {
-          options: [['0', '1']],
-          errorMessage: TABLE_MESSAGES.TABLE_STATUS_MUST_BE_0_OR_1
-        },
-        optional: { options: { nullable: true } }
-      },
-      capacity: {
+      quantity: {
         isNumeric: {
-          errorMessage: TABLE_MESSAGES.TABLE_CAPACITY_MUST_BE_NUMBER
+          errorMessage: INVENTORY_MESSAGE.QUANTITY_MUST_BE_NUMBER
         },
         custom: {
-          options: (value) => {
-            if (value < 1) {
-              throw new Error(TABLE_MESSAGES.TABLE_CAPACITY_MUST_BE_POSITIVE)
-            }
-            return true
+          options: async (value) => {
+            if (value < 1) throw new Error(INVENTORY_MESSAGE.QUANTITY_MUST_BE_VALID)
           }
-        },
-        optional: { options: { nullable: true } }
+        }
       },
-      location: {
+      stock: {
+        notEmpty: {
+          errorMessage: INVENTORY_MESSAGE.STOCK_MUST_BE_REQUIRED
+        },
         isString: {
-          errorMessage: TABLE_MESSAGES.TABLE_LOCATION_MUST_BE_STRING
+          errorMessage: INVENTORY_MESSAGE.STOCK_MUST_BE_STRING
+        }
+      },
+      unit_price: {
+        isNumeric: {
+          errorMessage: INVENTORY_MESSAGE.QUANTITY_MUST_BE_NUMBER
+        }
+      },
+      status: {
+        notEmpty: {
+          errorMessage: INVENTORY_MESSAGE.STATUS_MUST_BE_REQUIRED
         },
-        isLength: {
-          options: { min: 1, max: 100 },
-          errorMessage: TABLE_MESSAGES.TABLE_LOCATION_MUST_BE_BETWEEN_1_AND_100_CHARACTERS
-        },
-        optional: { options: { nullable: true } }
+        isString: {
+          errorMessage: INVENTORY_MESSAGE.STATUS_MUST_BE_STRING
+        }
+      },
+      perishable: {
+        isIn: {
+          options: [['0', '1']], // 0: không dễ vỡ, 1: dễ vỡ
+          errorMessage: INVENTORY_MESSAGE.PERISHABLE_MUST_BE_0_OR_1
+        }
       }
     },
-    ['body']
+    ['body', 'params']
   )
 )
 
@@ -122,9 +154,9 @@ export const deleteInventoryItemValidator = validate(
       id: {
         custom: {
           options: async (value) => {
-            const table = await databaseService.inventoryItems.findOne({ _id: new ObjectId(value as string) })
-            if (!table) {
-              throw new Error(TABLE_MESSAGES.TABLE_IS_NOT_FOUND)
+            const inventoryItem = await databaseService.inventoryItems.findOne({ _id: new ObjectId(value) })
+            if (!inventoryItem) {
+              throw new Error(INVENTORY_MESSAGE.INVENTORY_ITEM_IS_NOT_FOUND)
             }
           }
         }

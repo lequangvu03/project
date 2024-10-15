@@ -43,21 +43,21 @@ employeeRouter.post('/', accessTokenValidator, addEmployeeValidator, wrapRequest
  * header: {Authorization: Bearer <access_token>}
  * body: {name: string, contact_info: string, position: string, salary: number}
  * description: Update a employee
- * response: {message: string, result: TableType}
+ * response: {message: string, result: EmployeeType}
  * */
 employeeRouter.put('/:id', accessTokenValidator, updateEmployeeValidator, wrapRequestHandler(updateEmployeeController))
 
 /**
- * path: api/table/
+ * path: api/employee/
  * method: DELETE
  * header: {Authorization: Bearer <access_token>}
  * body: {table_number: number}
- * description: Delete a table
- * response: {message: string, result: TableType}
+ * description: Delete a employee
+ * response: {message: string, result: EmployeeType}
  * */
 employeeRouter.delete(
   '/:id',
-  deleteEmployeeValidator,
   accessTokenValidator,
+  deleteEmployeeValidator,
   wrapRequestHandler(deleteEmployeeController)
 )

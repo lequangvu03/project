@@ -1,7 +1,5 @@
 import { ObjectId } from 'mongodb'
-import { TableStatus } from '~/constants/enums'
 import databaseService from '~/services/database.services'
-import tableService from './table.services'
 
 class EmployeeService {
   async getAllEmployees() {
