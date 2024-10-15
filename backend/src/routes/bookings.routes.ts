@@ -31,12 +31,13 @@ bookingRouter.get('/', accessTokenValidator, wrapRequestHandler(getAllBookingsCo
  * */
 
 // TODO: addBookingValidator
-bookingRouter.post('/', accessTokenValidator, addBookingValidator, wrapRequestHandler(addBookingController))
+bookingRouter.post('/', addBookingValidator, wrapRequestHandler(addBookingController))
 
 /**
  * path: api/booking/
  * method: PUT
  * header: {Authorization: Bearer <access_token>}
+ * params: id:
  * body: {customer_name: string, customer_phone: string, table_number: number, details: string}
  * description: Update a booking
  * response: {message: string, result: BookingType}

@@ -30,7 +30,7 @@ export const addBookingValidator = validate(
         custom: {
           options: async (value) => {
             if (!value) {
-              throw new Error(BOOKING_MESSAGE.CUSTOMER_NAME_IS_REQUIRED)
+              throw new Error(BOOKING_MESSAGE.CUSTOMER_PHONE_IS_REQUIRED)
             }
             return true
           }
@@ -43,8 +43,6 @@ export const addBookingValidator = validate(
         custom: {
           options: async (value) => {
             if (!value) throw new Error(BOOKING_MESSAGE.TABLE_NUMBER_IS_REQUIRED)
-            const table = await tableService.checkTableExist(value)
-            if (table?.status === TableStatus.Busy) throw new Error(BOOKING_MESSAGE.TABLE_IS_BUSY)
             return true
           }
         }
@@ -67,6 +65,16 @@ export const addBookingValidator = validate(
 export const updateBookingValidator = validate(
   checkSchema(
     {
+      id: {
+        custom: {
+          options: async (value) => {
+            const booking = await databaseService.bookings.findOne({ _id: new ObjectId(value as string) })
+            if (!booking) {
+              throw new Error(BOOKING_MESSAGE.BOOKING_IS_NOT_FOUND)
+            }
+          }
+        }
+      },
       customer_name: {
         isString: {
           errorMessage: BOOKING_MESSAGE.CUSTOMER_NAME_MUST_BE_STRING
@@ -74,7 +82,7 @@ export const updateBookingValidator = validate(
         custom: {
           options: async (value) => {
             if (!value) {
-              throw new Error(BOOKING_MESSAGE.CUSTOMER_NAME_IS_REQUIRED)
+              throw new Error(BOOKING_MESSAGE.CUSTOMER_PHONE_IS_REQUIRED)
             }
             return true
           }
@@ -100,8 +108,10 @@ export const updateBookingValidator = validate(
         custom: {
           options: async (value) => {
             if (!value) throw new Error(BOOKING_MESSAGE.TABLE_NUMBER_IS_REQUIRED)
-            const table = await tableService.checkTableExist(value)
-            if (table?.status === TableStatus.Busy) throw new Error(BOOKING_MESSAGE.TABLE_IS_BUSY)
+            const { total } = await tableService.getAllTables()
+            if (value < 1 || value > total) {
+              throw new Error(BOOKING_MESSAGE.TABLE_NUMBER_IS_NOT_VALID)
+            }
             return true
           }
         }
@@ -118,7 +128,7 @@ export const updateBookingValidator = validate(
         }
       }
     },
-    ['body']
+    ['body', 'params']
   )
 )
 export const deleteBookingValidator = validate(

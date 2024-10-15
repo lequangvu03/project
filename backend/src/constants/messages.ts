@@ -144,6 +144,7 @@ export const BOOKING_MESSAGE = {
   DELETE_BOOKING_SUCCESS: 'Delete booking success',
   TABLE_NUMBER_MUST_BE_NUMBER: 'Table number must be a number',
   TABLE_NUMBER_IS_REQUIRED: 'Table number is required',
+  TABLE_NUMBER_IS_NOT_VALID: 'Table number is not valid',
   TABLE_IS_BUSY: 'This table is Reserved, please book other table!',
   CUSTOMER_NAME_MUST_BE_STRING: 'Customer name must be a string',
   CUSTOMER_NAME_IS_REQUIRED: 'Customer name is required',
@@ -151,7 +152,7 @@ export const BOOKING_MESSAGE = {
   CUSTOMER_PHONE_IS_REQUIRED: 'Customer phone is required',
   BOOKING_TIME_MUST_BE_VALID_DATE: 'booking time must be valid date',
   BOOKING_TIME_IS_REQUIRED: 'booking time is required',
-  BOOKING_IS_NOT_FOUND: 'booking is not found'
+  BOOKING_IS_NOT_FOUND: 'booking is not found (please provide correct id)'
 }
 
 export const INVENTORY_MESSAGE = {

@@ -26,39 +26,38 @@ class BookingService {
       booking_time: bookingTime,
       details: detailsInput
     })
-    // Bước 2: Cập nhật trạng thái bàn thành "Reserved" hoặc busy
-    const updatedStatusTable = await databaseService.tables.updateOne(
-      {
-        table_number: tableNumber
-      },
+
+    return newBooking
+  }
+  async updateBookingById(
+    id: string,
+    customerName: string,
+    customerPhone: string,
+    tableNumber: number,
+    bookingTime: Date,
+    detailsInput: string
+  ) {
+    // update booking
+    const updatedBooking = await databaseService.bookings.updateOne(
+      { _id: new ObjectId(id) },
       {
         $set: {
-          status: TableStatus.Busy
+          customer_name: customerName,
+          customer_phone: customerPhone,
+          table_number: tableNumber,
+          booking_time: bookingTime,
+          details: detailsInput
         }
       }
     )
-
-    return { newBooking, updatedStatusTable }
+    // Nếu thay đổi table number (old) thành 1 table number khác (new)
+    return updatedBooking
   }
-  async updateBooking() {}
   // Hủy booking
   // testing
   async deleteBookingById(id: string) {
     // 1. xóa booking khỏi DB
-    const foundBooking = await databaseService.bookings.findOne({ _id: new ObjectId(id) })
     const booking = await databaseService.bookings.deleteOne({ _id: new ObjectId(id) })
-    // 2. Cập nhật trạng thái table thành empty vì đã hủy booking
-    const tableNumber = foundBooking?.table_number as number
-    databaseService.tables.updateOne(
-      {
-        table_number: tableNumber
-      },
-      {
-        $set: {
-          status: TableStatus.Empty
-        }
-      }
-    )
     return booking
   }
 }
