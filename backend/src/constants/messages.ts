@@ -175,5 +175,6 @@ export const EMPLOYEE_MESSAGE = {
   SALARY_MUST_BE_NUMBER: 'employee salary must be numeric value',
   SALARY_IS_REQUIRED: 'employee salary is required',
   CONTACT_INFO_IS_REQUIRED: 'contact info is required',
-  CONTACT_INFO_MUST_BE_STRING: 'contact info must be a string'
+  CONTACT_INFO_MUST_BE_STRING: 'contact info must be a string',
+  EMPPLOYEE_ID_IS_REQUIRED: 'please enter employee id'
 }

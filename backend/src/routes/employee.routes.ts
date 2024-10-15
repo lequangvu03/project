@@ -6,6 +6,11 @@ import {
   updateEmployeeController
 } from '~/controllers/employee.controllers'
 import { accessTokenValidator } from '~/middlewares/auth.middlewares'
+import {
+  addEmployeeValidator,
+  deleteEmployeeValidator,
+  updateEmployeeValidator
+} from '~/middlewares/employee.middlewares'
 import { wrapRequestHandler } from '~/utils/handlers'
 
 export const employeeRouter = Router()
@@ -18,7 +23,7 @@ export const employeeRouter = Router()
  * response: {message: string, result: {employees: EmployeeType[], total: number}}
  * */
 
-employeeRouter.get('/', wrapRequestHandler(getAllEmployeesController))
+employeeRouter.get('/', accessTokenValidator, wrapRequestHandler(getAllEmployeesController))
 
 /**
  * path: api/employee/
@@ -30,7 +35,7 @@ employeeRouter.get('/', wrapRequestHandler(getAllEmployeesController))
  * */
 
 // TODO: addBookingValidator
-employeeRouter.post('/', wrapRequestHandler(addEmployeeController))
+employeeRouter.post('/', accessTokenValidator, addEmployeeValidator, wrapRequestHandler(addEmployeeController))
 
 /**
  * path: api/employee/
@@ -40,7 +45,7 @@ employeeRouter.post('/', wrapRequestHandler(addEmployeeController))
  * description: Update a employee
  * response: {message: string, result: TableType}
  * */
-employeeRouter.put('/:id', accessTokenValidator, wrapRequestHandler(updateEmployeeController))
+employeeRouter.put('/:id', accessTokenValidator, updateEmployeeValidator, wrapRequestHandler(updateEmployeeController))
 
 /**
  * path: api/table/
@@ -50,4 +55,9 @@ employeeRouter.put('/:id', accessTokenValidator, wrapRequestHandler(updateEmploy
  * description: Delete a table
  * response: {message: string, result: TableType}
  * */
-employeeRouter.delete('/:id', accessTokenValidator, wrapRequestHandler(deleteEmployeeController))
+employeeRouter.delete(
+  '/:id',
+  deleteEmployeeValidator,
+  accessTokenValidator,
+  wrapRequestHandler(deleteEmployeeController)
+)
