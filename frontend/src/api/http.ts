@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import HTTP_STATUS_CODE from '~/constants/httpStatusCode'
+import HTTP_STATUS_CODE from '~/definitions/constant/httpStatusCode.constant'
 import { handleErrorAPI, normalizePath } from '~/lib/utils'
 import { TLoginResponse } from '~/models/auth'
 
