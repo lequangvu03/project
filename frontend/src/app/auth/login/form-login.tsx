@@ -12,6 +12,7 @@ import { AuthSchema, TLoginForm } from '~/schemaValidations/auth.schema'
 import CustomInput from '../../../components/custom-input'
 import { Checkbox } from '../../../components/ui/checkbox'
 import { Form, FormField } from '../../../components/ui/form'
+import { signIn } from 'next-auth/react'
 
 type Props = {
   className?: string
@@ -32,9 +33,12 @@ export default function FormLogin({ className, ...props }: Props) {
   const onSubmit = async function (body: TLoginForm) {
     if (loginMutation.isPending) return
     try {
-      const response = await loginMutation.mutateAsync(body)
-      console.log('test', response.payload)
-      // router.replace('/admin/menu')
+      const response = await signIn('credentials', {
+        ...body,
+        redirect: false
+      })
+
+      router.replace('/admin/menu')
     } catch (error: any) {
       handleErrorAPI({
         error: error,
@@ -56,8 +60,8 @@ export default function FormLogin({ className, ...props }: Props) {
         <CardDescription className='text-center'>Please enter your credentials below to continue</CardDescription>
       </CardHeader>
       <CardContent className='mt-6 grid gap-4'>
-        <form method='POST' onSubmit={form.handleSubmit(onSubmit, console.log)} className='space-y-8'>
-          <Form {...form}>
+        <Form {...form}>
+          <form method='POST' onSubmit={form.handleSubmit(onSubmit, console.log)} className='space-y-8'>
             <FormField
               control={form.control}
               name='email'
@@ -71,7 +75,7 @@ export default function FormLogin({ className, ...props }: Props) {
             <div className='flex items-center justify-between'>
               <div className='flex items-center space-x-2'>
                 <Checkbox
-                  className='border-[var(--primary-color)] data-[state=checked]:text-[var(--primary-color)]'
+                  className='border-[var(--primary-color)] data-[state=checked]:bg-[#292C2D] data-[state=checked]:text-[var(--primary-color)]'
                   id='remember'
                 />
                 <label
@@ -93,8 +97,8 @@ export default function FormLogin({ className, ...props }: Props) {
             >
               Login
             </Button>
-          </Form>
-        </form>
+          </form>
+        </Form>
       </CardContent>
     </Card>
   )

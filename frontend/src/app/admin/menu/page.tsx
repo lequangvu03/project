@@ -1,9 +1,15 @@
-import { Button } from '~/components/ui/button'
-import { kitchens } from '~/data/kitchens'
-import { foods } from '~/data/foods'
+import { getServerSession } from 'next-auth'
+import { publicPost } from '~/api/request'
 import Food from '~/components/food'
+import { Button } from '~/components/ui/button'
+import { foods } from '~/data/foods'
 
-export default function MenuPage() {
+export default async function MenuPage() {
+  const session = await getServerSession()
+  console.log({
+    session
+  })
+
   return (
     <main className='flex flex-col gap-4'>
       <div className='h-[1px] w-full bg-slate-700 leading-[0px]' />
@@ -23,7 +29,7 @@ export default function MenuPage() {
       <h2 className='mt-4 text-[20px] font-medium text-white'>Special menu all items</h2>
 
       <section className='flex items-center justify-between'>
-        <div className=' flex items-center gap-1'>
+        <div className='flex items-center gap-1'>
           <Button className='bg-[#EA7C69] text-white'>Normal menu</Button>
           <Button className='bg-transparent text-white'>Special deals</Button>
           <Button className='bg-transparent text-white'>New year special</Button>
