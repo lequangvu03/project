@@ -4,6 +4,7 @@ import './globals.css'
 import { ReactNode } from 'react'
 import { ThemeProvider } from '~/providers/theme-provider'
 import QueryProvider from '~/providers/query-provider'
+import SessionProvider from '~/providers/session-provider'
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -29,11 +30,13 @@ export default function RootLayout({
   return (
     <html lang='en' suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <QueryProvider>
-          <ThemeProvider attribute='class' defaultTheme='dark' enableSystem disableTransitionOnChange>
-            {children}
-          </ThemeProvider>
-        </QueryProvider>
+        <SessionProvider>
+          <QueryProvider>
+            <ThemeProvider attribute='class' defaultTheme='dark' enableSystem disableTransitionOnChange>
+              {children}
+            </ThemeProvider>
+          </QueryProvider>
+        </SessionProvider>
       </body>
     </html>
   )

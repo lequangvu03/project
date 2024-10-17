@@ -3,6 +3,7 @@
 import NextAuth, { AuthOptions } from 'next-auth'
 import { publicPost } from '~/api/request'
 import CredentialsProvider from 'next-auth/providers/credentials'
+import { EntityError } from '~/api/http'
 /**
  * Config next-auth options protecting routes
  * Refer https://next-auth.js.org/configuration/providers/credentials#how-to
@@ -13,12 +14,23 @@ const nextAuthOptions: AuthOptions = {
       name: 'Credentials',
       credentials: {},
       async authorize(credentials: any) {
-        const { email, password } = credentials
-        const res = await publicPost('/auth/login', { email, password })
-
-        if (res.result) {
-          return res.result
+        try {
+          const { email, password } = credentials
+          const res = await publicPost('/auth/login', { email, password })
+          if (res.result) {
+            return res.result
+          }
+        } catch (error: any) {
+          throw new Error(
+            JSON.stringify(
+              new EntityError({
+                status: error?.status,
+                payload: error?.response?.data
+              })
+            )
+          )
         }
+
         return null
       }
     })

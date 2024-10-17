@@ -1,8 +1,9 @@
 import { type ClassValue, clsx } from 'clsx'
 import { UseFormSetError } from 'react-hook-form'
+import { toast } from 'sonner'
 import { twMerge } from 'tailwind-merge'
-import { EntityError } from '~/api/http'
-import { toast } from '~/hooks/use-toast'
+import { decrypt, encrypt } from './crypto'
+import Cookies from 'js-cookie'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -17,7 +18,7 @@ export function handleErrorAPI({
   setError?: UseFormSetError<any>
   error: any
 }) {
-  if (error instanceof EntityError && setError) {
+  if (error?.status === 422 && setError) {
     const errors = error.payload.errors
     for (const field in errors) {
       setError(field, {
@@ -26,13 +27,57 @@ export function handleErrorAPI({
       })
     }
   } else {
-    toast({
-      title: 'Lỗi!',
-      variant: 'destructive',
-      description: error?.payload?.message ?? 'Lỗi không xác định!',
-      duration: duration || 3000
+    toast('Lỗi không xác định!', {
+      duration: duration || 3000,
+      position: 'top-right'
     })
   }
 }
 
 export const normalizePath = (path: string): string => (path.startsWith('/') ? path : `/${path}`)
+
+export const setRememberMeToCS = (value: boolean) => {
+  Cookies.set('remember', JSON.stringify(value), {
+    expires: 30
+  })
+}
+
+export const getRememberMeFromCS = () => {
+  const remember = Cookies.get('remember')
+  return remember ? JSON.parse(remember) : false
+}
+
+export const removeRememberMeToCS = () => {
+  Cookies.remove('remember')
+}
+
+type Auth = {
+  email: string
+  password: string
+}
+
+export const setAuthToCS = ({ email, password }: Auth) => {
+  Cookies.set('email', encrypt(email), {
+    expires: 30
+  })
+  Cookies.set('password', encrypt(password), {
+    expires: 30
+  })
+}
+
+export const getAuthFromCS = () => {
+  const email = Cookies.get('email')
+  const password = Cookies.get('password')
+
+  return email && password
+    ? {
+        email: decrypt(email),
+        password: decrypt(password)
+      }
+    : null
+}
+
+export const removeAuthToCS = () => {
+  Cookies.remove('email')
+  Cookies.remove('password')
+}
