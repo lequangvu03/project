@@ -21,9 +21,6 @@ export default withAuth(
       return NextResponse.redirect(new URL('/auth/login', request.url))
     }
 
-    console.log({
-      isAuthenticated
-    })
     return NextResponse.next()
   },
   {

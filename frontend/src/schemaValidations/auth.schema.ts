@@ -10,7 +10,8 @@ export const AuthSchema = z.object({
     .regex(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{6,50}$/,
       'Password must be 6-50 characters long and contain at least 1 lowercase letter, 1 uppercase letter, 1 number, and 1 symbol'
-    )
+    ),
+  remember: z.boolean().optional()
 })
 
 export type TLoginForm = z.infer<typeof AuthSchema>
