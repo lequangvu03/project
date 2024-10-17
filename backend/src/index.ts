@@ -13,6 +13,7 @@ import { initFolder } from '~/utils/file'
 import { bookingRouter } from './routes/bookings.routes'
 import { inventoryItemRouter } from './routes/inventoryItem.routes'
 import { notificationRouter } from '~/routes/notification.routes'
+import { employeeRouter } from './routes/employee.routes'
 databaseService.connect().then(() => {
   databaseService.indexUsers()
   databaseService.indexRefreshTokens()
@@ -31,6 +32,7 @@ app.use('/api/category', categoryRouter)
 app.use('/api/booking', bookingRouter)
 app.use('/api/inventory_item', inventoryItemRouter)
 app.use('/api/notification', notificationRouter)
+app.use('/api/employee', employeeRouter)
 app.use(defaultErrorHandler)
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)

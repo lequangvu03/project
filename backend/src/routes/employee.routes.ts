@@ -6,6 +6,11 @@ import {
   updateEmployeeController
 } from '~/controllers/employee.controllers'
 import { accessTokenValidator } from '~/middlewares/auth.middlewares'
+import {
+  addEmployeeValidator,
+  deleteEmployeeValidator,
+  updateEmployeeValidator
+} from '~/middlewares/employee.middlewares'
 import { wrapRequestHandler } from '~/utils/handlers'
 
 export const employeeRouter = Router()
@@ -18,7 +23,7 @@ export const employeeRouter = Router()
  * response: {message: string, result: {employees: EmployeeType[], total: number}}
  * */
 
-employeeRouter.get('/', wrapRequestHandler(getAllEmployeesController))
+employeeRouter.get('/', accessTokenValidator, wrapRequestHandler(getAllEmployeesController))
 
 /**
  * path: api/employee/
@@ -30,7 +35,7 @@ employeeRouter.get('/', wrapRequestHandler(getAllEmployeesController))
  * */
 
 // TODO: addBookingValidator
-employeeRouter.post('/', wrapRequestHandler(addEmployeeController))
+employeeRouter.post('/', accessTokenValidator, addEmployeeValidator, wrapRequestHandler(addEmployeeController))
 
 /**
  * path: api/employee/
@@ -38,16 +43,21 @@ employeeRouter.post('/', wrapRequestHandler(addEmployeeController))
  * header: {Authorization: Bearer <access_token>}
  * body: {name: string, contact_info: string, position: string, salary: number}
  * description: Update a employee
- * response: {message: string, result: TableType}
+ * response: {message: string, result: EmployeeType}
  * */
-employeeRouter.put('/:id', accessTokenValidator, wrapRequestHandler(updateEmployeeController))
+employeeRouter.put('/:id', accessTokenValidator, updateEmployeeValidator, wrapRequestHandler(updateEmployeeController))
 
 /**
- * path: api/table/
+ * path: api/employee/
  * method: DELETE
  * header: {Authorization: Bearer <access_token>}
  * body: {table_number: number}
- * description: Delete a table
- * response: {message: string, result: TableType}
+ * description: Delete a employee
+ * response: {message: string, result: EmployeeType}
  * */
-employeeRouter.delete('/:id', accessTokenValidator, wrapRequestHandler(deleteEmployeeController))
+employeeRouter.delete(
+  '/:id',
+  accessTokenValidator,
+  deleteEmployeeValidator,
+  wrapRequestHandler(deleteEmployeeController)
+)

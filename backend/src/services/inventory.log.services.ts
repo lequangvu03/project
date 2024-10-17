@@ -8,13 +8,7 @@ class InventoryLogService {
     return { inventoryLogs, total }
   }
 
-  async addInventoryLog(
-    itemId: ObjectId,
-    quantity: number,
-    changeType: string,
-    changeQuantity: number,
-    changeDate: Date
-  ) {
+  async addInventoryLog(itemId: ObjectId, changeType: string, changeQuantity: number, changeDate: Date) {
     // 1. ghi nhập thông tin nhập kho (khi tạo 1 inventory mới)
     const newInventoryLog = await databaseService.inventoryLogs.insertOne({
       _id: new ObjectId(),
@@ -32,5 +26,5 @@ class InventoryLogService {
     return inventoryLog
   }
 }
-const inventoryItemsService = new InventoryLogService()
-export default inventoryItemsService
+const inventoryLogService = new InventoryLogService()
+export default inventoryLogService

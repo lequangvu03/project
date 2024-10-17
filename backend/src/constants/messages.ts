@@ -158,19 +158,36 @@ export const BOOKING_MESSAGE = {
 export const INVENTORY_MESSAGE = {
   GET_ALL_INVENTORY_SUCCESS: 'Get all inventories success',
   ADD_NEW_INVENTORY_SUCCESS: 'Add new inventory success',
-  UPDATE_BOOKING_SUCCESS: 'Update booking success',
-  DELETE_BOOKING_SUCCESS: 'Delete booking success',
-  TABLE_NUMBER_MUST_BE_NUMBER: 'Table number must be a number',
-  TABLE_NUMBER_IS_REQUIRED: 'Table number is required',
-  NAME_MUST_BE_STRING: 'Category name must be a string.'
+  UPDATE_INVENTORY_SUCCESS: 'Update inventory success',
+  DELETE_INVENTORY_SUCCESS: 'Delete inventory success',
+  INVENTORY_NAME_MUST_BE_STRING: 'Inventory name must be a string',
+  INVENTORY_NAME_IS_REQUIRED: 'Inventory name is required',
+  CATEGORY_NAME_MUST_BE_STRING: 'Inventory name must be a string',
+  CATEGORY_NAME_IS_REQUIRED: 'Inventory name is required',
+  CATEGORY_NAME_NOT_EXIST: 'category name is not exist',
+  QUANTITY_MUST_BE_NUMBER: 'quantity must be a number',
+  QUANTITY_MUST_BE_VALID: 'quantity must be greater than 1 ',
+  STOCK_MUST_BE_STRING: 'stock must be a string',
+  STOCK_MUST_BE_REQUIRED: 'stock is required',
+  STATUS_MUST_BE_STRING: 'status must be a string ',
+  STATUS_MUST_BE_REQUIRED: 'status is required',
+  PERISHABLE_MUST_BE_0_OR_1: 'perishable  must be 0 or 1',
+  INVENTORY_ITEM_IS_NOT_FOUND: 'inventory item is not found, try other id'
 }
 
 export const EMPLOYEE_MESSAGE = {
   GET_ALL_EMPLOYEE_SUCCESS: 'Get all employees success',
   ADD_NEW_EMPLOYEE_SUCCESS: 'Add new employee success',
-  UPDATE_BOOKING_SUCCESS: 'Update booking success',
-  DELETE_BOOKING_SUCCESS: 'Delete booking success',
-  TABLE_NUMBER_MUST_BE_NUMBER: 'Table number must be a number',
-  TABLE_NUMBER_IS_REQUIRED: 'Table number is required',
-  NAME_MUST_BE_STRING: 'Category name must be a string.'
+  UPDATE_EMPLOYEE_SUCCESS: 'Update employee success',
+  DELETE_EMPLOYEE_SUCCESS: 'Delete employee success',
+  EMPLOYEE_NOT_FOUND: 'employee not found, try different id',
+  EMPLOYEE_NAME_MUST_BE_A_STRING: 'employee name must be a string',
+  EMPLOYEE_NAME_IS_REQUIRED: 'employee name is required',
+  POSITION_MUST_BE_A_STRING: 'employee position must be a string',
+  POSITION_IS_REQUIRED: 'employee position is required',
+  SALARY_MUST_BE_NUMBER: 'employee salary must be numeric value',
+  SALARY_IS_REQUIRED: 'employee salary is required',
+  CONTACT_INFO_IS_REQUIRED: 'contact info is required',
+  CONTACT_INFO_MUST_BE_STRING: 'contact info must be a string',
+  EMPPLOYEE_ID_IS_REQUIRED: 'please enter employee id'
 }

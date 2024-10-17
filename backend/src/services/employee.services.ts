@@ -1,7 +1,5 @@
 import { ObjectId } from 'mongodb'
-import { TableStatus } from '~/constants/enums'
 import databaseService from '~/services/database.services'
-import tableService from './table.services'
 
 class EmployeeService {
   async getAllEmployees() {
@@ -21,7 +19,20 @@ class EmployeeService {
 
     return newEmployee
   }
-  async updateEmployee() {}
+  async updateEmployee(id: string, nameInput: string, contactInfo: string, positionInput: string, salaryInput: number) {
+    const updatedEmployee = await databaseService.employees.updateOne(
+      { _id: new ObjectId(id) },
+      {
+        $set: {
+          name: nameInput,
+          contact_info: contactInfo,
+          position: positionInput,
+          salary: salaryInput
+        }
+      }
+    )
+    return updatedEmployee
+  }
   // xóa nhân viên
   // testing
   async deleteEmployeeById(id: string) {

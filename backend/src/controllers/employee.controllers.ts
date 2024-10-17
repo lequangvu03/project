@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
-import { BOOKING_MESSAGE, EMPLOYEE_MESSAGE, TABLE_MESSAGES } from '~/constants/messages'
+import { EMPLOYEE_MESSAGE } from '~/constants/messages'
 import employeeService from '~/services/employee.services'
 
 export const getAllEmployeesController = async (req: Request, res: Response, error: NextFunction) => {
@@ -13,10 +13,12 @@ export const addEmployeeController = async (req: Request, res: Response, error: 
   return res.status(201).json({ message: EMPLOYEE_MESSAGE.ADD_NEW_EMPLOYEE_SUCCESS, result })
 }
 export const updateEmployeeController = async (req: Request, res: Response, error: NextFunction) => {
-  const result = await employeeService.updateEmployee()
-  return res.status(200).json({ message: BOOKING_MESSAGE.UPDATE_BOOKING_SUCCESS, result })
+  const id = req.params.id
+  const { name, contact_info, position, salary } = req.body
+  const result = await employeeService.updateEmployee(id, name, contact_info, position, salary)
+  return res.status(200).json({ message: EMPLOYEE_MESSAGE.UPDATE_EMPLOYEE_SUCCESS, result })
 }
 export const deleteEmployeeController = async (req: Request, res: Response, error: NextFunction) => {
   const result = await employeeService.deleteEmployeeById(req.params.id)
-  return res.status(200).json({ message: BOOKING_MESSAGE.DELETE_BOOKING_SUCCESS, result })
+  return res.status(200).json({ message: EMPLOYEE_MESSAGE.DELETE_EMPLOYEE_SUCCESS, result })
 }
