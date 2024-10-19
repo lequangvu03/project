@@ -13,7 +13,9 @@ class MenuService {
     return menuItem
   }
   async getMenu() {
-    return await databaseService.menuItems.find().toArray()
+    const menus = await databaseService.menuItems.find().toArray()
+    const total = menus.length
+    return { menus, total }
   }
   async getMenuByCategory(categoryId: string) {
     return await databaseService.menuItems.find({ category_id: new ObjectId(categoryId) }).toArray()
@@ -41,7 +43,6 @@ class MenuService {
       price: +data.price,
       image: data.image,
       category_id: new ObjectId(data.category_id),
-      availability: data.availability,
       stock: +data.stock
     })
     await databaseService.menuItems.insertOne(newMenuItem)
