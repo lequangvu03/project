@@ -18,7 +18,9 @@ class MenuService {
     return { menus, total }
   }
   async getMenuByCategory(categoryId: string) {
-    return await databaseService.menuItems.find({ category_id: new ObjectId(categoryId) }).toArray()
+    const menus = await databaseService.menuItems.find({ category_id: new ObjectId(categoryId) }).toArray()
+    const total = menus.length
+    return { menus, total }
   }
   async uploadImage(file: any) {
     const newName = getNameFromFullname(file.newFilename)

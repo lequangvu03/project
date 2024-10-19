@@ -7,7 +7,7 @@ export const getAllMenuController = async (req: Request, res: Response, error: N
   return res.status(200).json({ message: MENU_MESSAGES.GET_ALL_MENU_ITEM_SUCCESS, result })
 }
 export const getMenuByCategoryController = async (req: Request, res: Response, error: NextFunction) => {
-  const result = await menuService.getMenuByCategory(req.params.categoryId)
+  const result = await menuService.getMenuByCategory(req.params.id)
   return res.status(200).json({ message: MENU_MESSAGES.GET_ALL_MENU_ITEM_SUCCESS, result })
 }
 export const addMenuItemController = async (req: Request, res: Response, error: NextFunction) => {
