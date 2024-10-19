@@ -4,10 +4,12 @@ import Category from '~/components/category'
 import { Button } from '~/components/ui/button'
 import { foods } from '~/data/foods'
 import { useGetCategoriesQuery } from '~/hooks/data/categories.data'
+import { ICategory } from '~/models/categories.module'
 
 export default function MenuPage() {
-  const { data: categories } = useGetCategoriesQuery()
-  console.log(categories)
+  const { data } = useGetCategoriesQuery()
+  const categories = (data?.result?.categories as ICategory[]) || null
+
   return (
     <main className='flex flex-col gap-4'>
       <div className='h-[1px] w-full bg-slate-700 leading-[0px]' />
@@ -19,8 +21,8 @@ export default function MenuPage() {
       </section>
 
       <section className='grid grid-cols-7 gap-4'>
-        {foods.map(function (category, index: number) {
-          return <Category amount={+category.amount} key={index} icon={category.icon} name={category.name} />
+        {categories && categories.map(function (category, index: number) {
+          return <Category amount={+category.totalProducts} key={index}  name={category.name} />
         })}
       </section>
 

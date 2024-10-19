@@ -1,8 +1,8 @@
-import { sendPost } from '~/api/request'
+import { sendGet } from '~/api/request'
 
 const categoriesServices = {
   getCategories: () => {
-    return sendPost('/category')
+    return sendGet('/category')
   }
 }
 
