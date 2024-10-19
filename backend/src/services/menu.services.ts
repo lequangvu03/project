@@ -15,6 +15,9 @@ class MenuService {
   async getMenu() {
     return await databaseService.menuItems.find().toArray()
   }
+  async getMenuByCategory(categoryId: string) {
+    return await databaseService.menuItems.find({ category_id: new ObjectId(categoryId) }).toArray()
+  }
   async uploadImage(file: any) {
     const newName = getNameFromFullname(file.newFilename)
     const newPath = path.resolve(UPLOAD_IMAGE_DIR, `${newName}.jpg`)
@@ -39,7 +42,7 @@ class MenuService {
       image: data.image,
       category_id: new ObjectId(data.category_id),
       availability: data.availability,
-      stock: data.stock
+      stock: +data.stock
     })
     await databaseService.menuItems.insertOne(newMenuItem)
     return newMenuItem
