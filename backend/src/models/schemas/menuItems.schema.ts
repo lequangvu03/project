@@ -6,7 +6,6 @@ interface MenuItemType {
   description: string
   price: number
   category_id: ObjectId
-  availability: boolean
   stock: number
   image?: string
   created_at?: number
@@ -19,7 +18,6 @@ export default class MenuItem {
   description: string
   price: number
   category_id: ObjectId
-  availability: boolean
   stock: number
   image?: string
   created_at?: number
@@ -32,7 +30,6 @@ export default class MenuItem {
     this.description = menuItem.description
     this.price = menuItem.price
     this.category_id = menuItem.category_id
-    this.availability = menuItem.availability
     this.stock = menuItem.stock
     this.image = menuItem.image || ''
     this.created_at = menuItem.created_at || date
