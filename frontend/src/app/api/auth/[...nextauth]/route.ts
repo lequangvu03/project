@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-param-reassign */
 import NextAuth, { AuthOptions } from 'next-auth'
-import { publicPost } from '~/api/request'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { EntityError } from '~/api/http'
+import { publicPost } from '~/api/request'
 /**
  * Config next-auth options protecting routes
  * Refer https://next-auth.js.org/configuration/providers/credentials#how-to
@@ -79,6 +79,7 @@ const nextAuthOptions: AuthOptions = {
       session.accessToken = token.accessToken
       session.refreshToken = token.refreshToken
       session.accessTokenExpires = token.exp
+      session.role = token?.role
       return session
     },
     /**
@@ -93,6 +94,7 @@ const nextAuthOptions: AuthOptions = {
         token.accessToken = user?.access_token || user?.accessToken
         token.refreshToken = user?.refresh_token || user?.refreshToken
         token.accessTokenExpires = user?.exp
+        token.role = user?.role
         if (currentTime >= user.exp) {
           token.isAuthenticated = false
         } else {
@@ -121,7 +123,7 @@ const nextAuthOptions: AuthOptions = {
 
 async function refreshAccessToken(refreshToken: string) {
   try {
-    const response = await publicPost('/api/auth/refresh-token', { refresh_token: refreshToken })
+    const response = await publicPost('/auth/refresh-token', { refresh_token: refreshToken })
     return {
       accessToken: response.result.access_token,
       accessTokenExpires: response.result.exp,
