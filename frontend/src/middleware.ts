@@ -13,13 +13,13 @@ export default withAuth(
 
     const isAuthenticated = request.nextauth?.token?.isAuthenticated
 
-    // if (isAuthenticated && isAuthRoutes) {
-    //   return NextResponse.redirect(new URL('/admin/menu', request.url))
-    // }
+    if (isAuthenticated && isAuthRoutes) {
+      return NextResponse.redirect(new URL('/admin/menu', request.url))
+    }
 
-    // if (!isAuthenticated && isProtectedRoutes) {
-    //   return NextResponse.redirect(new URL('/auth/login', request.url))
-    // }
+    if (!isAuthenticated && isProtectedRoutes) {
+      return NextResponse.redirect(new URL('/auth/login', request.url))
+    }
 
     return NextResponse.next()
   },

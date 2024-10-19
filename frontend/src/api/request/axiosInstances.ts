@@ -20,7 +20,7 @@ export async function getAccessToken() {
  */
 const protectedAxiosInstance = Axios.create({
   timeout: 60 * 1000,
-  baseURL: process.env.API_HOST,
+  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
   withCredentials: true
 })
 
