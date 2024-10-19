@@ -12,8 +12,28 @@ class CategoryService {
   }
 
   async getAllCategories() {
-    const categories = await databaseService.categories.find().toArray()
+    const categories = await databaseService.categories
+      .aggregate([
+        {
+          $lookup: {
+            from: 'menu_items',
+            localField: '_id',
+            foreignField: 'category_id',
+            as: 'products'
+          }
+        },
+        {
+          $project: {
+            _id: 1,
+            name: 1,
+            totalProducts: { $size: '$products' }
+          }
+        }
+      ])
+      .toArray()
+
     const total = await databaseService.categories.countDocuments()
+
     return { categories, total }
   }
 
