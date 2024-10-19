@@ -1,8 +1,10 @@
 import { sendGet } from '~/api/request'
 
 const menuServices = {
-  getDishes: () => {
-    return sendGet('/menu')
+  getDishes: ({ categoryId }: { categoryId?: string }) => {
+    return sendGet('/menu', {
+      categoryId: categoryId
+    })
   }
 }
 
