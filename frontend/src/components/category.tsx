@@ -2,16 +2,16 @@
 
 import { StaticImport } from 'next/dist/shared/lib/get-img-props'
 import Image from 'next/image'
+import { orderIcon } from '~/assets/images'
 
 type Props = {
   _id?: string
   name: string
-  description?: string
   amount: number
-  icon: string | StaticImport
+  icon?: StaticImport | string
 }
 
-export default function Category({ icon, name, amount }: Props) {
+export default function Category({ icon = orderIcon.burger, name, amount }: Props) {
   return (
     <main className='rounded-xl bg-[#292C2D] px-3 py-4 shadow-2xl'>
       <section className='flex w-full items-center justify-end'>
