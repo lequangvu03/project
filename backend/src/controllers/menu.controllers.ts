@@ -1,13 +1,19 @@
 import { NextFunction, Request, Response } from 'express'
-import { MENU_MESSAGES } from '~/constants/messages'
+import { CATEGORY_MESSAGES, MENU_MESSAGES } from '~/constants/messages'
 import adminService from '~/services/media.services'
 import menuService from '~/services/menu.services'
 export const getAllMenuController = async (req: Request, res: Response, error: NextFunction) => {
-  const result = await menuService.getMenu()
+  const { categoryId } = req.query
+  let result
+  if (categoryId) {
+    result = await menuService.getMenuByCategory(categoryId as string)
+  } else {
+    result = await menuService.getMenu()
+  }
   return res.status(200).json({ message: MENU_MESSAGES.GET_ALL_MENU_ITEM_SUCCESS, result })
 }
 export const getMenuByCategoryController = async (req: Request, res: Response, error: NextFunction) => {
-  const result = await menuService.getMenuByCategory(req.params.categoryId)
+  const result = await menuService.getMenuByCategory(req.params.id)
   return res.status(200).json({ message: MENU_MESSAGES.GET_ALL_MENU_ITEM_SUCCESS, result })
 }
 export const addMenuItemController = async (req: Request, res: Response, error: NextFunction) => {

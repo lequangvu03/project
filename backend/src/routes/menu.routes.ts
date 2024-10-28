@@ -29,19 +29,6 @@ export const menuRouter = Router()
 menuRouter.get('/', accessTokenValidator, wrapRequestHandler(getAllMenuController))
 
 /**
- * @route   GET api/menu/category/:categoryId
- * @desc    Get menu items by category ID
- * @access  Private (Admin or Employee)
- * @headers {Authorization: Bearer <access_token>} - access token required
- * @params  {categoryId: string} - ID of the category
- * @response
- *  {
- *    message: string,
- *    result: MenuItemType[]       // List of menu items in the category
- *  }
- */
-menuRouter.get('/category/:id', accessTokenValidator, wrapRequestHandler(getMenuByCategoryController))
-/**
  * @route   POST api/menu/
  * @desc    Add a new menu item
  * @access  Private (Admin)

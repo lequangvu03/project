@@ -8,7 +8,6 @@ import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { Button } from '~/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/components/ui/card'
-import { useLoginMutation } from '~/hooks/data/auth'
 import {
   cn,
   getAuthFromCS,
@@ -23,13 +22,11 @@ import { AuthSchema, TLoginForm } from '~/schemaValidations/auth.schema'
 import CustomInput from '../../../components/custom-input'
 import { Checkbox } from '../../../components/ui/checkbox'
 import { Form, FormField } from '../../../components/ui/form'
-
 type Props = {
   className?: string
 }
 
 export default function FormLogin({ className, ...props }: Props) {
-  const loginMutation = useLoginMutation()
   const router = useRouter()
   const form = useForm<TLoginForm>({
     defaultValues: {
@@ -54,7 +51,6 @@ export default function FormLogin({ className, ...props }: Props) {
   }, [])
 
   const onSubmit = async function (body: TLoginForm) {
-    if (loginMutation.isPending) return
     try {
       const response = await signIn('credentials', {
         ...body,
@@ -136,10 +132,7 @@ export default function FormLogin({ className, ...props }: Props) {
                 </div>
               )}
             ></FormField>
-            <Button
-              className='h-auto w-full bg-[var(--primary-color)] py-3 text-xl transition-all hover:bg-[var(--primary-color)] hover:shadow-md hover:shadow-[var(--primary-color)]'
-              disabled={loginMutation.isPending}
-            >
+            <Button className='h-auto w-full bg-[var(--primary-color)] py-3 text-xl transition-all hover:bg-[var(--primary-color)] hover:shadow-md hover:shadow-[var(--primary-color)]'>
               Login
             </Button>
           </form>
