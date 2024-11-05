@@ -2,7 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 
 export default function Header() {
   return (
-    <header className='flex h-[70px] items-center justify-between rounded-sm bg-[#1F1D2B] px-4'>
+    <header className='flex h-[100px] items-center justify-between rounded-sm bg-[#1F1D2B] px-4'>
       <section className='flex flex-col'>
         <h2 className='text-[20px] font-semibold text-gray-200'>Reservation</h2>
         <h4 className='text-[12px] font-medium text-gray-500'>Friday, 1 Nov 2024</h4>
