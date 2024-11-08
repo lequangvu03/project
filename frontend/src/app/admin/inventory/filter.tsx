@@ -20,7 +20,7 @@ function Filter() {
     }
   })
   return (
-    <div className='flex w-full min-w-[360px] max-w-[360px] items-center gap-5 rounded-[10px] bg-[#1F1D2B] px-4 py-5'>
+    <div className='flex w-full min-w-[360px] max-w-[360px] items-center gap-5 rounded-[10px] bg-[var(--secondary-color)] px-4 py-5'>
       <div className='w-full text-white'>
         <div>
           <h3 className='mb-4'>Product Status</h3>

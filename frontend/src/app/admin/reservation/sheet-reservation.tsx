@@ -30,7 +30,7 @@ function SheetReservation({ children }: Props) {
       <SheetTrigger asChild>{children}</SheetTrigger>
       <SheetContent
         hasCloseIcon={false}
-        className='w-full !max-w-[640px] overflow-y-auto rounded-bl-[30px] rounded-tl-[30px] bg-[#1F1D2B] pt-[60px]'
+        className='w-full !max-w-[640px] overflow-y-auto rounded-bl-[30px] rounded-tl-[30px] bg-[var(--secondary-color)] pt-[60px]'
       >
         <SheetHeader className='flex flex-row items-center justify-between border-b border-slate-500 pb-6'>
           <SheetTitle>Add New Inventory</SheetTitle>

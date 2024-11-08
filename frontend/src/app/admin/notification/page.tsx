@@ -4,7 +4,7 @@ import { notifications } from '~/data/notification'
 
 export default function Page() {
   return (
-    <main className='bg-[#1F1D2B]'>
+    <main className='bg-[var(--secondary-color)]'>
       <section className='flex items-center justify-between rounded-sm p-4'>
         <div className='flex items-center gap-2'>
           <Button className=''>ADD</Button>

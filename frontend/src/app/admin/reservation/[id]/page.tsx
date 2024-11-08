@@ -19,7 +19,7 @@ function ReservationDetailPage({ params }: Props) {
       </div>
       <div className='mt-8'>
         <h2 className='mb-4 text-xl font-medium'>Reservation Details {id}</h2>
-        <Table className='overflow-hidden rounded-[10px] bg-[#1F1D2B]'>
+        <Table className='overflow-hidden rounded-[10px] bg-[var(--secondary-color)]'>
           <TableBody>
             <TableRow className='[&>td]:p-6'>
               <TableCell className='font-medium'>
@@ -58,7 +58,7 @@ function ReservationDetailPage({ params }: Props) {
       </div>
       <div className='mt-8'>
         <h2 className='mb-4 text-xl font-medium'>Customer Infor</h2>
-        <Table className='overflow-hidden rounded-[10px] bg-[#1F1D2B]'>
+        <Table className='overflow-hidden rounded-[10px] bg-[var(--secondary-color)]'>
           <TableBody>
             <TableRow className='[&>td]:p-6'>
               <TableCell className='font-medium'>
