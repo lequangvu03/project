@@ -4,7 +4,7 @@ import { INVENTORY_MESSAGE, TABLE_MESSAGES } from '~/constants/messages'
 import databaseService from '~/services/database.services'
 import { validate } from '~/utils/validation'
 
-export const addInventoryItemValidator = validate(
+export const addIngredientValidator = validate(
   checkSchema(
     {
       name: {
@@ -71,13 +71,13 @@ export const addInventoryItemValidator = validate(
   )
 )
 
-export const updateInventoryItemValidator = validate(
+export const updateIngredientValidator = validate(
   checkSchema(
     {
       id: {
         custom: {
           options: async (value) => {
-            const table = await databaseService.inventoryItems.findOne({ _id: new ObjectId(value as string) })
+            const table = await databaseService.ingredients.findOne({ _id: new ObjectId(value as string) })
             if (!table) {
               throw new Error(INVENTORY_MESSAGE.INVENTORY_ITEM_IS_NOT_FOUND)
             }
@@ -148,14 +148,14 @@ export const updateInventoryItemValidator = validate(
   )
 )
 
-export const deleteInventoryItemValidator = validate(
+export const deleteIngredientValidator = validate(
   checkSchema(
     {
       id: {
         custom: {
           options: async (value) => {
-            const inventoryItem = await databaseService.inventoryItems.findOne({ _id: new ObjectId(value) })
-            if (!inventoryItem) {
+            const ingredient = await databaseService.ingredients.findOne({ _id: new ObjectId(value) })
+            if (!ingredient) {
               throw new Error(INVENTORY_MESSAGE.INVENTORY_ITEM_IS_NOT_FOUND)
             }
           }
