@@ -11,7 +11,7 @@ import { ordersRouter } from './routes/orders.routes'
 import { categoryRouter } from '~/routes/category.routes'
 import { initFolder } from '~/utils/file'
 import { bookingRouter } from './routes/bookings.routes'
-import { inventoryItemRouter } from './routes/inventoryItem.routes'
+import { inventoryItemRouter } from './routes/ingredient.routes'
 import { notificationRouter } from '~/routes/notification.routes'
 import { employeeRouter } from './routes/employee.routes'
 databaseService.connect().then(() => {

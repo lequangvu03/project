@@ -95,11 +95,6 @@ export const addMenuItemValidator = validate(
           }
         }
       },
-      availability: {
-        isBoolean: {
-          errorMessage: MENU_MESSAGES.AVAILABILITY_MUST_BE_A_BOOLEAN
-        }
-      },
       stock: {
         isNumeric: {
           errorMessage: MENU_MESSAGES.STOCK_MUST_BE_A_NUMBER
@@ -169,12 +164,6 @@ export const updateMenuItemValidator = validate(
             }
             return true
           }
-        },
-        optional: { options: { nullable: true } } // Cho phép không có giá trị
-      },
-      availability: {
-        isBoolean: {
-          errorMessage: MENU_MESSAGES.AVAILABILITY_MUST_BE_A_BOOLEAN
         },
         optional: { options: { nullable: true } } // Cho phép không có giá trị
       },

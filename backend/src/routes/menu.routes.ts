@@ -3,6 +3,7 @@ import {
   addMenuItemController,
   deleteMenuItemController,
   getAllMenuController,
+  getMenuByCategoryController,
   updateMenuItemController
 } from '~/controllers/menu.controllers'
 import { accessTokenValidator, isAdmin } from '~/middlewares/auth.middlewares'

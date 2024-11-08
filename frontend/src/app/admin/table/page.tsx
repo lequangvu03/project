@@ -2,7 +2,7 @@ import Order from '~/components/table'
 import { orders } from '~/data/orders'
 import { foods } from '~/data/foods'
 import { kitchens } from '~/data/kitchens'
-import Food from '~/components/food'
+import Food from '~/components/category'
 import Kitchen from '~/components/kitchen'
 
 export default function Page() {

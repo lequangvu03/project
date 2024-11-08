@@ -5,7 +5,7 @@ interface BookingType {
   customer_name: string
   customer_phone: string
   table_number: number
-  booking_time: Date
+  booking_time: number
   details?: string
 }
 
@@ -14,7 +14,7 @@ export default class Booking {
   customer_name: string
   customer_phone: string
   table_number: number
-  booking_time: Date
+  booking_time: number
   details?: string
 
   constructor(booking: BookingType) {

@@ -1,15 +1,16 @@
 import Link from 'next/link'
+import DashboardChart from '~/components/dashboard-chart'
 
 export default function DashboardPage() {
   return (
-    <div className='flex flex-col gap-4'>
-      <section className='grid grid-cols-3 gap-6'>
+    <div className='flex flex-col gap-10'>
+      <section className='grid grid-cols-3 gap-10'>
         {Array.from({ length: 3 }, (_, index) => (
-          <div className='flex flex-col gap-6 rounded-xl bg-[#1F1D2B] p-4 shadow-lg hover:shadow-2xl'>
+          <div className='flex flex-col gap-8 rounded-xl bg-[#1F1D2B] p-4 shadow-lg hover:shadow-2xl'>
             <div className='flex items-center justify-between'>
-              <div>
-                <div className='text-[14px] leading-[16px] text-gray-300'>Daily Sales</div>
-                <div className='text-[20px] font-medium leading-[36px] text-white'>$2K</div>
+              <div className='flex flex-col gap-1'>
+                <div className='text-[16px] leading-[16px] text-gray-300'>Daily Sales</div>
+                <div className='text-[26px] font-medium leading-[36px] text-white'>$2K</div>
               </div>
               <div className='flex items-center justify-center rounded-full bg-[#EA7C69] p-1'>
                 <svg
@@ -28,11 +29,11 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            <div className='flex items-end justify-between'>
-              <h3 className='text-gray-400'>9 Feburary 2024</h3>
+            <div className='flex items-end justify-between gap-4'>
+              <h3 className='text-[18px] text-gray-400'>9 Feburary 2024</h3>
 
               <div>
-                <svg width='155' height='52' viewBox='0 0 155 52' fill='none' xmlns='http://www.w3.org/2000/svg'>
+                <svg width='240' height='100' viewBox='0 0 155 52' fill='none' xmlns='http://www.w3.org/2000/svg'>
                   <g clip-path='url(#clip0_158_7264)'>
                     <g clip-path='url(#clip1_158_7264)'>
                       <rect x='0.984375' y='22.3789' width='6.34111' height='62.6619' rx='2.97167' fill='#50CD89' />
@@ -60,13 +61,13 @@ export default function DashboardPage() {
         ))}
       </section>
 
-      <section className='grid grid-cols-2 gap-4'>
+      <section className='grid grid-cols-2 gap-10'>
         {Array.from({ length: 2 }, (_, index) => {
           return (
             <div className='flex flex-col gap-4 rounded-xl bg-[#1F1D2B] p-6'>
               <header className='flex items-center justify-between'>
-                <h3 className='text-[18px] font-medium leading-[36px] text-white'>Popular Dishes</h3>
-                <Link className='text-[14px] font-normal leading-6 text-[#EA7C69] underline' href={'/'}>
+                <h3 className='text-[20px] font-medium leading-[36px] text-white'>Popular Dishes</h3>
+                <Link className='text-[16px] font-normal leading-6 text-[#EA7C69] underline' href={'/'}>
                   See All
                 </Link>
               </header>
@@ -96,6 +97,10 @@ export default function DashboardPage() {
             </div>
           )
         })}
+      </section>
+
+      <section>
+        <DashboardChart />
       </section>
     </div>
   )

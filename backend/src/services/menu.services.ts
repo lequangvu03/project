@@ -5,6 +5,7 @@ import sharp from 'sharp'
 import { UPLOAD_IMAGE_DIR } from '~/constants/dir'
 import MenuItem from '~/models/schemas/menuItems.schema'
 import databaseService from '~/services/database.services'
+import cloudinary from '~/utils/cloudinary'
 import { getNameFromFullname } from '~/utils/file'
 
 class MenuService {
@@ -13,7 +14,14 @@ class MenuService {
     return menuItem
   }
   async getMenu() {
-    return await databaseService.menuItems.find().toArray()
+    const menus = await databaseService.menuItems.find().toArray()
+    const total = menus.length
+    return { menus, total }
+  }
+  async getMenuByCategory(categoryId: string) {
+    const menus = await databaseService.menuItems.find({ category_id: new ObjectId(categoryId) }).toArray()
+    const total = menus.length
+    return { menus, total }
   }
   async uploadImage(file: any) {
     const newName = getNameFromFullname(file.newFilename)
@@ -38,8 +46,8 @@ class MenuService {
       price: +data.price,
       image: data.image,
       category_id: new ObjectId(data.category_id),
-      availability: data.availability,
-      stock: data.stock
+      stock: +data.stock,
+      ingredients: data.ingredients
     })
     await databaseService.menuItems.insertOne(newMenuItem)
     return newMenuItem
@@ -52,17 +60,30 @@ class MenuService {
       category_id: new ObjectId(data.category_id),
       updated_at: Date.now()
     }
-
-    // Nếu có đường dẫn ảnh mới, thêm vào đối tượng cập nhật
     if (dir !== '') {
+      const item = await databaseService.menuItems.findOne({ _id: new ObjectId(menuItemId) })
+      const avatarUrl = item?.image
+      if (avatarUrl) {
+        const publicId = avatarUrl.split('/').pop()?.split('.')[0]
+        if (publicId) {
+          await cloudinary.uploader.destroy(publicId)
+        }
+      }
       updateData.image = dir
     }
-
-    // Thực hiện cập nhật trong cơ sở dữ liệu
     await databaseService.menuItems.updateOne({ _id: new ObjectId(menuItemId) }, { $set: updateData })
   }
 
   async deleteMenuItem(menuItemId: string) {
+    const item = await databaseService.menuItems.findOne({ _id: new ObjectId(menuItemId) })
+    const avatarUrl = item?.image
+    if (avatarUrl) {
+      const publicId = avatarUrl.split('/').pop()?.split('.')[0]
+      // 3. Xóa ảnh khỏi Cloudinary
+      if (publicId) {
+        await cloudinary.uploader.destroy(publicId)
+      }
+    }
     await databaseService.menuItems.deleteOne({ _id: new ObjectId(menuItemId) })
   }
 }

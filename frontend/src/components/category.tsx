@@ -1,16 +1,19 @@
 'use client'
 
-import Image, { StaticImageData } from 'next/image'
+import { StaticImport } from 'next/dist/shared/lib/get-img-props'
+import Image from 'next/image'
+import { orderIcon } from '~/assets/images'
 
 type Props = {
-  icon: StaticImageData | string
+  _id?: string
   name: string
-  amount: string
+  amount: number
+  icon?: StaticImport | string
 }
 
-export default function Food({ icon, name, amount }: Props) {
+export default function Category({ icon = orderIcon.burger, name, amount }: Props) {
   return (
-    <main className='rounded-xl bg-[#292C2D] px-3 py-4 shadow-2xl'>
+    <main className='rounded-xl bg-[#1F1D2B] px-3 py-4 shadow-2xl'>
       <section className='flex w-full items-center justify-end'>
         <Image src={icon} alt='Food Icon' />
       </section>
