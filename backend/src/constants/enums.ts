@@ -46,3 +46,8 @@ export enum NotificationStatus {
   Unread,
   Read
 }
+export enum ChangeType {
+  Add,
+  Remove,
+  Update
+}

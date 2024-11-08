@@ -152,7 +152,10 @@ export const BOOKING_MESSAGE = {
   CUSTOMER_PHONE_IS_REQUIRED: 'Customer phone is required',
   BOOKING_TIME_MUST_BE_VALID_DATE: 'booking time must be valid date',
   BOOKING_TIME_IS_REQUIRED: 'booking time is required',
-  BOOKING_IS_NOT_FOUND: 'booking is not found (please provide correct id)'
+  BOOKING_IS_NOT_FOUND: 'booking is not found (please provide correct id)',
+  TABLE_IS_NOT_FOUND: 'table is not found',
+  BOOKING_TIME_CONFLICT: 'booking time conflict with other booking',
+  BOOKING_TIME_MUST_BE_NUMBER: 'booking time must be a number',
 }
 
 export const INVENTORY_MESSAGE = {

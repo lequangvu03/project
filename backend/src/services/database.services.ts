@@ -4,7 +4,8 @@ import { envConfig } from '~/constants/config'
 import Booking from '~/models/schemas/bookings.schema'
 import Category from '~/models/schemas/categorys.schema'
 import Employee from '~/models/schemas/employees.schema'
-import InventoryItem from '~/models/schemas/inventoryItems.schema'
+import ingredients from '~/models/schemas/ingredients.schema'
+import ingredient from '~/models/schemas/ingredients.schema'
 import InventoryLog from '~/models/schemas/inventoryLogs.schema'
 import MenuItem from '~/models/schemas/menuItems.schema'
 import Notification from '~/models/schemas/notifications.schema'
@@ -80,8 +81,8 @@ class DatabaseService {
   get bookings(): Collection<Booking> {
     return this.db.collection('bookings')
   }
-  get inventoryItems(): Collection<InventoryItem> {
-    return this.db.collection('inventory_items')
+  get ingredients(): Collection<ingredients> {
+    return this.db.collection('ingredients')
   }
   get inventoryLogs(): Collection<InventoryLog> {
     return this.db.collection('inventory_logs')

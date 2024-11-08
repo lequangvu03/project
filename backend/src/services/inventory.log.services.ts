@@ -1,4 +1,5 @@
 import { ObjectId } from 'mongodb'
+import InventoryLog from '~/models/schemas/inventoryLogs.schema'
 import databaseService from '~/services/database.services'
 
 class InventoryLogService {
@@ -8,14 +9,11 @@ class InventoryLogService {
     return { inventoryLogs, total }
   }
 
-  async addInventoryLog(itemId: ObjectId, changeType: string, changeQuantity: number, changeDate: Date) {
+  async addInventoryLog(data: InventoryLog) {
     // 1. ghi nhập thông tin nhập kho (khi tạo 1 inventory mới)
     const newInventoryLog = await databaseService.inventoryLogs.insertOne({
       _id: new ObjectId(),
-      item_id: itemId,
-      change_type: changeType,
-      change_quantity: changeQuantity,
-      change_date: changeDate
+      ...data
     })
     return newInventoryLog
   }
