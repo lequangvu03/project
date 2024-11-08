@@ -9,12 +9,21 @@ class BookingService {
     const total = await databaseService.bookings.countDocuments()
     return { bookings, total }
   }
+  async checkBookingOverlap(table_number: number, startTime: number, endTime: number) {
+    return await databaseService.bookings.findOne({
+      table_number,
+      booking_time: {
+        $lt: endTime,
+        $gt: startTime - 2 * 60 * 60 * 1000
+      }
+    })
+  }
 
   async addBooking(
     customerName: string,
     customerPhone: string,
     tableNumber: number,
-    bookingTime: Date,
+    bookingTime: number,
     detailsInput: string
   ) {
     // Bước 1 insert 1 đặt bàn vào DB (do nhân viên thực hiện)
@@ -35,7 +44,7 @@ class BookingService {
     customerName: string,
     customerPhone: string,
     tableNumber: number,
-    bookingTime: Date,
+    bookingTime: number,
     detailsInput: string
   ) {
     // update booking

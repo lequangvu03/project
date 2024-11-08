@@ -1,6 +1,6 @@
 import cloudinary from '~/utils/cloudinary'
 
-class AdminService {
+class MediaService {
   async uploadImage(file: any) {
     try {
       const result = await cloudinary.uploader.upload(file.filepath)
@@ -10,5 +10,5 @@ class AdminService {
     }
   }
 }
-const adminService = new AdminService()
-export default adminService
+const mediaService = new MediaService()
+export default mediaService
