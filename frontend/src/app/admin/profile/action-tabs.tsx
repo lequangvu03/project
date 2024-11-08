@@ -55,11 +55,11 @@ function ActionTabs() {
   return (
     <Tabs defaultValue={tab} className='flex gap-10'>
       <div className='flex flex-col gap-8'>
-        <TabsList className='flex h-[fit] w-[360px] max-w-[360px] flex-col rounded-[10px] bg-[#292C2D] px-5 py-[30px] text-white'>
+        <TabsList className='flex h-[fit] w-[360px] max-w-[360px] flex-col rounded-[10px] bg-[var(--secondary-color)] px-5 py-[30px] text-white'>
           {tabs.map((tab) => (
             <TabsTrigger
               key={tab.key}
-              className='w-full justify-start gap-4 px-10 py-[14px] text-base data-[state=active]:bg-[#FAC1D9]'
+              className='w-full justify-start gap-4 px-10 py-[14px] text-base data-[state=active]:bg-[var(--primary-color)]'
               value={tab.key}
               onClick={() => handleActiveTab(tab.key)}
             >
@@ -69,7 +69,7 @@ function ActionTabs() {
           ))}
 
           <Button
-            className='flex h-auto w-full items-center justify-start gap-4 border border-transparent bg-transparent px-10 py-[14px] hover:bg-transparent active:border-white'
+            className='flex h-auto w-full items-center justify-start gap-4 border border-transparent bg-transparent px-10 py-[14px] text-white hover:bg-transparent active:border-white'
             value='logout'
           >
             <LogOut />
@@ -77,7 +77,7 @@ function ActionTabs() {
           </Button>
         </TabsList>
         {tab === Tab.Access && (
-          <TabsList className='flex h-fit w-[360px] max-w-[360px] flex-col rounded-[10px] bg-[#292C2D] px-5 py-[30px] text-white'>
+          <TabsList className='flex h-fit w-[360px] max-w-[360px] flex-col rounded-[10px] bg-[var(--secondary-color)] px-5 py-[30px] text-white'>
             <h3 className='mb-6 w-full text-left text-2xl font-medium'>Add new sub account</h3>
             <div className='w-full space-y-5'>
               <Form {...form}>
@@ -111,7 +111,7 @@ function ActionTabs() {
                   )}
                 />
 
-                <Button className='h-auto w-full bg-[#FAC1D9] px-12 py-3 text-base text-black transition-all hover:bg-[#FAC1D9] hover:shadow-md hover:shadow-[#FAC1D9]'>
+                <Button className='h-auto w-full bg-[var(--primary-color)] px-12 py-3 text-base text-black transition-all hover:bg-[var(--primary-color)] hover:shadow-md hover:shadow-[var(--primary-color)]'>
                   Add
                 </Button>
               </Form>
@@ -133,7 +133,7 @@ function LayoutTabContent({ children, className, tab }: { children: ReactNode; c
   return (
     <TabsContent
       value={tab}
-      className={cn('mt-0 w-full rounded-[10px] bg-[#292C2D] px-10 pb-20 pt-10 text-white', className)}
+      className={cn('mt-0 w-full rounded-[10px] bg-[var(--secondary-color)] px-10 pb-20 pt-10 text-white', className)}
     >
       {children}
     </TabsContent>
@@ -172,7 +172,7 @@ function Profile() {
         </div>
         <div>
           <p className='text-2xl font-medium'>John Doe</p>
-          <span className='text-[#FAC1D9]'>Manager</span>
+          <span className='text-[var(--primary-color)]'>Manager</span>
         </div>
       </div>
       <div className='space-y-5'>
@@ -209,10 +209,10 @@ function Profile() {
             />
           </div>
           <div className='!mt-9 flex items-center justify-end gap-5'>
-            <Button className='h-auto bg-transparent px-12 py-3 text-base underline transition-all hover:bg-transparent hover:text-[#FAC1D9]'>
+            <Button className='h-auto bg-transparent px-12 py-3 text-base underline transition-all hover:bg-transparent hover:text-[var(--primary-color)]'>
               Discard Changes
             </Button>
-            <Button className='h-auto bg-[#FAC1D9] px-12 py-3 text-base text-black transition-all hover:bg-[#FAC1D9] hover:shadow-md hover:shadow-[#FAC1D9]'>
+            <Button className='h-auto bg-[var(--primary-color)] px-12 py-3 text-base text-black transition-all hover:bg-[var(--primary-color)] hover:shadow-md hover:shadow-[var(--primary-color)]'>
               Save Changes
             </Button>
           </div>
@@ -256,9 +256,9 @@ function ManageAccess() {
         <div className='flex items-start gap-8'>
           <div>
             <h3 className='text-xl font-medium'>LOUIS</h3>
-            <span className='text-[#FAC1D9]'>louis@gmail.com</span>
+            <span className='text-[var(--primary-color)]'>louis@gmail.com</span>
           </div>
-          <span className='inline-block rounded-sm bg-[#FAC1D9] px-5 py-1 text-black'>Admin</span>
+          <span className='inline-block rounded-sm bg-[var(--primary-color)] px-5 py-1 text-black'>Admin</span>
         </div>
         <ul className='my-8 flex flex-wrap items-center gap-10'>
           {permissions.map(({ key, label }) => (
@@ -267,7 +267,7 @@ function ManageAccess() {
               <Switch
                 checked
                 disabled
-                className='data-[state=checked]:bg-[#FAC1D9] data-[state=unchecked]:bg-[#3D4142]'
+                className='data-[state=checked]:bg-[var(--primary-color)] data-[state=unchecked]:bg-[#3D4142]'
               />
             </li>
           ))}
@@ -277,15 +277,15 @@ function ManageAccess() {
         <div className='mt-6 flex items-start gap-8'>
           <div>
             <h3 className='text-xl font-medium'>Le Vu</h3>
-            <span className='text-[#FAC1D9]'>levu@gmail.com</span>
+            <span className='text-[var(--primary-color)]'>levu@gmail.com</span>
           </div>
-          <span className='inline-block rounded-sm bg-[#FAC1D9] px-5 py-1 text-black'>Admin</span>
+          <span className='inline-block rounded-sm bg-[var(--primary-color)] px-5 py-1 text-black'>Admin</span>
         </div>
         <ul className='my-8 flex flex-wrap items-center gap-10'>
           {permissions.map(({ key, label }) => (
             <li className='flex flex-grow flex-col justify-center gap-4' key={key}>
               <span>{label}</span>
-              <Switch className='data-[state=checked]:bg-[#FAC1D9] data-[state=unchecked]:bg-[#3D4142]' />
+              <Switch className='data-[state=checked]:bg-[var(--primary-color)] data-[state=unchecked]:bg-[#3D4142]' />
             </li>
           ))}
         </ul>

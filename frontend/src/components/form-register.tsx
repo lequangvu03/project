@@ -34,7 +34,7 @@ export default function FormRegister({ className, ...props }: Props) {
   return (
     <Card
       className={cn(
-        'w-full max-w-[756px] rounded-2xl border-none bg-[#1F1D2B] text-white md:rounded-[50px] md:p-[50px]',
+        'w-full max-w-[756px] rounded-2xl border-none bg-[var(--secondary-color)] text-white md:rounded-[50px] md:p-[50px]',
         className
       )}
       {...props}
