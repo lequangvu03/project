@@ -8,9 +8,10 @@ type Props = {
 
 function MainLayout({ children }: Props) {
   return (
-    <div className='flex'>
+    <div className='flex gap-10'>
       <Sidebar />
-      <main className='flex flex-1 flex-col gap-4 p-4'>
+
+      <main className='flex w-full flex-col gap-10'>
         <Header />
         {children}
       </main>
