@@ -61,7 +61,7 @@ export default function MenuPage() {
         <Button className='bg-[#EA7C69] text-white'>Add new menu item</Button>
       </section>
       <div>
-        <Table className='overflow-hidden rounded-[10px] bg-[#1F1D2B] text-white'>
+        <Table className='overflow-hidden rounded-[10px] bg-[var(--secondary-color)] text-white'>
           <TableCaption>A list of your recent invoices.</TableCaption>
           <TableBody className='[&>tr]:border-none'>
             {dishies &&
@@ -113,7 +113,7 @@ export default function MenuPage() {
                           <AlertDialogTrigger asChild>
                             <Trash />
                           </AlertDialogTrigger>
-                          <AlertDialogContent className='bg-[#1F1D2B]'>
+                          <AlertDialogContent className='bg-[var(--secondary-color)]'>
                             <AlertDialogHeader>
                               <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                               <AlertDialogDescription>

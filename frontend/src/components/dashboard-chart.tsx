@@ -29,7 +29,7 @@ const chartConfig = {
 
 export default function DashboardChart() {
   return (
-    <div className='h-[200px] rounded-2xl bg-[#1F1D2B] p-4'>
+    <div className='h-[200px] rounded-2xl bg-[var(--secondary-color)] p-4'>
       <CardHeader>
         <CardTitle>Overview</CardTitle>
         <CardDescription>January - June 2024</CardDescription>
