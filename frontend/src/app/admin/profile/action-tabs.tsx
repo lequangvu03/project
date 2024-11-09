@@ -1,9 +1,11 @@
+/* eslint-disable no-unused-vars */
 'use client'
 
 import { Image, LogOut, Settings, User } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { ReactNode, useRef } from 'react'
 import { useForm } from 'react-hook-form'
+import ButtonLogout from '~/components/button-logout'
 import CustomInput from '~/components/custom-input'
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar'
 import { Button } from '~/components/ui/button'
@@ -67,14 +69,10 @@ function ActionTabs() {
               <span>{tab.label}</span>
             </TabsTrigger>
           ))}
-
-          <Button
-            className='flex h-auto w-full items-center justify-start gap-4 border border-transparent bg-transparent px-10 py-[14px] text-white hover:bg-transparent active:border-white'
-            value='logout'
-          >
+          <ButtonLogout className='flex h-auto w-full items-center justify-start gap-4 rounded-sm border border-transparent bg-transparent px-10 py-[14px] text-white active:bg-[var(--primary-color)]'>
             <LogOut />
-            <span>Logout </span>
-          </Button>
+            <span>Logout</span>
+          </ButtonLogout>
         </TabsList>
         {tab === Tab.Access && (
           <TabsList className='flex h-fit w-[360px] max-w-[360px] flex-col rounded-[10px] bg-[var(--secondary-color)] px-5 py-[30px] text-white'>
@@ -209,7 +207,7 @@ function Profile() {
             />
           </div>
           <div className='!mt-9 flex items-center justify-end gap-5'>
-            <Button className='h-auto bg-transparent px-12 py-3 text-base underline transition-all hover:bg-transparent hover:text-[var(--primary-color)]'>
+            <Button className='h-auto bg-transparent px-12 py-3 text-base text-white underline transition-all hover:bg-transparent hover:text-[var(--primary-color)]'>
               Discard Changes
             </Button>
             <Button className='h-auto bg-[var(--primary-color)] px-12 py-3 text-base text-black transition-all hover:bg-[var(--primary-color)] hover:shadow-md hover:shadow-[var(--primary-color)]'>
