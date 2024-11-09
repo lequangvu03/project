@@ -37,17 +37,7 @@ export const updateProfileValidator = validate(
       permissions: {
         custom: {
           options: async (value) => {
-            if (typeof value === 'string') {
-              try {
-                const parsedValue = JSON.parse(value)
-                if (Array.isArray(parsedValue)) {
-                  return parsedValue
-                }
-                throw new Error()
-              } catch (error) {
-                throw new Error(USER_MESSAGES.PERMISSIONS_MUST_BE_AN_ARRAY)
-              }
-            }
+            console.log(value)
             return value
           }
         },
