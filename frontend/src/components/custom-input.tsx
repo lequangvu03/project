@@ -1,15 +1,15 @@
-import React, { useState } from 'react'
-import { Input } from './ui/input'
 import { Eye, EyeOff } from 'lucide-react'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form'
-import { ControllerRenderProps } from 'react-hook-form'
+import { useState } from 'react'
 import { cn } from '~/lib/utils'
+import { FormControl, FormItem, FormLabel, FormMessage } from './ui/form'
+import { Input } from './ui/input'
 
 type Props = {
   className?: string
   classNameInput?: string
   placeholder?: string
   label?: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   field: any
   type?: 'text' | 'password'
 }
@@ -29,7 +29,7 @@ function CustomInput({ className, placeholder, field, label, classNameInput, typ
           <Input
             type={type === 'password' ? (visible ? 'text' : 'password') : 'text'}
             className={cn(
-              'h-auto border-none bg-[#3D4142] px-6 py-4 text-base outline-none focus-visible:ring-0 focus-visible:ring-offset-0',
+              'h-auto border-none bg-[#2D303E] px-6 py-4 text-base outline-none focus-visible:ring-0 focus-visible:ring-offset-0',
               classNameInput
             )}
             placeholder={placeholder}

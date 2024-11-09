@@ -10,8 +10,12 @@ function MainLayout({ children }: Props) {
   return (
     <div className='flex'>
       <Sidebar />
-
-      <main className='flex w-full flex-col gap-10 px-8'>
+      <main
+        className='flex w-full flex-col gap-10'
+        style={{
+          padding: 32
+        }}
+      >
         <Header />
         {children}
       </main>

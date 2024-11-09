@@ -35,14 +35,8 @@
 
   --primary-color: #ea7c69;
   --secondary-color: #1f1d2b;
-  --bg-input: #3d4142;
+  --bg-input: #2d303e;
   --bg-primary: #111315;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
 }
 
 .dark {
@@ -84,6 +78,9 @@ body {
 
 @layer base {
   * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
     @apply border-border;
   }
 
@@ -96,7 +93,7 @@ body {
   select:-webkit-autofill,
   select:-webkit-autofill:hover,
   select:-webkit-autofill:focus {
-    border: 1px solid #434346;
+    border: 1px solid #2d303e;
     -webkit-text-fill-color: #f1f1f1;
     -webkit-box-shadow: 0 0 0 1000px var(--bg-input) inset;
   }
