@@ -7,13 +7,13 @@ import { ForgotPasswordVerifyStatus, RoleType, UserVerifyStatus } from '~/consta
 import HTTP_STATUS from '~/constants/httpStatus'
 import { AUTH_MESSAGES } from '~/constants/messages'
 import { ErrorWithStatus } from '~/models/Errors'
-import usersService from '~/services/auth.services'
+import authService from '~/services/auth.services'
 import databaseService from '~/services/database.services'
 import { hashPassword } from '~/utils/crypto'
 import { verifyToken } from '~/utils/jwt'
 import { validate } from '~/utils/validation'
 
-const passwordSchema: ParamSchema = {
+export const passwordSchema: ParamSchema = {
   notEmpty: {
     errorMessage: AUTH_MESSAGES.PASSWORD_IS_REQUIRED
   },
@@ -38,7 +38,7 @@ const passwordSchema: ParamSchema = {
     errorMessage: AUTH_MESSAGES.PASSWORD_MUST_BE_STRONG
   }
 }
-const confirmPasswordSchema: ParamSchema = {
+export const confirmPasswordSchema: ParamSchema = {
   notEmpty: {
     errorMessage: AUTH_MESSAGES.CONFIRM_PASSWORD_IS_REQUIRED
   },
@@ -96,7 +96,7 @@ export const registerValidator = validate(
         trim: true,
         custom: {
           options: async (value) => {
-            const isExistEmail = await usersService.checkEmailExist(value)
+            const isExistEmail = await authService.checkEmailExist(value)
             if (isExistEmail) {
               throw new Error(AUTH_MESSAGES.EMAIL_ALREADY_EXISTS)
             }

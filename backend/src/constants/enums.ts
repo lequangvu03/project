@@ -51,3 +51,11 @@ export enum ChangeType {
   Remove,
   Update
 }
+export enum permissionType {
+  Dashboard,
+  Reposts,
+  Inventory,
+  Orders,
+  Customers,
+  Settings
+}
