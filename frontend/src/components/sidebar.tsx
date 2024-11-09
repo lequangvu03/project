@@ -1,8 +1,14 @@
-import { publicRoutes } from '~/routers'
+'use client'
+
+import usePermissions from '~/hooks/usePermissions'
+import { adminRoutes, employeeRoutes } from '~/routers'
 import ButtonLogout from './button-logout'
 import SidebarOption from './side-option'
 
 export default function Sidebar() {
+  const { isAdmin } = usePermissions()
+  const routes = isAdmin ? adminRoutes : employeeRoutes
+
   return (
     <main className='sticky bottom-0 left-0 top-0 z-10 h-screen min-w-[110px] overflow-y-auto overflow-x-hidden rounded-br-[30px] rounded-tr-[30px] bg-[var(--secondary-color)]'>
       <aside className='flex h-full flex-col items-center justify-between gap-4 p-2'>
@@ -28,7 +34,7 @@ export default function Sidebar() {
           </svg>
         </section>
         <section className='flex-1 items-start'>
-          {publicRoutes.map(function (publicRoute, index: number) {
+          {routes.map(function (publicRoute, index: number) {
             return (
               <SidebarOption
                 key={index}
