@@ -14,6 +14,7 @@ import { bookingRouter } from './routes/bookings.routes'
 import { ingredientRouter } from './routes/ingredient.routes'
 import { notificationRouter } from '~/routes/notification.routes'
 import { employeeRouter } from './routes/employee.routes'
+import { userRouter } from '~/routes/user.routes'
 databaseService.connect().then(() => {
   databaseService.indexUsers()
   databaseService.indexRefreshTokens()
@@ -30,9 +31,11 @@ app.use('/api/menu', menuRouter)
 app.use('/api/order', ordersRouter)
 app.use('/api/category', categoryRouter)
 app.use('/api/booking', bookingRouter)
-app.use('/api/inventory_item', ingredientRouter)
+app.use('/api/ingredient', ingredientRouter)
 app.use('/api/notification', notificationRouter)
 app.use('/api/employee', employeeRouter)
+app.use('/api/profile', userRouter)
+
 app.use(defaultErrorHandler)
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
