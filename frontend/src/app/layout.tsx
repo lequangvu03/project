@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
-import './globals.css'
+import './globals.scss'
 import { ReactNode } from 'react'
 import { ThemeProvider } from '~/providers/theme-provider'
 import QueryProvider from '~/providers/query-provider'

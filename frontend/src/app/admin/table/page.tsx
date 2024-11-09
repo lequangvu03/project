@@ -46,13 +46,96 @@ export default function Page() {
             </section>
           </header>
 
-          <aside className='h-[400px]'></aside>
-          <footer className='flex items-center justify-between bg-[#3D4142] p-4'>
-            <section></section>
-            <section></section>
-            <button className='flex items-center justify-center bg-slate-700 text-center text-gray-300'>
-              Send To Token
-            </button>
+          <aside className='flex h-[400px] flex-col items-center gap-3 overflow-x-auto overflow-y-auto'>
+            <div className='flex w-full items-center justify-between gap-1 rounded-xl bg-[#3D4142] px-4 py-3'>
+              <div className='flex h-8 w-8 items-center justify-center rounded-full bg-[#EA7C69] p-1'>01</div>
+              <p className='flex-1 overflow-hidden text-ellipsis whitespace-nowrap'>
+                Chicken Parmesan <span>x 2</span>
+              </p>
+              <p>$ 55.00</p>
+            </div>
+
+            <div className='flex w-full items-center justify-between gap-1 rounded-xl bg-[#3D4142] px-4 py-3'>
+              <div className='flex h-8 w-8 items-center justify-center rounded-full bg-[#EA7C69] p-1'>01</div>
+              <p className='flex-1 overflow-hidden text-ellipsis whitespace-nowrap'>
+                Chicken Parmesan <span>x 2</span>
+              </p>
+              <p>$ 55.00</p>
+            </div>
+            <div className='flex w-full items-center justify-between gap-1 rounded-xl bg-[#3D4142] px-4 py-3'>
+              <div className='flex h-8 w-8 items-center justify-center rounded-full bg-[#EA7C69] p-1'>01</div>
+              <p className='flex-1 overflow-hidden text-ellipsis whitespace-nowrap'>
+                Chicken Parmesan <span>x 2</span>
+              </p>
+              <p>$ 55.00</p>
+            </div>
+            <div className='flex w-full items-center justify-between gap-1 rounded-xl bg-[#3D4142] px-4 py-3'>
+              <div className='flex h-8 w-8 items-center justify-center rounded-full bg-[#EA7C69] p-1'>01</div>
+              <p className='flex-1 overflow-hidden text-ellipsis whitespace-nowrap'>
+                Chicken Parmesan <span>x 2</span>
+              </p>
+              <p>$ 55.00</p>
+            </div>
+            <div className='flex w-full items-center justify-between gap-1 rounded-xl bg-[#3D4142] px-4 py-3'>
+              <div className='flex h-8 w-8 items-center justify-center rounded-full bg-[#EA7C69] p-1'>01</div>
+              <p className='flex-1 overflow-hidden text-ellipsis whitespace-nowrap'>
+                Chicken Parmesan <span>x 2</span>
+              </p>
+              <p>$ 55.00</p>
+            </div>
+            <div className='flex w-full items-center justify-between gap-1 rounded-xl bg-[#3D4142] px-4 py-3'>
+              <div className='flex h-8 w-8 items-center justify-center rounded-full bg-[#EA7C69] p-1'>01</div>
+              <p className='flex-1 overflow-hidden text-ellipsis whitespace-nowrap'>
+                Chicken Parmesan <span>x 2</span>
+              </p>
+              <p>$ 55.00</p>
+            </div>
+            <div className='flex w-full items-center justify-between gap-1 rounded-xl bg-[#3D4142] px-4 py-3'>
+              <div className='flex h-8 w-8 items-center justify-center rounded-full bg-[#EA7C69] p-1'>01</div>
+              <p className='flex-1 overflow-hidden text-ellipsis whitespace-nowrap'>
+                Chicken Parmesan <span>x 2</span>
+              </p>
+              <p>$ 55.00</p>
+            </div>
+            <div className='flex w-full items-center justify-between gap-1 rounded-xl bg-[#3D4142] px-4 py-3'>
+              <div className='flex h-8 w-8 items-center justify-center rounded-full bg-[#EA7C69] p-1'>01</div>
+              <p className='flex-1 overflow-hidden text-ellipsis whitespace-nowrap'>
+                Chicken Parmesan <span>x 2</span>
+              </p>
+              <p>$ 55.00</p>
+            </div>
+          </aside>
+          <footer className='flex flex-col items-center justify-between gap-4 rounded-xl bg-[#3D4142] p-4'>
+            <section className='flex w-full flex-col gap-4'>
+              <div className='flex items-center justify-between'>
+                <p>Subtotal</p>
+                <p>$116.5</p>
+              </div>
+              <div className='flex items-center justify-between'>
+                <p>Tax 5%</p>
+                <p>$116.5</p>
+              </div>
+              <div className='border-dash w-full border-[1px] border-gray-500' />
+              <footer className='flex items-center justify-between'>
+                <p>Total</p>
+                <p>$116.5</p>
+              </footer>
+            </section>
+
+            <div className='flex w-full flex-col items-center justify-center'>
+              {/* <div className='flex flex-col gap-4'>
+                <section>Payment Method</section>
+                <section className='flex items-center justify-center rounded-lg border-[1px] border-solid border-gray-300 p-4'>
+                  <svg width='94' height='94' viewBox='0 0 94 94' fill='none' xmlns='http://www.w3.org/2000/svg'>
+                    <rect x='0.304688' y='0.304688' width='92.9302' height='92.9302' fill='white' />
+                  </svg>
+                </section>
+                <section>Scan QR Code</section>
+              </div> */}
+              <button className='mt-4 flex h-12 w-full items-center justify-center rounded-xl bg-slate-700 text-center text-white'>
+                Send To Token
+              </button>
+            </div>
           </footer>
         </div>
       </aside>
