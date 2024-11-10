@@ -5,21 +5,70 @@ export default function Table() {
   return (
     <div className={'flex flex-col gap-4 rounded-xl bg-[#292C2D] p-4 shadow-sm'}>
       <section className='flex flex-col gap-4'>
-        <div className='flex items-center justify-between'>
-          <div className=' flex h-12 w-12 items-center justify-center rounded-xl bg-[#EA7C69] p-2 text-[16px]'>
-            01
+        <div className='flex items-center justify-between gap-2'>
+          <div className='flex h-12 w-12 items-center justify-center rounded-xl bg-[#EA7C69] p-2 text-[16px]'>01</div>
+          <div className='flex flex-1 flex-col'>
+            <h2 className='text-[16px] font-light leading-8'>Watson Joyce</h2>
+            <p className='text-[12px] leading-6 text-gray-400'>Order # 990</p>
           </div>
-          <div></div>
-          <div></div>
+          <div className='flex flex-col gap-2'>
+            <div className='flex items-center gap-1 rounded-lg bg-[#FFEDBE] px-4 py-1'>
+              <svg width='10' height='8' viewBox='0 0 10 8' fill='none' xmlns='http://www.w3.org/2000/svg'>
+                <path
+                  d='M9 1.18359L3.5 6.68359L1 4.18359'
+                  stroke='black'
+                  stroke-linecap='round'
+                  stroke-linejoin='round'
+                />
+              </svg>
+              <p className='text-gray-800'>In Progress</p>
+            </div>
+
+            <div className='flex items-center gap-4'>
+              <div className='h-2 w-2 rounded-full bg-[#FFBD0F]'></div>
+              <div className='text-[14px] leading-6 text-gray-300'>Cooking</div>
+              <svg width='13' height='13' viewBox='0 0 13 13' fill='none' xmlns='http://www.w3.org/2000/svg'>
+                <path
+                  d='M3.25 4.875L6.5 8.125L9.75 4.875'
+                  stroke='white'
+                  stroke-linecap='round'
+                  stroke-linejoin='round'
+                />
+              </svg>
+            </div>
+          </div>
         </div>
-        <div className='flex items-center justify-between'>
+        <div className='flex items-center justify-between text-[15px] font-light'>
           <h3>Wenednesday, 28th 2024</h3>
           <h3>4:48 PM</h3>
         </div>
       </section>
-      <div className={'h-[1px] w-full bg-slate-300'} />
-      <section className={''}></section>
-      <div className={'h-[1px] w-full bg-slate-300'} />
+      <div className={'h-[0.5px] w-full bg-slate-500'} />
+      <section className='flex w-full flex-col gap-2'>
+        <header className='flex w-full items-center justify-between gap-4 text-[14px] text-gray-400'>
+          <div className='overflow-hidden text-ellipsis whitespace-nowrap'>Qty</div>
+          <div className='flex-1 overflow-hidden text-ellipsis whitespace-nowrap'>Items</div>
+          <div>Price</div>
+        </header>
+        <aside className='flex flex-col gap-2'>
+          <div className='flex items-center justify-between gap-4 text-[14px] font-light text-gray-200'>
+            <div>01</div>
+            <div className='flex-1'>Items</div>
+            <div>Price</div>
+          </div>
+          <div className='flex items-center justify-between gap-4 text-[14px] font-light text-gray-200'>
+            <div>Qty</div>
+            <div className='flex-1'>Items</div>
+            <div>Price</div>
+          </div>
+          <div className='flex items-center justify-between gap-4 text-[14px] font-light text-gray-200'>
+            <div>Qty</div>
+            <div className='flex-1'>Items</div>
+            <div>Price</div>
+          </div>
+        </aside>
+      </section>
+      <div className={'h-[0.5px] w-full bg-slate-500'} />
       <section className={'flex flex-col gap-4'}>
         <header className='flex items-center justify-between'>
           <h2 className='text-[16px] font-light leading-[24px] text-white'>SubTotal</h2>
@@ -43,7 +92,6 @@ export default function Table() {
             </svg>
           </Button>
           <Button className='flex flex-1 items-center justify-center border-[1px] bg-[#EA7C69] text-white'>
-            {' '}
             Pay Bill
           </Button>
         </footer>
