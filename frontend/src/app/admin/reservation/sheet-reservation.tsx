@@ -42,7 +42,7 @@ function SheetReservation({ children }: Props) {
           <Image
             src={PlaceholderImage}
             alt='placeholder image'
-            className='max-w-[240px] overflow-hidden rounded-[10px] bg-[#2D303E]'
+            className='max-w-[240px] overflow-hidden rounded-[10px] bg-[var(--bg-input)]'
           />
           <p className='text-[var(--primary-color)] underline'>Change inventory image</p>
         </div>
@@ -53,7 +53,12 @@ function SheetReservation({ children }: Props) {
                 control={form.control}
                 name='newPassword'
                 render={({ field }) => (
-                  <CustomInput className='flex-grow' classNameInput='bg-[#2D303E]' label='New Password' field={field} />
+                  <CustomInput
+                    className='flex-grow'
+                    classNameInput='bg-[var(--bg-input)]'
+                    label='New Password'
+                    field={field}
+                  />
                 )}
               />
               <FormField
@@ -62,7 +67,7 @@ function SheetReservation({ children }: Props) {
                 render={({ field }) => (
                   <CustomInput
                     className='flex-grow'
-                    classNameInput='bg-[#2D303E]'
+                    classNameInput='bg-[var(--bg-input)]'
                     label='Confirm Password'
                     field={field}
                   />
@@ -74,7 +79,12 @@ function SheetReservation({ children }: Props) {
                 control={form.control}
                 name='newPassword'
                 render={({ field }) => (
-                  <CustomInput className='flex-grow' classNameInput='bg-[#2D303E]' label='New Password' field={field} />
+                  <CustomInput
+                    className='flex-grow'
+                    classNameInput='bg-[var(--bg-input)]'
+                    label='New Password'
+                    field={field}
+                  />
                 )}
               />
               <FormField
@@ -83,7 +93,7 @@ function SheetReservation({ children }: Props) {
                 render={({ field }) => (
                   <CustomInput
                     className='flex-grow'
-                    classNameInput='bg-[#2D303E]'
+                    classNameInput='bg-[var(--bg-input)]'
                     label='Confirm Password'
                     field={field}
                   />
@@ -96,7 +106,7 @@ function SheetReservation({ children }: Props) {
               render={({ field }) => (
                 <CustomInput
                   className='flex-grow'
-                  classNameInput='bg-[#2D303E]'
+                  classNameInput='bg-[var(--bg-input)]'
                   label='Confirm Password'
                   field={field}
                 />
@@ -108,7 +118,7 @@ function SheetReservation({ children }: Props) {
               render={({ field }) => (
                 <CustomInput
                   className='flex-grow'
-                  classNameInput='bg-[#2D303E]'
+                  classNameInput='bg-[var(--bg-input)]'
                   label='Confirm Password'
                   field={field}
                 />

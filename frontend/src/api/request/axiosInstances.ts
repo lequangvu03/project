@@ -29,7 +29,6 @@ const protectedAxiosInstance = Axios.create({
 protectedAxiosInstance.interceptors.request.use(
   async (config) => {
     const session = await getSession()
-    console.log('session: ', { session })
     config.headers!.Authorization = `Bearer ${(session as any)?.accessToken}`
     return config
   },
