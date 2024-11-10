@@ -4,10 +4,8 @@ import { RoleType } from '~/definitions/constant/types.constant'
 
 function usePermissions() {
   const { data } = useSession()
-
   return {
-    isAdmin: (data as any)?.role === RoleType.Admin,
-    permissions: []
+    isAdmin: (data as any)?.role === RoleType.Admin
   }
 }
 

@@ -12,27 +12,41 @@ type Props = {
   name: string
   amount: number
   icon?: StaticImport | string
+  className?: string
 }
 
-export default function Category({ _id, icon = orderIcon.burger, name, amount }: Props) {
+export default function Category({ _id, icon = orderIcon.burger, name, amount, className }: Props) {
   const searchParams = useQueryParams()
-  console.log(_id)
+  const isActive = searchParams?.categoryId === _id
   return (
     <Link
-      href={`/admin/menu/?categoryId=${_id}`}
+      href={_id ? `/admin/menu/?categoryId=${_id}` : '/admin/menu'}
       className={cn(
-        'block cursor-pointer rounded-xl border-2 border-transparent bg-[var(--secondary-color)] px-3 py-4 shadow-2xl',
+        'block cursor-pointer rounded-xl border-2 border-transparent bg-[var(--secondary-color)] px-3 py-4 shadow-2xl transition-all hover:border-[var(--primary-color)]',
         {
-          'border-[var(--primary-color)]': searchParams?.categoryId === _id
-        }
+          'bg-[var(--primary-color)]': isActive
+        },
+        className
       )}
     >
       <section className='flex w-full items-center justify-end'>
         <Image src={icon} alt='Food Icon' />
       </section>
       <section>
-        <h2 className='text-[16px] font-medium leading-[24px] text-gray-300'>{name}</h2>
-        <p className='text-[16px] font-light leading-[24px] text-gray-500'>{amount + ' items'}</p>
+        <h2
+          className={cn('text-[16px] font-medium leading-[24px] text-gray-300 transition-all', {
+            'text-secondary': isActive
+          })}
+        >
+          {name}
+        </h2>
+        <p
+          className={cn('text-[16px] font-light leading-[24px] text-gray-500 transition-all', {
+            'text-secondary': isActive
+          })}
+        >
+          {amount + ' items'}
+        </p>
       </section>
     </Link>
   )

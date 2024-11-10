@@ -74,6 +74,10 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+
+  .shadow-border {
+    box-shadow: 0 0 2px #ffffff50;
+  }
 }
 
 @layer base {
