@@ -20,7 +20,7 @@ export default function OrderPage() {
         </div>
       </section>
 
-      <section className='grid grid-cols-3 gap-4'>
+      <section className='grid grid-cols-3 gap-8'>
         {Array.from({ length: 8 }, (_, index) => (
           <Table key={index} />
         ))}

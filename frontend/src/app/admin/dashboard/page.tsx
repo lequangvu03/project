@@ -6,7 +6,10 @@ export default function DashboardPage() {
     <div className='flex flex-col gap-10'>
       <section className='grid grid-cols-3 gap-10'>
         {Array.from({ length: 3 }, (_, index) => (
-          <div className='flex flex-col gap-8 rounded-xl bg-[#1F1D2B] p-4 shadow-lg hover:shadow-2xl'>
+          <div
+            className='flex flex-col gap-8 rounded-xl bg-[var(--secondary-color)] p-4 shadow-lg hover:shadow-2xl'
+            key={index}
+          >
             <div className='flex items-center justify-between'>
               <div className='flex flex-col gap-1'>
                 <div className='text-[16px] leading-[16px] text-gray-300'>Daily Sales</div>
@@ -64,7 +67,7 @@ export default function DashboardPage() {
       <section className='grid grid-cols-2 gap-10'>
         {Array.from({ length: 2 }, (_, index) => {
           return (
-            <div className='flex flex-col gap-4 rounded-xl bg-[#1F1D2B] p-6'>
+            <div className='flex flex-col gap-4 rounded-xl bg-[var(--secondary-color)] p-6' key={index}>
               <header className='flex items-center justify-between'>
                 <h3 className='text-[20px] font-medium leading-[36px] text-white'>Popular Dishes</h3>
                 <Link className='text-[16px] font-normal leading-6 text-[#EA7C69] underline' href={'/'}>
@@ -75,7 +78,7 @@ export default function DashboardPage() {
               <aside className='flex h-[300px] flex-col gap-4 overflow-x-hidden overflow-y-hidden'>
                 {Array.from({ length: 4 }, (_, index) => {
                   return (
-                    <div className='flex items-center justify-between rounded-xl bg-[#262728] p-1'>
+                    <div className='flex items-center justify-between rounded-xl bg-[#262728] p-1' key={index}>
                       <div className='flex items-start gap-4'>
                         <div className='h-[60px] w-[90px] rounded-md bg-slate-400'>
                           <></>

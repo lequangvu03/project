@@ -21,7 +21,7 @@ function ProductList() {
     console.log(`Delete product ${id}`)
   }
   return (
-    <Table className='overflow-hidden rounded-[10px] bg-[#1F1D2B] text-white'>
+    <Table className='overflow-hidden rounded-[10px] bg-[var(--secondary-color)] text-white'>
       <TableCaption>A list of your recent invoices.</TableCaption>
       <TableBody className='[&>tr]:border-none'>
         <TableRow className='w-fit'>
@@ -70,7 +70,7 @@ function ProductList() {
                 <AlertDialogTrigger asChild>
                   <Trash />
                 </AlertDialogTrigger>
-                <AlertDialogContent className='bg-[#1F1D2B]'>
+                <AlertDialogContent className='bg-[var(--secondary-color)]'>
                   <AlertDialogHeader>
                     <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                     <AlertDialogDescription>

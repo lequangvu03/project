@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import withAuth from 'next-auth/middleware'
 import { routes } from './definitions/constant/routes.constant'
 interface NextAuthRequest extends NextRequest {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   nextauth?: any
 }
 

@@ -49,7 +49,15 @@ export const AUTH_MESSAGES = {
   USER_NOT_VERIFIED: 'User not verified',
   PERMISSION_DENIED: 'Permission denied'
 } as const
-
+export const USER_MESSAGES = {
+  GET_ALL_Profile_SUCCESS: 'Get all profiles success',
+  GET_PROFILE_BY_ID_SUCCESS: 'Get profile by id success',
+  USER_NOT_FOUND: 'User not found',
+  NAME_MUST_BE_A_STRING: 'Name must be a string',
+  PERMISSIONS_MUST_BE_AN_ARRAY: 'Permissions must be an array',
+  DELETE_PROFILE_SUCCESS: 'Delete profile success',
+  UPDATE_PROFILE_SUCCESS: 'Update profile success',
+} as const
 export const TABLE_MESSAGES = {
   TABLE_NUMBER_MUST_BE_NUMBER: 'Table number must be number',
   TABLE_NUMBER_LENGHT_MUST_BE_FROM_1_TO_100: 'Table number length must be from 1 to 100',
@@ -155,7 +163,7 @@ export const BOOKING_MESSAGE = {
   BOOKING_IS_NOT_FOUND: 'booking is not found (please provide correct id)',
   TABLE_IS_NOT_FOUND: 'table is not found',
   BOOKING_TIME_CONFLICT: 'booking time conflict with other booking',
-  BOOKING_TIME_MUST_BE_NUMBER: 'booking time must be a number',
+  BOOKING_TIME_MUST_BE_NUMBER: 'booking time must be a number'
 }
 
 export const INVENTORY_MESSAGE = {
