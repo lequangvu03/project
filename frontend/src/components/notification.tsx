@@ -1,7 +1,9 @@
+import { Button } from './ui/button'
+
 export default function Notification() {
   return (
-    <div className='flex h-[90px] w-full items-center px-4 py-2'>
-      <section className='flex h-[50px] w-[50px] items-center justify-center rounded-sm bg-slate-500'>
+    <div className='flex h-[90px] w-full items-center gap-4 border-[0.15px] border-b-gray-800 px-4 py-2'>
+      <section className='flex h-[50px] w-[50px] items-center justify-center rounded-sm bg-[#EA7C69]'>
         <svg width='20' height='20' viewBox='0 0 30 30' fill='none' xmlns='http://www.w3.org/2000/svg'>
           <g clip-path='url(#clip0_158_11204)'>
             <path
@@ -16,6 +18,24 @@ export default function Notification() {
           </defs>
         </svg>
       </section>
+      <section className='flex flex-1 items-center justify-between'>
+        <div className='flex flex-col'>
+          <h3 className='text-[16px] font-light text-gray-300'>Low Inventory Alert</h3>
+          <p className='text-[13px] font-light text-gray-300'>
+            This is to notify you that the following items are running low in stock:
+          </p>
+        </div>
+        <p className='text-[16px] font-light text-gray-300'>07/04/2024</p>
+      </section>
+      <Button className='flex items-center gap-4 border-[1px] border-solid border-[#EA7C69]'>
+        <svg width='14' height='16' viewBox='0 0 14 16' fill='none' xmlns='http://www.w3.org/2000/svg'>
+          <path
+            d='M3.12365 15.4285C2.70198 15.4285 2.34998 15.2873 2.06765 15.005C1.7847 14.722 1.64323 14.3697 1.64323 13.9481V2.59516H0.726562V1.67849H4.39323V0.972656H9.89323V1.67849H13.5599V2.59516H12.6432V13.9481C12.6432 14.3697 12.5021 14.7217 12.2197 15.0041C11.9368 15.287 11.5845 15.4285 11.1628 15.4285H3.12365ZM5.1339 12.6785H6.05056V4.42849H5.1339V12.6785ZM8.2359 12.6785H9.15256V4.42849H8.2359V12.6785Z'
+            fill='#E70000'
+          />
+        </svg>
+        <p>Delete</p>
+      </Button>
     </div>
   )
 }
