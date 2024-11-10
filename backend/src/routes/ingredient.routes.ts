@@ -10,7 +10,7 @@ import {
   addIngredientValidator,
   deleteIngredientValidator,
   updateIngredientValidator
-} from '~/middlewares/inventory.item.middlewares'
+} from '~/middlewares/ingredient.middlewares'
 import { wrapRequestHandler } from '~/utils/handlers'
 
 // 1. Thêm hàng mới vào kho
