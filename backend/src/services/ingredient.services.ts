@@ -12,12 +12,12 @@ class IngredientsService {
   }
 
   async addIngredient(data: ingredients) {
-    // 1. Nhập kho (tạo 1 inventory Item mới VD: gà)
     data._id = new ObjectId()
-    const newingredient = await databaseService.ingredients.insertOne({
-      _id: new ObjectId(),
-      ...data
-    })
+    const newingredient = await databaseService.ingredients.insertOne(
+      new ingredients({
+        ...data
+      })
+    )
     return newingredient
   }
 

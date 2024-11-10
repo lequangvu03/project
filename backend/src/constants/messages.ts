@@ -177,13 +177,15 @@ export const INVENTORY_MESSAGE = {
   CATEGORY_NAME_IS_REQUIRED: 'Inventory name is required',
   CATEGORY_NAME_NOT_EXIST: 'category name is not exist',
   QUANTITY_MUST_BE_NUMBER: 'quantity must be a number',
+  UNIT_MUST_BE_STRING: 'unit must be a string',
   QUANTITY_MUST_BE_VALID: 'quantity must be greater than 1 ',
   STOCK_MUST_BE_STRING: 'stock must be a string',
   STOCK_MUST_BE_REQUIRED: 'stock is required',
   STATUS_MUST_BE_STRING: 'status must be a string ',
   STATUS_MUST_BE_REQUIRED: 'status is required',
   PERISHABLE_MUST_BE_0_OR_1: 'perishable  must be 0 or 1',
-  INVENTORY_ITEM_IS_NOT_FOUND: 'inventory item is not found, try other id'
+  INVENTORY_ITEM_IS_NOT_FOUND: 'inventory item is not found, try other id',
+  INVENTORY_ITEM_IS_EXIST: 'inventory item is exist, try other name',
 }
 
 export const EMPLOYEE_MESSAGE = {
