@@ -13,7 +13,7 @@ export const handleRequest = async (req: Request, res: Response, next: NextFunct
       maxFiles: 1,
       keepExtensions: true,
       maxFileSize: 3000 * 1024, // 300KB
-      filter: function ({ name, originalFilename, mimetype }) {
+      filter: function ({ name, mimetype }) {
         const valid = name === 'image' && Boolean(mimetype?.startsWith('image/'))
         if (!valid) {
           form.emit('error' as any, new Error('File type is not valid') as any)
@@ -21,6 +21,7 @@ export const handleRequest = async (req: Request, res: Response, next: NextFunct
         return valid
       }
     })
+
     const result = await new Promise<any>((resolve, reject) => {
       form.parse(req, (err, fields, files) => {
         if (err) {
@@ -30,10 +31,20 @@ export const handleRequest = async (req: Request, res: Response, next: NextFunct
         resolve({ files, fields })
       })
     })
-    const processedFields: Record<string, string> = {}
+
+    const processedFields: Record<string, any> = {}
+
     for (const [key, value] of Object.entries(result.fields)) {
-      processedFields[key] = Array.isArray(value) ? value[0] : (value as string)
+      let fieldValue = Array.isArray(value) ? value[0] : value
+      if (fieldValue === 'true' || fieldValue === 'false') {
+        fieldValue = fieldValue === 'true'
+      } else if (!isNaN(fieldValue as any) && fieldValue.trim() !== '') {
+        fieldValue = +fieldValue
+      }
+
+      processedFields[key] = fieldValue
     }
+
     req.body = processedFields
     next()
   } catch (error) {

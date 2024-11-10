@@ -1,4 +1,5 @@
 import { ObjectId } from 'mongodb'
+import { TagType } from '~/constants/enums'
 
 interface MenuItemType {
   _id: ObjectId
@@ -6,6 +7,7 @@ interface MenuItemType {
   description: string
   price: number
   category_id: ObjectId
+  tag: TagType
   stock: number
   image?: string
   ingredients: Array<{
@@ -21,6 +23,7 @@ export default class MenuItem {
   name: string
   description: string
   price: number
+  tag: TagType
   category_id: ObjectId
   stock: number
   image?: string
@@ -37,6 +40,7 @@ export default class MenuItem {
     this.name = menuItem.name
     this.description = menuItem.description
     this.price = menuItem.price
+    this.tag = menuItem.tag
     this.category_id = menuItem.category_id
     this.stock = menuItem.stock
     this.image = menuItem.image || ''

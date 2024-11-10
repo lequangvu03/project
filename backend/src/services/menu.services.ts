@@ -39,16 +39,11 @@ class MenuService {
   }
   async addMenuItem({ data, dir }: { data: MenuItem; dir: string }) {
     data.image = dir
+    data._id = new ObjectId()
     const newMenuItem = new MenuItem({
-      _id: new ObjectId(),
-      name: data.name,
-      description: data.description,
-      price: +data.price,
-      image: data.image,
-      category_id: new ObjectId(data.category_id),
-      stock: +data.stock,
-      ingredients: data.ingredients
+      ...data
     })
+
     await databaseService.menuItems.insertOne(newMenuItem)
     return newMenuItem
   }
