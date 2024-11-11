@@ -6,6 +6,10 @@ export const getAllProfileController = async (req: Request, res: Response, error
   const result = await userService.getAllProfile()
   return res.status(200).json({ message: USER_MESSAGES.GET_ALL_Profile_SUCCESS, result })
 }
+export const getMeProfileController = async (req: Request, res: Response, error: NextFunction) => {
+  const result = req.user
+  return res.status(200).json({ message: USER_MESSAGES.GET_ALL_Profile_SUCCESS, result })
+}
 export const getProfileByIdController = async (req: Request, res: Response, error: NextFunction) => {
   const result = await userService.getProfileById(req.params.id)
   return res.status(200).json({ message: USER_MESSAGES.GET_PROFILE_BY_ID_SUCCESS, result })
