@@ -2,6 +2,7 @@ import { Router } from 'express'
 import {
   deleteProfileController,
   getAllProfileController,
+  getMeProfileController,
   getProfileByIdController,
   updatedProfileController
 } from '~/controllers/user.contollers'
@@ -20,6 +21,14 @@ export const userRouter = Router()
  * response: {message: string, result: {profiles: profileType[], total: number}}
  */
 userRouter.get('/', accessTokenValidator, wrapRequestHandler(getAllProfileController))
+/**
+ * path: api/profile/me
+ * method: GET
+ * header: {Authorization: Bearer <access_token>}
+ * description: Get all profiles
+ * response: {message: string, result: {profiles: profileType[], total: number}}
+ */
+userRouter.get('/me', accessTokenValidator, wrapRequestHandler(getMeProfileController))
 
 /**
  * path: api/profile/:id
