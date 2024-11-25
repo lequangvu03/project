@@ -28,7 +28,7 @@ export default function Header() {
         >
           <Avatar className='h-10 w-10'>
             <AvatarImage className='h-full w-full' src='https://github.com/shadcn.png' alt='@shadcn' />
-            <AvatarFallback>Nguyen Duy Khanh</AvatarFallback>
+            <AvatarFallback className='bg-white text-black'>K</AvatarFallback>
           </Avatar>
           <div className='gap flex flex-col px-2'>
             <h2 className='text-[16px] font-semibold text-gray-400'>Nguyen Duy Khanh</h2>
