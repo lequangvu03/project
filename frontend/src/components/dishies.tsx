@@ -3,9 +3,7 @@
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { Pencil, Trash } from 'lucide-react'
 import Image from 'next/image'
-import { useState } from 'react'
 import { toast } from 'sonner'
-import SheetInventory from '~/app/admin/inventory/sheet-inventory'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -19,13 +17,18 @@ import {
 } from '~/components/ui/alert-dialog'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/components/ui/table'
 import { useDeleteDishQuery, useGetDishesQuery } from '~/hooks/data/menu.data'
+import useQueryParams from '~/hooks/useQueryParams'
 import { cn } from '~/lib/utils'
 import { IMenuItem } from '~/models/menu.model'
+import CustomSheet from './custom-sheet'
 import { Checkbox } from './ui/checkbox'
 
 function TableDishes() {
-  const [dishesExpandStatus, setExpandDishes] = useState<(IMenuItem & { checked: boolean })[]>([])
-  const { data: dishesData } = useGetDishesQuery({})
+  const { categoryId } = useQueryParams()
+  const { data: dishesData } = useGetDishesQuery({
+    categoryId: categoryId
+  })
+  console.log({ dishesData })
   const deleteDishMutation = useDeleteDishQuery()
   const dishes = (dishesData?.result?.menus as IMenuItem[]) || null
 
@@ -102,11 +105,11 @@ function TableDishes() {
                   </TableCell>
                   <TableCell className='text-right'>
                     <div className='flex items-center gap-4'>
-                      <SheetInventory>
+                      <CustomSheet isConfirmationRequired render={<div>Form</div>} title='Edit dish'>
                         <div className='cursor-pointer hover:opacity-60 active:opacity-60'>
                           <Pencil />
                         </div>
-                      </SheetInventory>
+                      </CustomSheet>
                       <AlertDialog>
                         <AlertDialogTrigger asChild className='cursor-pointer hover:opacity-60 active:opacity-60'>
                           <Trash />

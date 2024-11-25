@@ -3,7 +3,7 @@ import CustomSheet from '~/components/custom-sheet'
 import { Button } from '~/components/ui/button'
 import { Skeleton } from '~/components/ui/skeleton'
 
-const TableDishes = dynamic(() => import('~/components/dishies'), {
+const TableDishes = dynamic(() => import('./data-table'), {
   ssr: false
 })
 
@@ -26,13 +26,12 @@ export default function Page() {
       <div className='h-[1px] w-full bg-slate-700 leading-[0px]' />
       <section className='flex items-center justify-between'>
         <h2 className='text-[20px] font-semibold text-white'>Categories</h2>
-        <CustomSheet title='Add new category' trigger={<Button className='bg-[#EA7C69]'>Add new category</Button>}>
-          <span>test</span>
+        <CustomSheet title='Add new category' render={<span>test</span>}>
+          <Button className='bg-[#EA7C69]'>Add new category</Button>
         </CustomSheet>
       </section>
 
       <Categories />
-
       <h2 className='mt-4 text-[20px] font-medium text-white'>Special menu all items</h2>
       <section className='space-y-4'>
         <div className='flex items-center justify-between'>
@@ -47,6 +46,7 @@ export default function Page() {
         </div>
 
         <TableDishes />
+        {/* <TableDishes /> */}
       </section>
     </main>
   )

@@ -29,9 +29,9 @@ export default function Category({ _id, icon = orderIcon.burger, name, amount, c
         className
       )}
     >
-      <section className='flex w-full items-center justify-end'>
-        <Image src={icon} alt='Food Icon' />
-      </section>
+      <div className='flex w-full items-center justify-end'>
+        <Image src={icon} alt='Food Icon' className='pointer-events-none select-none' />
+      </div>
       <section>
         <h2
           className={cn('text-[16px] font-medium leading-[24px] text-gray-300 transition-all', {
