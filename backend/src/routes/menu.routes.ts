@@ -7,7 +7,12 @@ import {
   updateMenuItemController
 } from '~/controllers/menu.controllers'
 import { accessTokenValidator, isAdmin } from '~/middlewares/auth.middlewares'
-import { addMenuItemValidator, deleteMenuItemValidator, handleRequest, updateMenuItemValidator } from '~/middlewares/menu.middlewares'
+import {
+  addMenuItemValidator,
+  deleteMenuItemValidator,
+  handleRequest,
+  updateMenuItemValidator
+} from '~/middlewares/menu.middlewares'
 import { wrapRequestHandler } from '~/utils/handlers'
 
 export const menuRouter = Router()
@@ -108,3 +113,19 @@ menuRouter.delete(
   deleteMenuItemValidator,
   wrapRequestHandler(deleteMenuItemController)
 )
+
+/**
+ * @route   GET api/menu/
+ * @desc    Get all menu items
+ * @access  Private (Admin or Employee)
+ * @headers {Authorization: Bearer <access_token>} - access token required
+ * @response
+ *  {
+ *    message: string,
+ *    result: {
+ *      menuItems: MenuItemType[],  // List of menu items
+ *      total: number               // Total count of menu items
+ *    }
+ *  }
+ */
+menuRouter.get('/:id', accessTokenValidator, wrapRequestHandler(getMenuByCategoryController))
