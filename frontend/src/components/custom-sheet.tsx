@@ -13,7 +13,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger
 } from '~/components/ui/alert-dialog'
-import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '~/components/ui/sheet'
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '~/components/ui/sheet'
 
 type Props = {
   title?: string
@@ -35,6 +35,7 @@ function CustomSheet({ children, render, title, isConfirmationRequired = false, 
       setOpenSheet(false)
     }
   }
+
   return (
     <>
       <Sheet open={openSheet}>
@@ -51,8 +52,8 @@ function CustomSheet({ children, render, title, isConfirmationRequired = false, 
           hasCloseIcon={false}
           className='w-full !max-w-[640px] overflow-y-auto rounded-bl-[30px] rounded-tl-[30px] bg-[var(--secondary-color)] pt-[60px]'
         >
-          <SheetHeader className='flex flex-row items-center justify-between border-b border-slate-500 pb-6'>
-            <SheetTitle>{title}</SheetTitle>
+          <SheetHeader className='sticky top-0 flex flex-row items-center justify-between border-b border-slate-500 pb-6'>
+            <SheetTitle className='text-white'>{title}</SheetTitle>
             <div onClick={onCloseSheet} className='cursor-pointer hover:opacity-70'>
               <X />
             </div>
@@ -70,8 +71,15 @@ function CustomSheet({ children, render, title, isConfirmationRequired = false, 
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel onClick={() => setOpenSheet(false)}>Confirm</AlertDialogCancel>
-            <AlertDialogAction>Cancel</AlertDialogAction>
+            <AlertDialogCancel
+              className='bg-primary text-black hover:bg-primary/90 hover:text-black'
+              onClick={() => setOpenSheet(false)}
+            >
+              Confirm
+            </AlertDialogCancel>
+            <AlertDialogAction className='bg-[var(--primary-color)] text-white hover:bg-[var(--primary-color)] hover:opacity-90'>
+              Cancel
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

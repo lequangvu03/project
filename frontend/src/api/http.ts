@@ -85,7 +85,7 @@ const request = async <Response>(method: 'GET' | 'POST' | 'PUT' | 'DELETE', url:
     next: options?.next
   })
 
-  let payload: Response = await res.json()
+  const payload: Response = await res.json()
 
   const data = {
     status: res.status,

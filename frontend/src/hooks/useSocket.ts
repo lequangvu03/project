@@ -1,5 +1,5 @@
 // ~/hooks/useSocket.ts
-'use client'  // Thêm dòng này
+'use client' // Thêm dòng này
 
 import { useEffect, useState } from 'react'
 import { io, Socket } from 'socket.io-client'
