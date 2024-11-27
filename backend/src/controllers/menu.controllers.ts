@@ -2,20 +2,23 @@ import { NextFunction, Request, Response } from 'express'
 import { CATEGORY_MESSAGES, MENU_MESSAGES } from '~/constants/messages'
 import mediaService from '~/services/media.services'
 import menuService from '~/services/menu.services'
-export const getAllMenuController = async (req: Request, res: Response, error: NextFunction) => {
-  const { categoryId, tag } = req.query
-  let result
-  if (categoryId) {
-    result = await menuService.getMenuByCategory(categoryId as string)
-  } else if (tag) {
-    result = await menuService.getMenuByTag(+tag)
-  } else {
-    result = await menuService.getMenu()
+export const getAllMenuController = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { categoryId, tag } = req.query
+
+    const result = await menuService.getMenu({
+      categoryId: categoryId as string,
+      tag: tag ? +tag : undefined
+    })
+
+    return res.status(200).json({ message: MENU_MESSAGES.GET_ALL_MENU_ITEM_SUCCESS, result })
+  } catch (error) {
+    next(error)
   }
-  return res.status(200).json({ message: MENU_MESSAGES.GET_ALL_MENU_ITEM_SUCCESS, result })
 }
+
 export const getMenuByCategoryController = async (req: Request, res: Response, error: NextFunction) => {
-  const result = await menuService.getMenuByCategory(req.params.id)
+  const result = await menuService.getMenu({ categoryId: req.params.id })
   return res.status(200).json({ message: MENU_MESSAGES.GET_ALL_MENU_ITEM_SUCCESS, result })
 }
 export const addMenuItemController = async (req: Request, res: Response, error: NextFunction) => {
