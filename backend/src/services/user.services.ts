@@ -29,6 +29,9 @@ class UserService {
         }
       }
     }
+    if (typeof data.permissions === 'string') {
+      data.permissions = JSON.parse(data.permissions)
+    }
     await databaseService.users.updateOne({ _id: new ObjectId(id) }, { $set: data })
   }
   async deleteProfile(id: string) {

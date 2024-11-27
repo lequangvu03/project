@@ -1,5 +1,6 @@
 import { checkSchema } from 'express-validator'
 import { permission } from 'process'
+import { permissionType } from '~/constants/enums'
 import { AUTH_MESSAGES, USER_MESSAGES } from '~/constants/messages'
 import { confirmPasswordSchema, passwordSchema } from '~/middlewares/auth.middlewares'
 import authService from '~/services/auth.services'
@@ -37,6 +38,17 @@ export const updateProfileValidator = validate(
       permissions: {
         custom: {
           options: async (value) => {
+            if (typeof value === 'string') {
+              value = JSON.parse(value)
+            }
+            const validPermissions = Object.values(permissionType).filter(
+              (permission) => typeof permission === 'number'
+            )
+            const isValid = value.every((permission: number) => validPermissions.includes(permission))
+
+            if (!isValid) {
+              throw new Error(`Invalid permissions. Valid values are: ${validPermissions.join(', ')}`)
+            }
             return value
           }
         },

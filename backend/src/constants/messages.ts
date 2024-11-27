@@ -90,6 +90,7 @@ export const MENU_MESSAGES = {
   AVAILABILITY_MUST_BE_A_BOOLEAN: 'Availability must be a boolean',
   STOCK_MUST_BE_A_NUMBER: 'Stock must be a number',
   STOCK_IS_REQUIRED: 'Stock is required',
+  MENU_ITEM_NOT_FOUND: 'Menu item not found',
   MENU_ITEM_NAME_IS_REQUIRED: 'Menu item name is required',
   MENU_ITEM_NAME_IS_EXIST: 'Menu item name is exist',
   MENU_ITEM_PRICE_MUST_BE_GREATER_THAN_ZERO: 'Menu item price must be greater than zero'
