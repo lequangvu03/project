@@ -7,7 +7,7 @@ interface MenuItemType {
   description: string
   price: number
   category_id: ObjectId
-  tag: TagType
+  tag: TagType[]
   stock: number
   image?: string
   ingredients: Array<{
@@ -23,7 +23,7 @@ export default class MenuItem {
   name: string
   description: string
   price: number
-  tag: TagType
+  tag: TagType[]
   category_id: ObjectId
   stock: number
   image?: string
