@@ -80,6 +80,7 @@ const nextAuthOptions: AuthOptions = {
       session.refreshToken = token.refreshToken
       session.accessTokenExpires = token.exp
       session.role = token?.role
+
       return session
     },
     /**

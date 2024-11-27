@@ -37,7 +37,6 @@ export const updateProfileValidator = validate(
       permissions: {
         custom: {
           options: async (value) => {
-            console.log(value)
             return value
           }
         },

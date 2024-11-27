@@ -6,6 +6,8 @@ import { checkSchema } from 'express-validator'
 import { MENU_MESSAGES } from '~/constants/messages'
 import categoryService from '~/services/category.services'
 import menuService from '~/services/menu.services'
+import databaseService from '~/services/database.services'
+import { ObjectId } from 'mongodb'
 
 export const handleRequest = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -13,7 +15,7 @@ export const handleRequest = async (req: Request, res: Response, next: NextFunct
       maxFiles: 1,
       keepExtensions: true,
       maxFileSize: 3000 * 1024, // 300KB
-      filter: function ({ name, originalFilename, mimetype }) {
+      filter: function ({ name, mimetype }) {
         const valid = name === 'image' && Boolean(mimetype?.startsWith('image/'))
         if (!valid) {
           form.emit('error' as any, new Error('File type is not valid') as any)
@@ -21,6 +23,7 @@ export const handleRequest = async (req: Request, res: Response, next: NextFunct
         return valid
       }
     })
+
     const result = await new Promise<any>((resolve, reject) => {
       form.parse(req, (err, fields, files) => {
         if (err) {
@@ -30,10 +33,20 @@ export const handleRequest = async (req: Request, res: Response, next: NextFunct
         resolve({ files, fields })
       })
     })
-    const processedFields: Record<string, string> = {}
+
+    const processedFields: Record<string, any> = {}
+
     for (const [key, value] of Object.entries(result.fields)) {
-      processedFields[key] = Array.isArray(value) ? value[0] : (value as string)
+      let fieldValue = Array.isArray(value) ? value[0] : value
+      if (fieldValue === 'true' || fieldValue === 'false') {
+        fieldValue = fieldValue === 'true'
+      } else if (!isNaN(fieldValue as any) && fieldValue.trim() !== '') {
+        fieldValue = +fieldValue
+      }
+
+      processedFields[key] = fieldValue
     }
+
     req.body = processedFields
     next()
   } catch (error) {
@@ -172,6 +185,39 @@ export const updateMenuItemValidator = validate(
           errorMessage: MENU_MESSAGES.STOCK_MUST_BE_A_NUMBER
         },
         optional: { options: { nullable: true } } // Cho phép không có giá trị
+      }
+    },
+    ['body']
+  )
+)
+export const deleteMenuItemValidator = validate(
+  checkSchema(
+    {
+      ids: {
+        custom: {
+          options: async (value, req) => {
+            // Kiểm tra mảng không rỗng
+            if (value.length === 0) {
+              throw new Error('Mảng ids không được rỗng')
+            }
+
+            // Kiểm tra tất cả ID có tồn tại trong DB không
+            const objectIds = value.map((id: string) => new ObjectId(id))
+            const existingItems = await databaseService.menuItems
+              .find({
+                _id: { $in: objectIds }
+              })
+              .toArray()
+            if (existingItems.length !== value.length) {
+              const foundIds = existingItems.map((item: any) => item._id.toString())
+              const invalidIds = value.filter((id: string) => !foundIds.includes(id))
+
+              // Throw lỗi nếu có ID không hợp lệ
+              throw new Error(`Những ID không tồn tại trong cơ sở dữ liệu: ${invalidIds.join(', ')}`)
+            }
+            return true
+          }
+        }
       }
     },
     ['body']

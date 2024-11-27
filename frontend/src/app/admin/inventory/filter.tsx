@@ -26,7 +26,7 @@ function Filter() {
             <li>
               <Link
                 href={'/admin/inventory'}
-                className='flex items-center justify-between rounded-[10px] border border-slate-500 bg-[#2D303E] px-4 py-3'
+                className='flex items-center justify-between rounded-[10px] border border-slate-500 bg-[var(--bg-input)] px-4 py-3'
               >
                 <span>All</span>
                 <span className='rounded-sm bg-[var(--primary-color)] px-2'>160</span>
@@ -35,7 +35,7 @@ function Filter() {
             <li>
               <Link
                 href={'/admin/inventory'}
-                className='flex items-center justify-between rounded-[10px] bg-[#2D303E] px-4 py-3'
+                className='flex items-center justify-between rounded-[10px] bg-[var(--bg-input)] px-4 py-3'
               >
                 <span>Active</span>
                 <span>120</span>
@@ -44,7 +44,7 @@ function Filter() {
             <li>
               <Link
                 href={'/admin/inventory'}
-                className='flex items-center justify-between rounded-[10px] bg-[#2D303E] px-4 py-3'
+                className='flex items-center justify-between rounded-[10px] bg-[var(--bg-input)] px-4 py-3'
               >
                 <span>Inactive</span>
                 <span>30</span>
@@ -53,7 +53,7 @@ function Filter() {
             <li>
               <Link
                 href={'/admin/inventory'}
-                className='flex items-center justify-between rounded-[10px] bg-[#2D303E] px-4 py-3'
+                className='flex items-center justify-between rounded-[10px] bg-[var(--bg-input)] px-4 py-3'
               >
                 <span>Draft</span>
                 <span>10</span>
@@ -64,10 +64,10 @@ function Filter() {
         <div>
           <h3 className='my-4'>Product Status</h3>
           <Select>
-            <SelectTrigger className='h-auto w-full bg-[#2D303E] px-4 py-3'>
+            <SelectTrigger className='h-auto w-full bg-[var(--bg-input)] px-4 py-3'>
               <SelectValue placeholder='Theme' />
             </SelectTrigger>
-            <SelectContent className='bg-[#2D303E] text-white'>
+            <SelectContent className='bg-[var(--bg-input)] text-white'>
               <SelectItem value='light'>Light</SelectItem>
               <SelectItem value='dark'>Dark</SelectItem>
               <SelectItem value='system'>System</SelectItem>
@@ -77,10 +77,10 @@ function Filter() {
         <div>
           <h3 className='my-4'>Product Status</h3>
           <Select>
-            <SelectTrigger className='h-auto w-full bg-[#2D303E] px-4 py-3'>
+            <SelectTrigger className='h-auto w-full bg-[var(--bg-input)] px-4 py-3'>
               <SelectValue placeholder='Theme' />
             </SelectTrigger>
-            <SelectContent className='bg-[#2D303E] text-white'>
+            <SelectContent className='bg-[var(--bg-input)] text-white'>
               <SelectItem value='light'>Light</SelectItem>
               <SelectItem value='dark'>Dark</SelectItem>
               <SelectItem value='system'>System</SelectItem>
@@ -90,10 +90,10 @@ function Filter() {
         <div>
           <h3 className='my-4'>Product Status</h3>
           <Select>
-            <SelectTrigger className='h-auto w-full bg-[#2D303E] px-4 py-3'>
+            <SelectTrigger className='h-auto w-full bg-[var(--bg-input)] px-4 py-3'>
               <SelectValue placeholder='Theme' />
             </SelectTrigger>
-            <SelectContent className='bg-[#2D303E] text-white'>
+            <SelectContent className='bg-[var(--bg-input)] text-white'>
               <SelectItem value='light'>Light</SelectItem>
               <SelectItem value='dark'>Dark</SelectItem>
               <SelectItem value='system'>System</SelectItem>
@@ -108,7 +108,12 @@ function Filter() {
                 control={form.control}
                 name='newPassword'
                 render={({ field }) => (
-                  <CustomInput className='flex-grow' classNameInput='bg-[#2D303E]' label='New Password' field={field} />
+                  <CustomInput
+                    className='flex-grow'
+                    classNameInput='bg-[var(--bg-input)]'
+                    label='New Password'
+                    field={field}
+                  />
                 )}
               />
               <FormField
@@ -117,7 +122,7 @@ function Filter() {
                 render={({ field }) => (
                   <CustomInput
                     className='flex-grow'
-                    classNameInput='bg-[#2D303E]'
+                    classNameInput='bg-[var(--bg-input)]'
                     label='Confirm Password'
                     field={field}
                   />

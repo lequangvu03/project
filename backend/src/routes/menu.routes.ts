@@ -7,7 +7,7 @@ import {
   updateMenuItemController
 } from '~/controllers/menu.controllers'
 import { accessTokenValidator, isAdmin } from '~/middlewares/auth.middlewares'
-import { addMenuItemValidator, handleRequest, updateMenuItemValidator } from '~/middlewares/menu.middlewares'
+import { addMenuItemValidator, deleteMenuItemValidator, handleRequest, updateMenuItemValidator } from '~/middlewares/menu.middlewares'
 import { wrapRequestHandler } from '~/utils/handlers'
 
 export const menuRouter = Router()
@@ -101,4 +101,10 @@ menuRouter.put(
  *    result: MenuItemType       // Deleted menu item
  *  }
  */
-menuRouter.delete('/:id', accessTokenValidator, isAdmin, wrapRequestHandler(deleteMenuItemController))
+menuRouter.delete(
+  '/',
+  accessTokenValidator,
+  isAdmin,
+  deleteMenuItemValidator,
+  wrapRequestHandler(deleteMenuItemController)
+)

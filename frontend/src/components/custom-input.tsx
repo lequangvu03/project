@@ -29,7 +29,7 @@ function CustomInput({ className, placeholder, field, label, classNameInput, typ
           <Input
             type={type === 'password' ? (visible ? 'text' : 'password') : 'text'}
             className={cn(
-              'h-auto border-none bg-[#2D303E] px-6 py-4 text-base outline-none focus-visible:ring-0 focus-visible:ring-offset-0',
+              'h-auto border-none bg-[var(--bg-input)] px-6 py-4 text-base outline-none focus-visible:ring-0 focus-visible:ring-offset-0',
               classNameInput
             )}
             placeholder={placeholder}
