@@ -1,6 +1,7 @@
 import fs from 'fs'
 import { ObjectId } from 'mongodb'
 import path from 'path'
+import { ppid } from 'process'
 import sharp from 'sharp'
 import { UPLOAD_IMAGE_DIR } from '~/constants/dir'
 import MenuItem from '~/models/schemas/menuItems.schema'
@@ -37,8 +38,10 @@ class MenuService {
   async getMenuItemById(menuItemId: string) {
     return await databaseService.menuItems.findOne({ _id: new ObjectId(menuItemId) })
   }
-  async addMenuItem({ data, dir }: { data: MenuItem; dir: string }) {
-    data.image = dir
+  async addMenuItem({ data, dir }: { data: MenuItem; dir?: string }) {
+    if (dir) {
+      data.image = dir
+    }
     data._id = new ObjectId()
     const newMenuItem = new MenuItem({
       ...data
