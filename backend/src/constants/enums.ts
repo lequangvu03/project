@@ -60,8 +60,7 @@ export enum permissionType {
   Settings
 }
 export enum TagType {
-  nomarlMenu,
-  specialDeals,
-  newYearSpecial,
-  desertAndDrinks
+  Nomarl,
+  Special,
+  New
 }
