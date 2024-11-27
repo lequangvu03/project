@@ -17,7 +17,11 @@ export const getMenuByCategoryController = async (req: Request, res: Response, e
   return res.status(200).json({ message: MENU_MESSAGES.GET_ALL_MENU_ITEM_SUCCESS, result })
 }
 export const addMenuItemController = async (req: Request, res: Response, error: NextFunction) => {
-  const dir = await mediaService.uploadImage(req.files.image[0])
+  let dir
+  if (req.files.image) {
+    console.log('fds')
+    dir = await mediaService.uploadImage(req.files.image[0])
+  }
   const result = await menuService.addMenuItem({ data: req.body, dir: dir })
   return res.status(201).json({ message: MENU_MESSAGES.ADD_MENU_ITEM_SUCCESS, result })
 }
