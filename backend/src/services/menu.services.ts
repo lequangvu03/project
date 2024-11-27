@@ -14,7 +14,59 @@ class MenuService {
     const menuItem = await databaseService.menuItems.findOne({ name })
     return menuItem
   }
-  async getMenu() {
+  // async getMenu() {
+  //   const menus = await databaseService.menuItems
+  //     .aggregate([
+  //       {
+  //         // Chuyển category_id thành ObjectId nếu cần
+  //         $addFields: {
+  //           category_id: { $toObjectId: '$category_id' }
+  //         }
+  //       },
+  //       {
+  //         $lookup: {
+  //           from: 'categories', // Bảng categories
+  //           localField: 'category_id', // Trường category_id trong menuItems
+  //           foreignField: '_id', // Trường _id trong categories
+  //           as: 'category' // Kết quả join lưu vào trường 'category'
+  //         }
+  //       },
+  //       {
+  //         $unwind: {
+  //           path: '$category', // Giải nén kết quả trong trường 'category'
+  //           preserveNullAndEmptyArrays: true // Giữ lại menu không có category
+  //         }
+  //       },
+  //       {
+  //         $addFields: {
+  //           category_name: '$category.name' // Thêm trường 'categoryName' từ category
+  //         }
+  //       },
+  //       {
+  //         $project: {
+  //           category: 0 // Loại bỏ trường 'category' để kết quả gọn hơn
+  //         }
+  //       }
+  //     ])
+  //     .toArray()
+
+  //   const total = menus.length
+
+  //   return { menus, total }
+  // }
+  async getMenu({ categoryId, tag }: { categoryId?: string; tag?: number }) {
+    const matchFilter: any = {}
+
+    // Nếu có categoryId, thêm điều kiện lọc cho category_id
+    if (categoryId) {
+      matchFilter.category_id = new ObjectId(categoryId)
+    }
+
+    // Nếu có tag, thêm điều kiện lọc cho tag
+    if (tag !== undefined) {
+      matchFilter.tag = { $in: [tag] } // Lọc tag nằm trong mảng tag
+    }
+
     const menus = await databaseService.menuItems
       .aggregate([
         {
@@ -22,6 +74,10 @@ class MenuService {
           $addFields: {
             category_id: { $toObjectId: '$category_id' }
           }
+        },
+        {
+          // Áp dụng bộ lọc nếu có
+          $match: matchFilter
         },
         {
           $lookup: {
@@ -39,7 +95,7 @@ class MenuService {
         },
         {
           $addFields: {
-            category_name: '$category.name' // Thêm trường 'categoryName' từ category
+            category_name: '$category.name' // Thêm trường 'category_name' từ category
           }
         },
         {
@@ -55,24 +111,6 @@ class MenuService {
     return { menus, total }
   }
 
-  async getMenuByCategory(categoryId: string) {
-    const id = new ObjectId(categoryId)
-    const menus = await databaseService.menuItems.find({ category_id: id }).toArray()
-    const total = menus.length
-    return { menus, total }
-  }
-
-  async getMenuByTag(tag: number) {
-    // Truy vấn với toán tử $in để tìm các menu có chứa tag trong mảng tag
-    const menus = await databaseService.menuItems
-      .find({
-        tag: { $in: [tag] } // Tìm trong mảng `tag` có chứa giá trị `tag`
-      })
-      .toArray()
-
-    const total = menus.length
-    return { menus, total }
-  }
   async uploadImage(file: any) {
     const newName = getNameFromFullname(file.newFilename)
     const newPath = path.resolve(UPLOAD_IMAGE_DIR, `${newName}.jpg`)
