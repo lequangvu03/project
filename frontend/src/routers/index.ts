@@ -12,3 +12,9 @@ export const adminRoutes = [
   { name: 'Report', image: sidebarIcon.report, redirect: '/admin/report' },
   ...employeeRoutes
 ]
+
+export const routes = [
+  ...employeeRoutes,
+  ...adminRoutes,
+  { name: 'Profile', image: sidebarIcon.report, redirect: '/admin/profile' }
+]

@@ -5,6 +5,7 @@ import { ReactNode } from 'react'
 import { ThemeProvider } from '~/providers/theme-provider'
 import QueryProvider from '~/providers/query-provider'
 import SessionProvider from '~/providers/session-provider'
+import { Toaster } from '~/components/ui/sonner'
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -34,6 +35,7 @@ export default function RootLayout({
           <QueryProvider>
             <ThemeProvider attribute='class' defaultTheme='dark' enableSystem disableTransitionOnChange>
               {children}
+              <Toaster />
             </ThemeProvider>
           </QueryProvider>
         </SessionProvider>

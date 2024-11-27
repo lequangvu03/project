@@ -30,6 +30,6 @@ export const updateMenuItemController = async (req: Request, res: Response, erro
   return res.status(200).json({ message: MENU_MESSAGES.UPDATE_MENU_ITEM_SUCCESS, result })
 }
 export const deleteMenuItemController = async (req: Request, res: Response, error: NextFunction) => {
-  const result = await menuService.deleteMenuItem(req.params.id)
-  return res.status(200).json({ message: MENU_MESSAGES.DELETE_MENU_ITEM_SUCCESS, result })
+  const result = await menuService.deleteMenuItems(req.body.ids)
+  return res.status(200).json({ message: MENU_MESSAGES.DELETE_MENU_ITEM_SUCCESS })
 }

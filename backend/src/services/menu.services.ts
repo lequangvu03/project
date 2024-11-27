@@ -39,16 +39,11 @@ class MenuService {
   }
   async addMenuItem({ data, dir }: { data: MenuItem; dir: string }) {
     data.image = dir
+    data._id = new ObjectId()
     const newMenuItem = new MenuItem({
-      _id: new ObjectId(),
-      name: data.name,
-      description: data.description,
-      price: +data.price,
-      image: data.image,
-      category_id: new ObjectId(data.category_id),
-      stock: +data.stock,
-      ingredients: data.ingredients
+      ...data
     })
+
     await databaseService.menuItems.insertOne(newMenuItem)
     return newMenuItem
   }
@@ -74,17 +69,34 @@ class MenuService {
     await databaseService.menuItems.updateOne({ _id: new ObjectId(menuItemId) }, { $set: updateData })
   }
 
-  async deleteMenuItem(menuItemId: string) {
-    const item = await databaseService.menuItems.findOne({ _id: new ObjectId(menuItemId) })
-    const avatarUrl = item?.image
-    if (avatarUrl) {
-      const publicId = avatarUrl.split('/').pop()?.split('.')[0]
-      // 3. Xóa ảnh khỏi Cloudinary
-      if (publicId) {
-        await cloudinary.uploader.destroy(publicId)
+  async deleteMenuItems(menuItemIds: string[]) {
+    // Chuyển đổi tất cả các ID từ chuỗi sang ObjectId
+    const objectIds = menuItemIds.map((id) => new ObjectId(id))
+
+    // Lấy tất cả các mục trong cơ sở dữ liệu dựa trên các ObjectId
+    const items = await databaseService.menuItems
+      .find({
+        _id: { $in: objectIds }
+      })
+      .toArray()
+
+    // Duyệt qua từng item và xóa ảnh nếu có
+    for (const item of items) {
+      const avatarUrl = item?.image
+      if (avatarUrl) {
+        const publicId = avatarUrl.split('/').pop()?.split('.')[0]
+
+        // Nếu có publicId, xóa ảnh khỏi Cloudinary
+        if (publicId) {
+          await cloudinary.uploader.destroy(publicId)
+        }
       }
+
+      // Xóa mục khỏi cơ sở dữ liệu
+      await databaseService.menuItems.deleteOne({ _id: item._id })
     }
-    await databaseService.menuItems.deleteOne({ _id: new ObjectId(menuItemId) })
+
+    return { message: 'Items deleted successfully' }
   }
 }
 const menuService = new MenuService()

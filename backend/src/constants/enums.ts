@@ -59,3 +59,9 @@ export enum permissionType {
   Customers,
   Settings
 }
+export enum TagType {
+  nomarlMenu,
+  specialDeals,
+  newYearSpecial,
+  desertAndDrinks
+}
