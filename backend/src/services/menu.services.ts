@@ -103,7 +103,6 @@ class MenuService {
     if (dir) {
       data.image = dir
     }
-
     console.log('data', data)
     if (dir) {
       data.image = dir
@@ -111,7 +110,8 @@ class MenuService {
     console.log('data', data)
     data._id = new ObjectId()
     const newMenuItem = new MenuItem({
-      ...data
+      ...data,
+      category_id: new ObjectId(data.category_id),
     })
 
     await databaseService.menuItems.insertOne(newMenuItem)
@@ -134,7 +134,6 @@ class MenuService {
     }
     const updateData: any = {
       ...data,
-      price: +data.price,
       category_id: new ObjectId(data.category_id),
       updated_at: Date.now()
     }
@@ -154,7 +153,7 @@ class MenuService {
 
   async deleteMenuItems(menuItemIds: string[]) {
     // Chuyển đổi tất cả các ID từ chuỗi sang ObjectId
-    const objectIds = menuItemIds.map((id) => new ObjectId(id))
+    const objectIds = menuItemIds.map((id: string) => new ObjectId(id))
 
     // Lấy tất cả các mục trong cơ sở dữ liệu dựa trên các ObjectId
     const items = await databaseService.menuItems

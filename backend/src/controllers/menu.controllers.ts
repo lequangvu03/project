@@ -3,13 +3,10 @@ import { CATEGORY_MESSAGES, MENU_MESSAGES } from '~/constants/messages'
 import mediaService from '~/services/media.services'
 import menuService from '~/services/menu.services'
 export const getAllMenuController = async (req: Request, res: Response, error: NextFunction) => {
-  const { categoryId, tag } = req.query
+  const { categoryId } = req.query
   let result
   if (categoryId) {
     result = await menuService.getMenuByCategory(categoryId as string)
-  }
-  if (tag) {
-    result = await menuService.getMenuByTag(+tag)
   } else {
     result = await menuService.getMenu()
   }
@@ -37,6 +34,10 @@ export const updateMenuItemController = async (req: Request, res: Response, erro
   return res.status(200).json({ message: MENU_MESSAGES.UPDATE_MENU_ITEM_SUCCESS, result })
 }
 export const deleteMenuItemController = async (req: Request, res: Response, error: NextFunction) => {
-  const result = await menuService.deleteMenuItems(req.body.ids)
+  if (typeof req.query.ids === 'string') {
+    await menuService.deleteMenuItems(JSON.parse(req.query.ids))
+  } else {
+    return res.status(400).json({ message: 'Invalid ids parameter' })
+  }
   return res.status(200).json({ message: MENU_MESSAGES.DELETE_MENU_ITEM_SUCCESS })
 }

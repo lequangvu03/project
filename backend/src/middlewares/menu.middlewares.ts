@@ -8,6 +8,7 @@ import categoryService from '~/services/category.services'
 import menuService from '~/services/menu.services'
 import databaseService from '~/services/database.services'
 import { ObjectId } from 'mongodb'
+import { json } from 'stream/consumers'
 
 export const handleRequest = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -197,11 +198,11 @@ export const deleteMenuItemValidator = validate(
       ids: {
         custom: {
           options: async (value, req) => {
-            // Kiểm tra mảng không rỗng
             if (value.length === 0) {
               throw new Error('Mảng ids không được rỗng')
             }
-
+            value = JSON.parse(value)
+            console.log(value)
             // Kiểm tra tất cả ID có tồn tại trong DB không
             const objectIds = value.map((id: string) => new ObjectId(id))
             const existingItems = await databaseService.menuItems
@@ -221,6 +222,6 @@ export const deleteMenuItemValidator = validate(
         }
       }
     },
-    ['body']
+    ['query']
   )
 )
