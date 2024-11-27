@@ -39,10 +39,6 @@ export const updateMenuItemController = async (req: Request, res: Response, erro
   return res.status(200).json({ message: MENU_MESSAGES.UPDATE_MENU_ITEM_SUCCESS, result })
 }
 export const deleteMenuItemController = async (req: Request, res: Response, error: NextFunction) => {
-  if (typeof req.query.ids === 'string') {
-    await menuService.deleteMenuItems(JSON.parse(req.query.ids))
-  } else {
-    return res.status(400).json({ message: 'Invalid ids parameter' })
-  }
+  await menuService.deleteMenuItems(req.params.id)
   return res.status(200).json({ message: MENU_MESSAGES.DELETE_MENU_ITEM_SUCCESS })
 }
