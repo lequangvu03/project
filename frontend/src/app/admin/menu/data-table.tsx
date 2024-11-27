@@ -26,16 +26,16 @@ import {
   AlertDialogTrigger
 } from '~/components/ui/alert-dialog'
 
+import Image from 'next/image'
 import { toast } from 'sonner'
 import CustomSheet from '~/components/custom-sheet'
 import { Button } from '~/components/ui/button'
-import { Checkbox } from '~/components/ui/checkbox'
 import { Input } from '~/components/ui/input'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/components/ui/table'
 import { useDeleteDishQuery, useGetDishesQuery } from '~/hooks/data/menu.data'
 import useQueryParams from '~/hooks/useQueryParams'
 import { IMenuItem } from '~/models/menu.model'
-import Image from 'next/image'
+import Loading from '~/components/loading'
 
 export default function TableDishes() {
   const [sorting, setSorting] = useState<SortingState>([])
@@ -43,50 +43,47 @@ export default function TableDishes() {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = useState({})
 
+  const { categoryId, tag } = useQueryParams()
+
+  const { data: dishesData, isPending } = useGetDishesQuery({
+    categoryId: categoryId,
+    tag: tag === 'ALL' ? '' : tag
+  })
+
+  const deleteDishMutation = useDeleteDishQuery()
+
+  const dishes = useMemo(() => {
+    const dishes = dishesData?.result?.menus as IMenuItem[]
+    return dishes || []
+  }, [dishesData])
+
   const columns: ColumnDef<IMenuItem>[] = [
-    {
-      id: 'select',
-      header: ({ table }) => (
-        <Checkbox
-          checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label='Select all'
-        />
-      ),
-      cell: ({ row }) => (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label='Select row'
-        />
-      ),
-      enableSorting: false,
-      enableHiding: false
-    },
     {
       accessorKey: 'name',
       header: 'Product Name',
-      cell: ({ row }) => (
-        <>
-          <div className='flex items-center gap-4'>
-            <Image
-              width={100}
-              height={100}
-              className='h-[80px] w-[80px] rounded-[10px] object-cover'
-              src={row.getValue('image')}
-              alt='avatar'
-            />
-            <div className='shrink-0 capitalize'>{row.getValue('name')}</div>
-          </div>
-        </>
-      )
+      cell: ({ row }) => {
+        return (
+          <>
+            <div className='flex items-center gap-4'>
+              <Image
+                width={100}
+                height={100}
+                className='h-[80px] w-[80px] rounded-[10px] object-cover'
+                src={row.getValue('image')}
+                alt='avatar'
+              />
+              <div className='shrink-0 capitalize'>{row.getValue('name')}</div>
+            </div>
+          </>
+        )
+      }
     },
     {
       accessorKey: 'stock',
       header: ({ column }) => {
         return (
           <Button
-            className='flex gap-2'
+            className='flex w-full gap-2 text-center'
             variant='ghost'
             onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           >
@@ -95,7 +92,14 @@ export default function TableDishes() {
           </Button>
         )
       },
-      cell: ({ row }) => <div className='lowercase'>{row.getValue('stock')}</div>
+      cell: ({ row }) => <div className='text-center'>{row.getValue('stock')}</div>
+    },
+    {
+      accessorKey: 'category_name',
+      header: () => <div>Category Name</div>,
+      cell: ({ row }) => {
+        return <div className='font-medium'>{row.getValue('category_name')}</div>
+      }
     },
     {
       accessorKey: 'price',
@@ -103,6 +107,11 @@ export default function TableDishes() {
       cell: ({ row }) => {
         return <div className='font-medium'>{row.getValue('price')}</div>
       }
+    },
+    {
+      accessorKey: 'image',
+      cell: () => {},
+      header: () => null
     },
     {
       id: 'actions',
@@ -140,20 +149,9 @@ export default function TableDishes() {
       }
     }
   ]
-  const { categoryId } = useQueryParams()
-  const { data: dishesData, isPending } = useGetDishesQuery({
-    categoryId: categoryId
-  })
-  const deleteDishMutation = useDeleteDishQuery()
-
-  const data = useMemo(() => {
-    const dishes = dishesData?.result?.menus as IMenuItem[]
-    return dishes || []
-  }, [categoryId])
-  console.log(data)
 
   const table = useReactTable({
-    data,
+    data: dishes,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -173,9 +171,9 @@ export default function TableDishes() {
 
   const handleDelete = async (id: string) => {
     try {
-      await deleteDishMutation.mutateAsync(id)
+      await deleteDishMutation.mutateAsync([id])
       toast.success('Delete menu item successfully')
-    } catch (error) {
+    } catch (_) {
       toast.error('Failed to delete menu item')
     }
   }
@@ -184,64 +182,52 @@ export default function TableDishes() {
     <div className='w-full'>
       <div className='flex items-center py-4'>
         <Input
-          placeholder='Filter emails...'
-          value={(table.getColumn('email')?.getFilterValue() as string) ?? ''}
-          onChange={(event) => table.getColumn('email')?.setFilterValue(event.target.value)}
+          placeholder='Filter name...'
+          value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
+          onChange={(event) => table.getColumn('name')?.setFilterValue(event.target.value)}
           className='max-w-sm'
         />
       </div>
-      <div className='-mx-8 rounded-md border'>
-        <Table className='rounded-none'>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                    </TableHead>
-                  )
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
-                  ))}
+      <div className='-mx-8'>
+        {isPending ? (
+          <div role='status' className='flex min-h-[400px] w-full items-center justify-center'>
+            <Loading />
+            <span className='sr-only'>Loading...</span>
+          </div>
+        ) : (
+          <Table className='rounded-none'>
+            <TableHeader>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => {
+                    return (
+                      <TableHead key={header.id}>
+                        {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                      </TableHead>
+                    )
+                  })}
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={columns.length} className='h-24 text-center'>
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
-      <div className='flex items-center justify-end space-x-2 py-4'>
-        <div className='flex-1 text-sm text-muted-foreground'>
-          {table.getFilteredSelectedRowModel().rows.length} of {table.getFilteredRowModel().rows.length} row(s)
-          selected.
-        </div>
-        <div className='space-x-2'>
-          <Button
-            variant='outline'
-            size='sm'
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Previous
-          </Button>
-          <Button variant='outline' size='sm' onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
-            Next
-          </Button>
-        </div>
+              ))}
+            </TableHeader>
+            <TableBody>
+              {table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={columns.length} className='h-24 text-center'>
+                    No results.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        )}
       </div>
     </div>
   )

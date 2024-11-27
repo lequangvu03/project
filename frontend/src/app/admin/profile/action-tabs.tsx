@@ -158,12 +158,15 @@ function Profile() {
     <div>
       <h3 className='text-xl'>Personal Information</h3>
       <div className='mb-8 flex items-center gap-6'>
-        <div className='relative mt-8 h-fit w-fit'>
+        <div
+          className='relative mt-8 h-fit w-fit rounded-full transition-all hover:opacity-85'
+          onClick={openFileDialog}
+        >
           <Avatar className='relative h-[140px] w-[140px]'>
             <AvatarImage src='https://github.com/shadcn.png' alt='avatar' />
             <AvatarFallback className='text-black'>LQV</AvatarFallback>
           </Avatar>
-          <button className='absolute bottom-0 right-5 z-10' onClick={openFileDialog}>
+          <button className='absolute bottom-0 right-5 z-10'>
             <Image className='size-5' />
             <input ref={ref} type='file' accept='image/*' hidden />
           </button>

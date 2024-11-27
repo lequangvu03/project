@@ -28,7 +28,7 @@ function TableDishes() {
   const { data: dishesData } = useGetDishesQuery({
     categoryId: categoryId
   })
-  console.log({ dishesData })
+  console.log(dishesData)
   const deleteDishMutation = useDeleteDishQuery()
   const dishes = (dishesData?.result?.menus as IMenuItem[]) || null
 
@@ -36,7 +36,7 @@ function TableDishes() {
     try {
       await deleteDishMutation.mutateAsync(id)
       toast.success('Delete menu item successfully')
-    } catch (error) {
+    } catch (_) {
       toast.error('Failed to delete menu item')
     }
   }
