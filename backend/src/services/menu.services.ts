@@ -143,7 +143,6 @@ class MenuService {
     if (dir) {
       data.image = dir
     }
-    console.log('data', data)
     if (dir) {
       data.image = dir
     }
@@ -191,33 +190,25 @@ class MenuService {
     await databaseService.menuItems.updateOne({ _id: new ObjectId(menuItemId) }, { $set: updateData })
   }
 
-  async deleteMenuItems(menuItemIds: string[]) {
+  async deleteMenuItems(Ids: string) {
     // Chuyển đổi tất cả các ID từ chuỗi sang ObjectId
-    const objectIds = menuItemIds.map((id: string) => new ObjectId(id))
-
+    const id = new ObjectId(Ids)
     // Lấy tất cả các mục trong cơ sở dữ liệu dựa trên các ObjectId
-    const items = await databaseService.menuItems
-      .find({
-        _id: { $in: objectIds }
-      })
-      .toArray()
+    const item = await databaseService.menuItems.findOne({
+      _id: id
+    })
 
     // Duyệt qua từng item và xóa ảnh nếu có
-    for (const item of items) {
-      const avatarUrl = item?.image
-      if (avatarUrl) {
-        const publicId = avatarUrl.split('/').pop()?.split('.')[0]
-
-        // Nếu có publicId, xóa ảnh khỏi Cloudinary
-        if (publicId) {
-          await cloudinary.uploader.destroy(publicId)
-        }
+    const avatarUrl = item?.image
+    if (avatarUrl) {
+      const publicId = avatarUrl.split('/').pop()?.split('.')[0]
+      // Nếu có publicId, xóa ảnh khỏi Cloudinary
+      if (publicId) {
+        await cloudinary.uploader.destroy(publicId)
       }
-
-      // Xóa mục khỏi cơ sở dữ liệu
-      await databaseService.menuItems.deleteOne({ _id: item._id })
     }
 
+    await databaseService.menuItems.deleteOne({ _id: item?._id })
     return { message: 'Items deleted successfully' }
   }
 }

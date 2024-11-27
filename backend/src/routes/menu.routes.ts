@@ -102,7 +102,7 @@ menuRouter.put(
  *  }
  */
 menuRouter.delete(
-  '/',
+  '/:id',
   accessTokenValidator,
   isAdmin,
   deleteMenuItemValidator,

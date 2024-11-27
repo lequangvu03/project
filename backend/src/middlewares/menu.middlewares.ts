@@ -195,32 +195,18 @@ export const updateMenuItemValidator = validate(
 export const deleteMenuItemValidator = validate(
   checkSchema(
     {
-      ids: {
+      id: {
         custom: {
           options: async (value, req) => {
-            if (value.length === 0) {
-              throw new Error('Mảng ids không được rỗng')
-            }
-            value = JSON.parse(value)
-            // Kiểm tra tất cả ID có tồn tại trong DB không
-            const objectIds = value.map((id: string) => new ObjectId(id))
-            const existingItems = await databaseService.menuItems
-              .find({
-                _id: { $in: objectIds }
-              })
-              .toArray()
-            if (existingItems.length !== value.length) {
-              const foundIds = existingItems.map((item: any) => item._id.toString())
-              const invalidIds = value.filter((id: string) => !foundIds.includes(id))
-
-              // Throw lỗi nếu có ID không hợp lệ
-              throw new Error(`Những ID không tồn tại trong cơ sở dữ liệu: ${invalidIds.join(', ')}`)
+            const check = await databaseService.menuItems.findOne({ _id: new ObjectId(value as string) })
+            if (!check) {
+              throw new Error(MENU_MESSAGES.MENU_ITEM_NOT_FOUND)
             }
             return true
           }
         }
       }
     },
-    ['query']
+    ['params']
   )
 )
