@@ -3,10 +3,13 @@ import { CATEGORY_MESSAGES, MENU_MESSAGES } from '~/constants/messages'
 import mediaService from '~/services/media.services'
 import menuService from '~/services/menu.services'
 export const getAllMenuController = async (req: Request, res: Response, error: NextFunction) => {
-  const { categoryId } = req.query
+  const { categoryId, tag } = req.query
   let result
   if (categoryId) {
     result = await menuService.getMenuByCategory(categoryId as string)
+  }
+  if (tag) {
+    result = await menuService.getMenuByTag(+tag)
   } else {
     result = await menuService.getMenu()
   }
