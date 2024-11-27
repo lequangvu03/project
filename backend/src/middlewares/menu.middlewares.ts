@@ -202,7 +202,6 @@ export const deleteMenuItemValidator = validate(
               throw new Error('Mảng ids không được rỗng')
             }
             value = JSON.parse(value)
-            console.log(value)
             // Kiểm tra tất cả ID có tồn tại trong DB không
             const objectIds = value.map((id: string) => new ObjectId(id))
             const existingItems = await databaseService.menuItems
