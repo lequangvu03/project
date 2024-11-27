@@ -60,6 +60,17 @@ class MenuService {
     const total = menus.length
     return { menus, total }
   }
+  async getMenuByTag(tag: number) {
+    // Truy vấn với toán tử $in để tìm các menu có chứa tag trong mảng tag
+    const menus = await databaseService.menuItems
+      .find({
+        tag: { $in: [tag] } // Tìm trong mảng `tag` có chứa giá trị `tag`
+      })
+      .toArray()
+
+    const total = menus.length
+    return { menus, total }
+  }
   async uploadImage(file: any) {
     const newName = getNameFromFullname(file.newFilename)
     const newPath = path.resolve(UPLOAD_IMAGE_DIR, `${newName}.jpg`)
@@ -75,6 +86,25 @@ class MenuService {
     return await databaseService.menuItems.findOne({ _id: new ObjectId(menuItemId) })
   }
   async addMenuItem({ data, dir }: { data: MenuItem; dir?: string }) {
+    if (typeof data.tag === 'string') {
+      try {
+        data.tag = JSON.parse(data.tag)
+      } catch (error) {
+        console.error('Error parsing tag:', error)
+      }
+    }
+    if (typeof data.ingredients === 'string') {
+      try {
+        data.ingredients = JSON.parse(data.ingredients)
+      } catch (error) {
+        console.error('Error parsing ingredients:', error)
+      }
+    }
+    if (dir) {
+      data.image = dir
+    }
+
+    console.log('data', data)
     if (dir) {
       data.image = dir
     }
@@ -88,9 +118,22 @@ class MenuService {
     return newMenuItem
   }
   async updateMenuItem({ menuItemId, data, dir }: { menuItemId: string; data: MenuItem; dir: string }) {
+    if (data.tag && typeof data.tag === 'string') {
+      try {
+        data.tag = JSON.parse(data.tag)
+      } catch (error) {
+        console.error('Error parsing tag:', error)
+      }
+    }
+    if (data.ingredients && typeof data.ingredients === 'string') {
+      try {
+        data.ingredients = JSON.parse(data.ingredients)
+      } catch (error) {
+        console.error('Error parsing ingredients:', error)
+      }
+    }
     const updateData: any = {
-      name: data.name,
-      description: data.description,
+      ...data,
       price: +data.price,
       category_id: new ObjectId(data.category_id),
       updated_at: Date.now()
