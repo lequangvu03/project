@@ -114,7 +114,8 @@ export const addMenuItemValidator = validate(
         },
         notEmpty: {
           errorMessage: MENU_MESSAGES.STOCK_IS_REQUIRED
-        }
+        },
+        optional: { options: { nullable: true } }
       }
     },
     ['body']
