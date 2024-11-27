@@ -56,10 +56,12 @@ class MenuService {
   }
 
   async getMenuByCategory(categoryId: string) {
-    const menus = await databaseService.menuItems.find({ category_id: new ObjectId(categoryId) }).toArray()
+    const id = new ObjectId(categoryId)
+    const menus = await databaseService.menuItems.find({ category_id: id }).toArray()
     const total = menus.length
     return { menus, total }
   }
+
   async getMenuByTag(tag: number) {
     // Truy vấn với toán tử $in để tìm các menu có chứa tag trong mảng tag
     const menus = await databaseService.menuItems
@@ -111,7 +113,7 @@ class MenuService {
     data._id = new ObjectId()
     const newMenuItem = new MenuItem({
       ...data,
-      category_id: new ObjectId(data.category_id),
+      category_id: new ObjectId(data.category_id)
     })
 
     await databaseService.menuItems.insertOne(newMenuItem)

@@ -7,8 +7,7 @@ export const getAllMenuController = async (req: Request, res: Response, error: N
   let result
   if (categoryId) {
     result = await menuService.getMenuByCategory(categoryId as string)
-  }
-  if (tag) {
+  } else if (tag) {
     result = await menuService.getMenuByTag(+tag)
   } else {
     result = await menuService.getMenu()
