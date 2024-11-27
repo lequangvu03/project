@@ -15,10 +15,46 @@ class MenuService {
     return menuItem
   }
   async getMenu() {
-    const menus = await databaseService.menuItems.find().toArray()
+    const menus = await databaseService.menuItems
+      .aggregate([
+        {
+          // Chuyển category_id thành ObjectId nếu cần
+          $addFields: {
+            category_id: { $toObjectId: '$category_id' }
+          }
+        },
+        {
+          $lookup: {
+            from: 'categories', // Bảng categories
+            localField: 'category_id', // Trường category_id trong menuItems
+            foreignField: '_id', // Trường _id trong categories
+            as: 'category' // Kết quả join lưu vào trường 'category'
+          }
+        },
+        {
+          $unwind: {
+            path: '$category', // Giải nén kết quả trong trường 'category'
+            preserveNullAndEmptyArrays: true // Giữ lại menu không có category
+          }
+        },
+        {
+          $addFields: {
+            category_name: '$category.name' // Thêm trường 'categoryName' từ category
+          }
+        },
+        {
+          $project: {
+            category: 0 // Loại bỏ trường 'category' để kết quả gọn hơn
+          }
+        }
+      ])
+      .toArray()
+
     const total = menus.length
+
     return { menus, total }
   }
+
   async getMenuByCategory(categoryId: string) {
     const menus = await databaseService.menuItems.find({ category_id: new ObjectId(categoryId) }).toArray()
     const total = menus.length
@@ -42,6 +78,7 @@ class MenuService {
     if (dir) {
       data.image = dir
     }
+    console.log('data', data)
     data._id = new ObjectId()
     const newMenuItem = new MenuItem({
       ...data
