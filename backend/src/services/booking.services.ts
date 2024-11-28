@@ -4,7 +4,10 @@ import databaseService from '~/services/database.services'
 import tableService from './table.services'
 
 class BookingService {
-  async getAllBookings() {
+  async getAllBookings(id?: string) {
+    if (id) {
+      return await databaseService.bookings.findOne({ _id: new ObjectId(id) })
+    }
     const bookings = await databaseService.bookings.find().toArray()
     const total = await databaseService.bookings.countDocuments()
     return { bookings, total }

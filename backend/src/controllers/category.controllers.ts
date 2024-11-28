@@ -3,7 +3,8 @@ import { CATEGORY_MESSAGES } from '~/constants/messages'
 import categoryService from '~/services/category.services'
 
 export const getAllCategoriesController = async (req: Request, res: Response, next: NextFunction) => {
-  const result = await categoryService.getAllCategories()
+  const { id } = req.query
+  const result = await categoryService.getAllCategories(id as string)
   return res.status(200).json({ message: CATEGORY_MESSAGES.GET_ALL_CATEGORIES_SUCCESS, result })
 }
 

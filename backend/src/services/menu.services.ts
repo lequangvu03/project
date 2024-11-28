@@ -54,8 +54,25 @@ class MenuService {
 
   //   return { menus, total }
   // }
-  async getMenu({ categoryId, tag }: { categoryId?: string; tag?: number }) {
+  async getMenu({
+    limit,
+    page,
+    sortBy,
+    sortOrder,
+    categoryId,
+    tag
+  }: {
+    limit?: number
+    page?: number
+    sortBy?: string
+    sortOrder?: string
+    categoryId?: string
+    tag?: number
+  }) {
     const matchFilter: any = {}
+    const sortQuery: { [key: string]: 1 | -1 } = {
+      [sortBy || 'created_at']: sortOrder === 'ascend' ? 1 : -1
+    }
 
     // Nếu có categoryId, thêm điều kiện lọc cho category_id
     if (categoryId) {
@@ -67,45 +84,57 @@ class MenuService {
       matchFilter.tag = { $in: [tag] } // Lọc tag nằm trong mảng tag
     }
 
-    const menus = await databaseService.menuItems
-      .aggregate([
-        {
-          // Chuyển category_id thành ObjectId nếu cần
-          $addFields: {
-            category_id: { $toObjectId: '$category_id' }
-          }
-        },
-        {
-          // Áp dụng bộ lọc nếu có
-          $match: matchFilter
-        },
-        {
-          $lookup: {
-            from: 'categories', // Bảng categories
-            localField: 'category_id', // Trường category_id trong menuItems
-            foreignField: '_id', // Trường _id trong categories
-            as: 'category' // Kết quả join lưu vào trường 'category'
-          }
-        },
-        {
-          $unwind: {
-            path: '$category', // Giải nén kết quả trong trường 'category'
-            preserveNullAndEmptyArrays: true // Giữ lại menu không có category
-          }
-        },
-        {
-          $addFields: {
-            category_name: '$category.name' // Thêm trường 'category_name' từ category
-          }
-        },
-        {
-          $project: {
-            category: 0 // Loại bỏ trường 'category' để kết quả gọn hơn
-          }
+    // Khởi tạo pipeline cơ bản
+    const pipeline: any[] = [
+      {
+        // Chuyển category_id thành ObjectId nếu cần
+        $addFields: {
+          category_id: { $toObjectId: '$category_id' }
         }
-      ])
-      .toArray()
+      },
+      {
+        // Áp dụng bộ lọc nếu có
+        $match: matchFilter
+      },
+      {
+        $lookup: {
+          from: 'categories', // Bảng categories
+          localField: 'category_id', // Trường category_id trong menuItems
+          foreignField: '_id', // Trường _id trong categories
+          as: 'category' // Kết quả join lưu vào trường 'category'
+        }
+      },
+      {
+        $unwind: {
+          path: '$category', // Giải nén kết quả trong trường 'category'
+          preserveNullAndEmptyArrays: true // Giữ lại menu không có category
+        }
+      },
+      {
+        $addFields: {
+          category_name: '$category.name' // Thêm trường 'category_name' từ category
+        }
+      },
+      {
+        $project: {
+          category: 0 // Loại bỏ trường 'category' để kết quả gọn hơn
+        }
+      }
+    ]
 
+    // Thêm các bước phân trang nếu có `limit` và `page`
+    if (limit && page) {
+      pipeline.push(
+        { $sort: sortQuery }, // Thêm bước sắp xếp
+        { $skip: limit * (page - 1) }, // Thêm bước bỏ qua
+        { $limit: limit } // Thêm bước giới hạn số lượng
+      )
+    }
+
+    // Thực thi pipeline
+    const menus = await databaseService.menuItems.aggregate(pipeline).toArray()
+
+    // Tính tổng số lượng (nếu cần)
     const total = menus.length
 
     return { menus, total }

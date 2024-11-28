@@ -11,39 +11,60 @@ class CategoryService {
     return category
   }
 
-  async getAllCategories() {
-    const categories = await databaseService.categories
-      .aggregate([
-        {
-          $lookup: {
-            from: 'menu_items', // Bảng menu_items
-            localField: '_id', // Trường _id trong categories
-            foreignField: 'category_id', // Trường category_id trong menu_items
-            as: 'products' // Lưu kết quả vào trường 'products'
+  async getAllCategories(id?: string) {
+    const pipeline = []
+
+    // Nếu có `id`, thêm bước `$match`
+    if (id) {
+      try {
+        pipeline.push({
+          $match: {
+            _id: new ObjectId(id) // Chuyển id sang ObjectId
           }
-        },
-        {
-          $addFields: {
-            products: {
-              $filter: {
-                input: '$products',
-                as: 'product',
-                cond: { $eq: ['$$product.category_id', '$_id'] }
-              }
+        })
+      } catch (error) {
+        throw new Error('Invalid ID format') // Báo lỗi nếu id không hợp lệ
+      }
+    }
+
+    // Tiếp tục các bước lookup và xử lý
+    pipeline.push(
+      {
+        $lookup: {
+          from: 'menu_items', // Bảng menu_items
+          localField: '_id', // Trường _id trong categories
+          foreignField: 'category_id', // Trường category_id trong menu_items
+          as: 'products' // Lưu kết quả vào trường 'products'
+        }
+      },
+      {
+        $addFields: {
+          products: {
+            $filter: {
+              input: '$products',
+              as: 'product',
+              cond: { $eq: ['$$product.category_id', '$_id'] }
             }
           }
-        },
-        {
-          $project: {
-            _id: 1, // Chỉ lấy _id
-            name: 1, // Chỉ lấy name
-            totalProducts: { $size: '$products' } // Đếm số lượng sản phẩm trong trường 'products'
-          }
         }
-      ])
-      .toArray()
+      },
+      {
+        $project: {
+          _id: 1, // Chỉ lấy _id
+          name: 1, // Chỉ lấy name
+          totalProducts: { $size: '$products' } // Đếm số lượng sản phẩm trong trường 'products'
+        }
+      }
+    )
 
-    const total = await databaseService.categories.countDocuments()
+    // Thực hiện aggregate pipeline
+    const categories = await databaseService.categories.aggregate(pipeline).toArray()
+
+    // Tính tổng số lượng
+    const total = id
+      ? categories.length // Nếu có id, chỉ tính số kết quả tìm được
+      : await databaseService.categories.countDocuments()
+
     return { categories, total }
   }
 

@@ -7,7 +7,12 @@ import {
   updateMenuItemController
 } from '~/controllers/menu.controllers'
 import { accessTokenValidator, isAdmin } from '~/middlewares/auth.middlewares'
-import { addMenuItemValidator, deleteMenuItemValidator, handleRequest, updateMenuItemValidator } from '~/middlewares/menu.middlewares'
+import {
+  addMenuItemValidator,
+  deleteMenuItemValidator,
+  handleRequest,
+  updateMenuItemValidator
+} from '~/middlewares/menu.middlewares'
 import { wrapRequestHandler } from '~/utils/handlers'
 
 export const menuRouter = Router()

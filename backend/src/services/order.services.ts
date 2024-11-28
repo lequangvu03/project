@@ -1,13 +1,76 @@
 import Order from '~/models/schemas/orders.schema'
 import OrderItem from '~/models/schemas/orderItems.schema'
 import databaseService from './database.services'
-import { ObjectId } from 'mongodb'
+import { Filter, ObjectId } from 'mongodb'
 import { OrderStatus, PaymentStatus } from '~/constants/enums'
 
 class OrderService {
-  async getAllOrders() {
+  async getAllOrders({
+    limit,
+    page,
+    sortBy,
+    sortOrder
+  }: {
+    limit: number
+    page: number
+    sortBy?: string
+    sortOrder?: string
+  }) {
+    const sortQuery: { [key: string]: 1 | -1 } = {
+      [sortBy || 'created_at']: sortOrder === 'ascend' ? 1 : -1
+    }
     const orders = await databaseService.orders
       .aggregate([
+        { $unwind: { path: '$order_items', preserveNullAndEmptyArrays: true } },
+        {
+          $lookup: {
+            from: 'menu_items',
+            let: { item_id: { $toObjectId: '$order_items.item_id' } },
+            pipeline: [{ $match: { $expr: { $eq: ['$_id', '$$item_id'] } } }],
+            as: 'menu_item_details'
+          }
+        },
+        {
+          $addFields: {
+            order_items: {
+              $mergeObjects: [
+                '$order_items',
+                {
+                  item_name: { $arrayElemAt: ['$menu_item_details.name', 0] },
+                  item_price: { $arrayElemAt: ['$menu_item_details.price', 0] }
+                }
+              ]
+            }
+          }
+        },
+        { $unset: 'menu_item_details' },
+        {
+          $group: {
+            _id: '$_id',
+            order_time: { $first: '$order_time' },
+            table_number: { $first: '$table_number' },
+            total_price: { $first: '$total_price' },
+            payment_status: { $first: '$payment_status' },
+            order_status: { $first: '$order_status' },
+            created_at: { $first: '$created_at' },
+            updated_at: { $first: '$updated_at' },
+            order_items: { $push: '$order_items' }
+          }
+        },
+        { $sort: { order_time: -1 } }
+      ])
+      .sort(sortQuery)
+      .skip(limit * (page - 1))
+      .limit(limit)
+      .toArray()
+
+    const total = orders.length
+    return { orders, total }
+  }
+  async getOrdersById(id: string) {
+    const orders = await databaseService.orders
+      .aggregate([
+        { $match: { _id: new ObjectId(id) } },
         { $unwind: { path: '$order_items', preserveNullAndEmptyArrays: true } },
         {
           $lookup: {
@@ -51,7 +114,6 @@ class OrderService {
     const total = orders.length
     return { orders, total }
   }
-
   async addOrder(data: {
     table_number: number
     order_items: Array<{ item_id: string; quantity: number; price_per_item: number }>
