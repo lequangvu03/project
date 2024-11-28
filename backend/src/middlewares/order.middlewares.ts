@@ -39,7 +39,7 @@ export const addOrderValidator = validate(
               throw new Error(ORDER_MESSAGE.ORDER_ITEMS_CANNOT_BE_EMPTY)
             }
             for (const item of value) {
-              if (!item.item_id || !item.quantity || !item.price_per_item) {
+              if (!item.item_id || !item.quantity) {
                 throw new Error(ORDER_MESSAGE.ORDER_ITEM_FIELDS_MUST_BE_PRESENT)
               }
             }
@@ -92,7 +92,7 @@ export const updateOrderValidator = validate(
               throw new Error(ORDER_MESSAGE.ORDER_ITEMS_CANNOT_BE_EMPTY)
             }
             for (const item of value) {
-              if (!item.item_id || !item.quantity || !item.price_per_item) {
+              if (!item.item_id || !item.quantity ) {
                 throw new Error(ORDER_MESSAGE.ORDER_ITEM_FIELDS_MUST_BE_PRESENT)
               }
             }

@@ -3,7 +3,6 @@ import { ObjectId } from 'mongodb'
 interface OrderItemType {
   item_id: ObjectId
   quantity: number
-  price_per_item: number
 }
 interface OrderType {
   _id?: ObjectId
