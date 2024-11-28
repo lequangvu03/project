@@ -1,4 +1,4 @@
-import { sendDelete, sendGet, sendPost } from '~/api/request'
+import { sendDelete, sendGet, sendPost, sendPut } from '~/api/request'
 
 const categoriesServices = {
   getCategories: () => {
@@ -11,7 +11,12 @@ const categoriesServices = {
     return sendDelete(`/category/${id}`)
   },
   getCategoryById: (id: string) => {
-    return sendGet(`/category/${id}`)
+    return sendGet(`/category`, {
+      id
+    })
+  },
+  updateCategory: ({ id, body }: { id: string; body: { name: string; description: string } }) => {
+    return sendPut(`/category/${id}`, body)
   }
 }
 
