@@ -1,9 +1,30 @@
 'use client'
 
+import { Pencil, Trash } from 'lucide-react'
 import { StaticImport } from 'next/dist/shared/lib/get-img-props'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import { orderIcon } from '~/assets/images'
+import CustomInput from '~/components/custom-input'
+import CustomSheet from '~/components/custom-sheet'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger
+} from '~/components/ui/alert-dialog'
+import { Button } from '~/components/ui/button'
+import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from '~/components/ui/context-menu'
+import { Form, FormField } from '~/components/ui/form'
+import { useDeleteCategoryMutation, useGetCategoryByIdQuery } from '~/hooks/data/categories.data'
 import useQueryParams from '~/hooks/useQueryParams'
 import { cn } from '~/lib/utils'
 
@@ -17,37 +38,165 @@ type Props = {
 
 export default function Category({ _id, icon = orderIcon.burger, name, amount, className }: Props) {
   const searchParams = useQueryParams()
+  const router = useRouter()
+  const deleteCategoryMutation = useDeleteCategoryMutation()
+  const getCategoryByIdQuery = useGetCategoryByIdQuery(_id as string)
   const isActive = searchParams?.categoryId === _id
+  const form = useForm<{ name: string; description: string }>({
+    defaultValues: {
+      name: '',
+      description: ''
+    }
+  })
+  console.log({ getCategoryByIdQuery: getCategoryByIdQuery.data })
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteCategoryMutation.mutateAsync(id)
+      router.replace('/admin/menu')
+      toast.success('Delete menu item successfully')
+    } catch (_) {
+      toast.error('Failed to delete menu item')
+    }
+  }
+
+  const handleEditCategory = form.handleSubmit((data) => {})
+
   return (
-    <Link
-      href={_id ? `/admin/menu/?categoryId=${_id}` : '/admin/menu'}
-      className={cn(
-        'block cursor-pointer rounded-xl border-2 border-transparent bg-[var(--secondary-color)] px-3 py-4 shadow-2xl transition-all hover:border-[var(--primary-color)]',
-        {
-          'bg-[var(--primary-color)]': isActive
-        },
-        className
+    <>
+      {_id ? (
+        <ContextMenu>
+          <ContextMenuTrigger asChild>
+            <Link
+              href={`/admin/menu/?categoryId=${_id}`}
+              className={cn(
+                'block cursor-pointer rounded-xl border-2 border-transparent bg-[var(--secondary-color)] px-3 py-4 shadow-2xl transition-all hover:border-[var(--primary-color)]',
+                {
+                  'bg-[var(--primary-color)]': isActive
+                },
+                className
+              )}
+            >
+              <div className='flex w-full items-center justify-end'>
+                <Image src={icon} alt='Food Icon' className='pointer-events-none select-none' />
+              </div>
+              <section>
+                <h2
+                  className={cn('text-[16px] font-medium leading-[24px] text-gray-300 transition-all', {
+                    'text-secondary': isActive
+                  })}
+                >
+                  {name}
+                </h2>
+                <p
+                  className={cn('text-[16px] font-light leading-[24px] text-gray-500 transition-all', {
+                    'text-secondary': isActive
+                  })}
+                >
+                  {amount + ' items'}
+                </p>
+              </section>
+            </Link>
+          </ContextMenuTrigger>
+          <ContextMenuContent>
+            <ContextMenuItem
+              asChild
+              className='cursor-pointer rounded-sm p-2 text-white hover:bg-[var(--secondary-color)]'
+            >
+              <CustomSheet
+                isConfirmationRequired={form.formState.isDirty}
+                title='New category'
+                render={
+                  <div className='h-full space-y-5 py-9'>
+                    <Form {...form}>
+                      <FormField
+                        control={form.control}
+                        name='name'
+                        render={({ field }) => <CustomInput required field={field} label='Name' />}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name='description'
+                        render={({ field }) => <CustomInput label='Description' field={field} />}
+                      />
+                      <div className='!mt-9 flex items-center justify-end gap-5'>
+                        <Button
+                          onClick={handleEditCategory}
+                          className='h-auto bg-[var(--primary-color)] px-12 py-3 text-base text-white transition-all hover:bg-[var(--primary-color)] hover:shadow-md hover:shadow-[var(--primary-color)]'
+                        >
+                          Add
+                        </Button>
+                      </div>
+                    </Form>
+                  </div>
+                }
+              >
+                <div className='flex cursor-pointer items-center gap-2 rounded-sm p-2 text-white hover:bg-[var(--secondary-color)]'>
+                  <Pencil />
+                  Edit category
+                </div>
+              </CustomSheet>
+            </ContextMenuItem>
+            <ContextMenuItem asChild>
+              <AlertDialog>
+                <AlertDialogTrigger
+                  asChild
+                  className='cursor-pointer rounded-sm p-2 text-white hover:bg-[var(--secondary-color)]'
+                >
+                  <div className='flex items-center gap-2'>
+                    <Trash />
+                    Delete category
+                  </div>
+                </AlertDialogTrigger>
+                <AlertDialogContent className='bg-[var(--secondary-color)]'>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This action cannot be undone. This will permanently delete your account and remove your data from
+                      our servers.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction onClick={() => handleDelete(_id)}>Continue</AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </ContextMenuItem>
+          </ContextMenuContent>
+        </ContextMenu>
+      ) : (
+        <Link
+          href='/admin/menu'
+          className={cn(
+            'block cursor-pointer rounded-xl border-2 border-transparent bg-[var(--secondary-color)] px-3 py-4 shadow-2xl transition-all hover:border-[var(--primary-color)]',
+            {
+              'bg-[var(--primary-color)]': isActive
+            },
+            className
+          )}
+        >
+          <div className='flex w-full items-center justify-end'>
+            <Image src={icon} alt='Food Icon' className='pointer-events-none select-none' />
+          </div>
+          <section>
+            <h2
+              className={cn('text-[16px] font-medium leading-[24px] text-gray-300 transition-all', {
+                'text-secondary': isActive
+              })}
+            >
+              {name}
+            </h2>
+            <p
+              className={cn('text-[16px] font-light leading-[24px] text-gray-500 transition-all', {
+                'text-secondary': isActive
+              })}
+            >
+              {amount + ' items'}
+            </p>
+          </section>
+        </Link>
       )}
-    >
-      <div className='flex w-full items-center justify-end'>
-        <Image src={icon} alt='Food Icon' className='pointer-events-none select-none' />
-      </div>
-      <section>
-        <h2
-          className={cn('text-[16px] font-medium leading-[24px] text-gray-300 transition-all', {
-            'text-secondary': isActive
-          })}
-        >
-          {name}
-        </h2>
-        <p
-          className={cn('text-[16px] font-light leading-[24px] text-gray-500 transition-all', {
-            'text-secondary': isActive
-          })}
-        >
-          {amount + ' items'}
-        </p>
-      </section>
-    </Link>
+    </>
   )
 }

@@ -52,7 +52,7 @@ function CustomSheet({ children, render, title, isConfirmationRequired = false, 
           hasCloseIcon={false}
           className='w-full !max-w-[640px] overflow-y-auto rounded-bl-[30px] rounded-tl-[30px] bg-[var(--secondary-color)] pt-[60px]'
         >
-          <SheetHeader className='sticky top-0 flex flex-row items-center justify-between border-b border-slate-500 pb-6'>
+          <SheetHeader className='flex flex-row items-center justify-between border-b border-slate-500 pb-6'>
             <SheetTitle className='text-white'>{title}</SheetTitle>
             <div onClick={onCloseSheet} className='cursor-pointer hover:opacity-70'>
               <X />
