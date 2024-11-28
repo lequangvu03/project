@@ -128,14 +128,14 @@ class AuthService {
     })
 
     // Nếu ipAddress rỗng, thêm địa chỉ IP vào mảng ipAddress trong database
-    if (user.ipAdress && user.ipAdress.length === 0) {
+    if (user.ipAddress && user.ipAddress.length === 0) {
       await databaseService.users.updateOne(
         { _id: new ObjectId(user._id) }, // Tìm user dựa trên _id
         { $push: { ipAddress: ip } } // Thêm IP vào mảng ipAddress
       )
     } else {
       // Nếu ipAddress không rỗng, kiểm tra ip có nằm trong mảng không
-      const ipExists = user.ipAdress && user.ipAdress.includes(ip)
+      const ipExists = user.ipAddress && user.ipAddress.includes(ip)
       if (!ipExists) {
         throw new Error('IP address is not authorized.')
       }
