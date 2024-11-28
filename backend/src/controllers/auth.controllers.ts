@@ -18,7 +18,25 @@ import authService from '~/services/auth.services'
 
 export const loginController = async (req: Request<ParamsDictionary, any, LoginReqBody>, res: Response) => {
   const user = req.user as User
-  const result = await authService.login(user)
+  const ip_address = req.headers['x-forwarded-for'] || req.socket.remoteAddress
+  const result = await authService.login({ user, ip: ip_address?.toString() || '' })
+  const response = {
+    ...result,
+    role: user.role,
+    permissions: user.permissions
+  }
+  return res.json({
+    message: AUTH_MESSAGES.LOGIN_SUCCESS,
+    result: response
+  })
+}
+export const verifyOtpLoginController = async (
+  req: Request<ParamsDictionary, any, verifyOTPReqBody>,
+  res: Response
+) => {
+  const user = req.user as User
+  const ip_address = req.headers['x-forwarded-for'] || req.socket.remoteAddress
+  const result = await authService.verifyOtpLogin({ user, ip: ip_address?.toString() || '' })
   const response = {
     ...result,
     role: user.role,

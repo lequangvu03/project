@@ -42,8 +42,8 @@ export const updateCategoryValidator = validate(
           errorMessage: CATEGORY_MESSAGES.NAME_MUST_BE_STRING
         },
         custom: {
-          options: async (value) => {
-            const isExistCategory = await categoryService.checkCategoryNameExist(value)
+          options: async (value, { req }) => {
+            const isExistCategory = await categoryService.checkCategoryNameExist(value, req?.params?.id ?? '')
             if (isExistCategory) {
               throw new Error(CATEGORY_MESSAGES.NAME_IS_EXIST)
             }
@@ -59,6 +59,6 @@ export const updateCategoryValidator = validate(
         optional: true
       }
     },
-    ['body']
+    ['body', 'params']
   )
 )

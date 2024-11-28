@@ -6,7 +6,12 @@ export interface LoginReqBody {
   password: string
   role: number
 }
-
+export interface verifyOTPReqBody {
+  otp_id: string
+  otp: string
+  email: string
+  password: string
+}
 export interface VerifyEmailReqBody {
   email_verify_token: string
 }
