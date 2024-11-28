@@ -1,6 +1,8 @@
 import React from 'react'
+import { DatePickerWithRange } from '~/components/date-range-picker'
 import { LinesChart } from '~/components/line-chart'
 import { PiesChart } from '~/components/pie-chart'
+import ReportItem from '~/components/report-item'
 import { Button } from '~/components/ui/button'
 
 function Page() {
@@ -12,8 +14,8 @@ function Page() {
           <Button>Revenue Report</Button>
           <Button>Staff Report</Button>
         </div>
-        <div>
-          <Button>08/04/2024 --- 08/04/2024</Button>
+        <div className='flex items-center'>
+          <DatePickerWithRange />
           <Button>Generate Report</Button>
         </div>
       </header>
@@ -24,6 +26,11 @@ function Page() {
         <div className='flex-1'>
           <LinesChart />
         </div>
+      </div>
+      <div>
+        {[1, 2, 3].map(function () {
+          return <ReportItem />
+        })}
       </div>
     </div>
   )
