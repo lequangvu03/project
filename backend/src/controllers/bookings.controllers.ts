@@ -3,7 +3,8 @@ import { BOOKING_MESSAGE } from '~/constants/messages'
 import bookingService from '~/services/booking.services'
 
 export const getAllBookingsController = async (req: Request, res: Response, error: NextFunction) => {
-  const result = await bookingService.getAllBookings()
+  const { id } = req.query
+  const result = await bookingService.getAllBookings(id as string)
   return res.status(200).json({ message: BOOKING_MESSAGE.GET_ALL_BOOKING_SUCCESS, result })
 }
 // req.body sẽ cần truyền vào (customer_name, bookingService, table_id, details)

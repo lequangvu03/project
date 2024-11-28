@@ -5,7 +5,8 @@ import ingredientsService from '~/services/ingredient.services'
 
 // get oke
 export const getAllIngredientsController = async (req: Request, res: Response, error: NextFunction) => {
-  const result = await ingredientsService.getAllIngredients()
+  const { id } = req.query
+  const result = await ingredientsService.getAllIngredients(id as string)
   return res.status(200).json({ message: INVENTORY_MESSAGE.GET_ALL_INVENTORY_SUCCESS, result })
 }
 

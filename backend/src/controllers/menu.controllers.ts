@@ -5,8 +5,15 @@ import menuService from '~/services/menu.services'
 export const getAllMenuController = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { categoryId, tag } = req.query
-
+    const limit = Number(req.query.limit)
+    const page = Number(req.query.page)
+    const sortBy = req.query.sortBy as string | undefined
+    const sortOrder = req.query.sortOrder as 'asc' | 'desc' | undefined
     const result = await menuService.getMenu({
+      limit,
+      page,
+      sortBy,
+      sortOrder,
       categoryId: categoryId as string,
       tag: tag ? +tag : undefined
     })

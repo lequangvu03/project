@@ -2,7 +2,8 @@ import { NextFunction, Request, Response } from 'express'
 import { TABLE_MESSAGES } from '~/constants/messages'
 import tableService from '~/services/table.services'
 export const getAllTableController = async (req: Request, res: Response, error: NextFunction) => {
-  const result = await tableService.getAllTables()
+  const { id } = req.query
+  const result = await tableService.getAllTables(id as string)
   return res.status(200).json({ message: TABLE_MESSAGES.GET_ALL_TABLE_SUCCESS, result })
 }
 export const addTableController = async (req: Request, res: Response, error: NextFunction) => {
