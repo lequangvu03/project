@@ -19,6 +19,8 @@ export const getAllOrdersController = async (req: Request, res: Response, next: 
   const sortBy = req.query.sortBy as string | undefined
   const sortOrder = req.query.sortOrder as 'asc' | 'desc' | undefined
   const id = req.query.id as string
+  const status = req.query.status as number | undefined
+  const table_number = req.query.table_number as number | undefined
   if (id) {
     const result = await orderServices.getOrdersById(id)
     return res.status(200).json({
@@ -26,7 +28,7 @@ export const getAllOrdersController = async (req: Request, res: Response, next: 
       result
     })
   }
-  const result = await orderServices.getAllOrders({ limit, page, sortBy, sortOrder })
+  const result = await orderServices.getAllOrders({ limit, page, sortBy, sortOrder, status, table_number })
   return res.status(200).json({
     message: ORDER_MESSAGE.GET_ALL_ORDERS_SUCCESS,
     result
