@@ -5,6 +5,7 @@ import { StaticImport } from 'next/dist/shared/lib/get-img-props'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { orderIcon } from '~/assets/images'
@@ -24,7 +25,11 @@ import {
 import { Button } from '~/components/ui/button'
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from '~/components/ui/context-menu'
 import { Form, FormField } from '~/components/ui/form'
-import { useDeleteCategoryMutation, useGetCategoryByIdQuery } from '~/hooks/data/categories.data'
+import {
+  useDeleteCategoryMutation,
+  useGetCategoryByIdQuery,
+  useUpdateCategoryMutation
+} from '~/hooks/data/categories.data'
 import useQueryParams from '~/hooks/useQueryParams'
 import { cn } from '~/lib/utils'
 
@@ -39,8 +44,10 @@ type Props = {
 export default function Category({ _id, icon = orderIcon.burger, name, amount, className }: Props) {
   const searchParams = useQueryParams()
   const router = useRouter()
+  const updateCategoryMutation = useUpdateCategoryMutation()
   const deleteCategoryMutation = useDeleteCategoryMutation()
-  const getCategoryByIdQuery = useGetCategoryByIdQuery(_id as string)
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string>('')
+  const getCategoryByIdQuery = useGetCategoryByIdQuery(_id as string, !!selectedCategoryId)
   const isActive = searchParams?.categoryId === _id
   const form = useForm<{ name: string; description: string }>({
     defaultValues: {
@@ -48,24 +55,44 @@ export default function Category({ _id, icon = orderIcon.burger, name, amount, c
       description: ''
     }
   })
-  console.log({ getCategoryByIdQuery: getCategoryByIdQuery.data })
+
+  useEffect(() => {
+    if (getCategoryByIdQuery.data) {
+      const category = getCategoryByIdQuery?.data?.result?.categories[0]
+      form.setValue('name', category?.name)
+      form.setValue('description', category?.description || '')
+    }
+  }, [getCategoryByIdQuery.data])
+
   const handleDelete = async (id: string) => {
     try {
       await deleteCategoryMutation.mutateAsync(id)
       router.replace('/admin/menu')
       toast.success('Delete menu item successfully')
+      setSelectedCategoryId('')
+      form.reset()
     } catch (_) {
       toast.error('Failed to delete menu item')
     }
   }
 
-  const handleEditCategory = form.handleSubmit((data) => {})
-
+  const handleEditCategory = form.handleSubmit(async (data) => {
+    try {
+      const response = await updateCategoryMutation.mutateAsync({
+        id: selectedCategoryId,
+        body: data
+      })
+      toast(response?.message)
+    } catch (error) {
+      console.log(error)
+    }
+  })
+  console.log(selectedCategoryId)
   return (
     <>
       {_id ? (
         <ContextMenu>
-          <ContextMenuTrigger asChild>
+          <ContextMenuTrigger asChild onContextMenu={() => setSelectedCategoryId(_id)}>
             <Link
               href={`/admin/menu/?categoryId=${_id}`}
               className={cn(
@@ -124,7 +151,7 @@ export default function Category({ _id, icon = orderIcon.burger, name, amount, c
                           onClick={handleEditCategory}
                           className='h-auto bg-[var(--primary-color)] px-12 py-3 text-base text-white transition-all hover:bg-[var(--primary-color)] hover:shadow-md hover:shadow-[var(--primary-color)]'
                         >
-                          Add
+                          {selectedCategoryId ? 'Update' : 'Add'}
                         </Button>
                       </div>
                     </Form>
