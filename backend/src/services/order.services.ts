@@ -9,64 +9,87 @@ class OrderService {
     limit,
     page,
     sortBy,
-    sortOrder
+    sortOrder,
+    status,
+    table_number
   }: {
     limit: number
     page: number
     sortBy?: string
     sortOrder?: string
+    status?: number
+    table_number?: number
   }) {
+    const matchFilter: any = {}
+    // Gán giá trị mặc định nếu `limit` hoặc `page` không được truyền
+    limit = limit && Number.isInteger(limit) ? limit : 10 // Mặc định là 10
+    page = page && Number.isInteger(page) && page > 0 ? page : 1 // Mặc định là 1
+
     const sortQuery: { [key: string]: 1 | -1 } = {
       [sortBy || 'created_at']: sortOrder === 'ascend' ? 1 : -1
     }
+    if (status) {
+      matchFilter.order_status = +status
+    }
+    if (table_number) {
+      matchFilter.table_number = +table_number
+    }
+
+    const pipeline = [
+      { $unwind: { path: '$order_items', preserveNullAndEmptyArrays: true } },
+      {
+        $match: matchFilter
+      },
+      {
+        $lookup: {
+          from: 'menu_items',
+          let: { item_id: { $toObjectId: '$order_items.item_id' } },
+          pipeline: [{ $match: { $expr: { $eq: ['$_id', '$$item_id'] } } }],
+          as: 'menu_item_details'
+        }
+      },
+      {
+        $addFields: {
+          order_items: {
+            $mergeObjects: [
+              '$order_items',
+              {
+                item_name: { $arrayElemAt: ['$menu_item_details.name', 0] },
+                item_price: { $arrayElemAt: ['$menu_item_details.price', 0] }
+              }
+            ]
+          }
+        }
+      },
+      { $unset: 'menu_item_details' },
+      {
+        $group: {
+          _id: '$_id',
+          order_time: { $first: '$order_time' },
+          table_number: { $first: '$table_number' },
+          total_price: { $first: '$total_price' },
+          payment_status: { $first: '$payment_status' },
+          order_status: { $first: '$order_status' },
+          created_at: { $first: '$created_at' },
+          updated_at: { $first: '$updated_at' },
+          order_items: { $push: '$order_items' }
+        }
+      },
+      { $sort: { order_time: -1 } }
+    ]
+
     const orders = await databaseService.orders
-      .aggregate([
-        { $unwind: { path: '$order_items', preserveNullAndEmptyArrays: true } },
-        {
-          $lookup: {
-            from: 'menu_items',
-            let: { item_id: { $toObjectId: '$order_items.item_id' } },
-            pipeline: [{ $match: { $expr: { $eq: ['$_id', '$$item_id'] } } }],
-            as: 'menu_item_details'
-          }
-        },
-        {
-          $addFields: {
-            order_items: {
-              $mergeObjects: [
-                '$order_items',
-                {
-                  item_name: { $arrayElemAt: ['$menu_item_details.name', 0] },
-                  item_price: { $arrayElemAt: ['$menu_item_details.price', 0] }
-                }
-              ]
-            }
-          }
-        },
-        { $unset: 'menu_item_details' },
-        {
-          $group: {
-            _id: '$_id',
-            order_time: { $first: '$order_time' },
-            table_number: { $first: '$table_number' },
-            total_price: { $first: '$total_price' },
-            payment_status: { $first: '$payment_status' },
-            order_status: { $first: '$order_status' },
-            created_at: { $first: '$created_at' },
-            updated_at: { $first: '$updated_at' },
-            order_items: { $push: '$order_items' }
-          }
-        },
-        { $sort: { order_time: -1 } }
-      ])
+      .aggregate(pipeline)
       .sort(sortQuery)
-      .skip(limit * (page - 1))
-      .limit(limit)
+      .skip(limit * (page - 1)) // Sử dụng giá trị đã kiểm tra
+      .limit(limit) // Sử dụng giá trị đã kiểm tra
       .toArray()
 
-    const total = orders.length
+    const total = await databaseService.orders.countDocuments(matchFilter)
+
     return { orders, total }
   }
+
   async getOrdersById(id: string) {
     const orders = await databaseService.orders
       .aggregate([
