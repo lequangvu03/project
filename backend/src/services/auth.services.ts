@@ -121,57 +121,21 @@ class AuthService {
       message: 'Please check your email to verify your account.'
     }
   }
-  async login({ user, ip }: { user: User; ip: string }) {
+  async login(user: User) {
     const { access_token, refresh_token } = await this.signAccessAndRefreshToken({
       user_id: user._id?.toString() || '',
       verify: user.verify
     })
-
-    // Nếu ipAddress rỗng, thêm địa chỉ IP vào mảng ipAddress trong database
-    if (user.ipAddress && user.ipAddress.length === 0) {
-      await databaseService.users.updateOne(
-        { _id: new ObjectId(user._id) }, // Tìm user dựa trên _id
-        { $push: { ipAddress: ip } } // Thêm IP vào mảng ipAddress
-      )
-    } else {
-      // Nếu ipAddress không rỗng, kiểm tra ip có nằm trong mảng không
-      const ipExists = user.ipAddress && user.ipAddress.includes(ip)
-      if (!ipExists) {
-        throw new Error('IP address is not authorized.')
-      }
-    }
-
     await databaseService.refreshTokens.insertOne(
       new RefreshToken({ user_id: new ObjectId(user._id), token: refresh_token })
     )
     const { exp } = await this.decodeAccessToken(access_token)
-
     return {
       access_token,
       refresh_token,
       exp
     }
   }
-  async verifyOtpLogin({ user, ip }: { user: User; ip: string }) {
-    const { access_token, refresh_token } = await this.signAccessAndRefreshToken({
-      user_id: user._id?.toString() || '',
-      verify: user.verify
-    })
-    await databaseService.users.updateOne({ _id: new ObjectId(user._id) }, { $addToSet: { ipAddress: ip } })
-
-    await databaseService.refreshTokens.insertOne(
-      new RefreshToken({ user_id: new ObjectId(user._id), token: refresh_token })
-    )
-
-    const { exp } = await this.decodeAccessToken(access_token)
-
-    return {
-      access_token,
-      refresh_token,
-      exp
-    }
-  }
-
   async verifyEmail(user_id: string) {
     const [token] = await Promise.all([
       this.signAccessAndRefreshToken({ user_id, verify: UserVerifyStatus.Verified }),
