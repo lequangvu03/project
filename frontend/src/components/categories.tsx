@@ -11,12 +11,15 @@ function Categories() {
   const totalDishes = useMemo(() => {
     return categories?.reduce((total, category) => total + category.totalProducts, 0) || 0
   }, [categoriesData])
+
+  console.log({ categoriesData, categories })
   return (
     <div>
       <section className='flex flex-wrap gap-4'>
         <Category className='min-w-32' amount={totalDishes} name='All' />
         {categories &&
           categories.map(function (category, index: number) {
+            console.log(+category.totalProducts)
             return (
               <Category
                 className='min-w-32'

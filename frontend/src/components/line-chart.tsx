@@ -1,12 +1,8 @@
 'use client'
-
 import { TrendingUp } from 'lucide-react'
 import { CartesianGrid, Line, LineChart, XAxis } from 'recharts'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '~/components/ui/card'
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '~/components/ui/chart'
-
-export const description = 'A multiple line chart'
-
 const chartData = [
   { month: 'January', desktop: 186, mobile: 80 },
   { month: 'February', desktop: 305, mobile: 200 },
@@ -15,7 +11,6 @@ const chartData = [
   { month: 'May', desktop: 209, mobile: 130 },
   { month: 'June', desktop: 214, mobile: 140 }
 ]
-
 const chartConfig = {
   desktop: {
     label: 'Desktop',
@@ -26,12 +21,11 @@ const chartConfig = {
     color: 'hsl(var(--chart-2))'
   }
 } satisfies ChartConfig
-
-export default function DashboardChart() {
+export function LinesChart() {
   return (
-    <div className='rounded-2xl bg-[var(--secondary-color)] p-4'>
+    <Card className='flex-1'>
       <CardHeader>
-        <CardTitle>Overview</CardTitle>
+        <CardTitle>Line Chart - Multiple</CardTitle>
         <CardDescription>January - June 2024</CardDescription>
       </CardHeader>
       <CardContent>
@@ -58,6 +52,6 @@ export default function DashboardChart() {
           </LineChart>
         </ChartContainer>
       </CardContent>
-    </div>
+    </Card>
   )
 }

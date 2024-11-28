@@ -1,14 +1,22 @@
 'use client'
+import { Order, OrderItem } from '~/definitions/types'
 import { Button } from './ui/button'
+import { formatDateTime, formatTime } from '~/utils/format-datetime'
 
-export default function Table() {
+type Props = {
+  order: Order
+}
+
+export default function Table({ order }: Props) {
   return (
     <div className={'flex flex-col gap-4 rounded-xl bg-[#292C2D] p-4 shadow-sm'}>
       <section className='flex flex-col gap-4'>
         <div className='flex items-center justify-between gap-2'>
-          <div className='flex h-12 w-12 items-center justify-center rounded-xl bg-[#EA7C69] p-2 text-[16px]'>01</div>
+          <div className='flex h-12 w-12 items-center justify-center rounded-xl bg-[#EA7C69] p-2 text-[16px]'>
+            {order.table_number}
+          </div>
           <div className='flex flex-1 flex-col'>
-            <h2 className='text-[16px] font-light leading-8'>Watson Joyce</h2>
+            <h2 className='text-[16px] font-light leading-8'>Order {order.table_number}</h2>
             <p className='text-[12px] leading-6 text-gray-400'>Order # 990</p>
           </div>
           <div className='flex flex-col gap-2'>
@@ -21,7 +29,7 @@ export default function Table() {
                   stroke-linejoin='round'
                 />
               </svg>
-              <p className='text-gray-800'>In Progress</p>
+              <p className='text-gray-800'>{order.order_status}</p>
             </div>
 
             <div className='flex items-center gap-4'>
@@ -39,8 +47,8 @@ export default function Table() {
           </div>
         </div>
         <div className='flex items-center justify-between text-[15px] font-light'>
-          <h3>Wenednesday, 28th 2024</h3>
-          <h3>4:48 PM</h3>
+          <h3>{formatDateTime(order.order_time)}</h3>
+          <h3>{formatTime(order.order_time)}</h3>
         </div>
       </section>
       <div className={'h-[0.5px] w-full bg-slate-500'} />
@@ -51,28 +59,28 @@ export default function Table() {
           <div>Price</div>
         </header>
         <aside className='flex flex-col gap-2'>
-          <div className='flex items-center justify-between gap-4 text-[14px] font-light text-gray-200'>
-            <div>01</div>
-            <div className='flex-1'>Items</div>
-            <div>Price</div>
-          </div>
-          <div className='flex items-center justify-between gap-4 text-[14px] font-light text-gray-200'>
-            <div>Qty</div>
-            <div className='flex-1'>Items</div>
-            <div>Price</div>
-          </div>
-          <div className='flex items-center justify-between gap-4 text-[14px] font-light text-gray-200'>
-            <div>Qty</div>
-            <div className='flex-1'>Items</div>
-            <div>Price</div>
-          </div>
+          {order.order_items.map(function (orderItem: OrderItem, index: number) {
+            return (
+              <div key={index} className='flex items-center justify-between gap-4 text-[14px] font-light text-gray-200'>
+                <div>{orderItem.quantity}</div>
+                <div className='flex-1'>{orderItem.item_name}</div>
+                <div>$ {orderItem.item_price}</div>
+              </div>
+            )
+          })}
         </aside>
       </section>
       <div className={'h-[0.5px] w-full bg-slate-500'} />
       <section className={'flex flex-col gap-4'}>
         <header className='flex items-center justify-between'>
           <h2 className='text-[16px] font-light leading-[24px] text-white'>SubTotal</h2>
-          <p className='text-[16px] font-light leading-[24px] text-white'>$650</p>
+          <p className='text-[16px] font-light leading-[24px] text-white'>
+            $
+            {order.order_items.reduce(function (total: number, amount: OrderItem) {
+              return total + amount.quantity;
+            }, 0)}
+
+          </p>
         </header>
         <footer className='flex items-center gap-2'>
           <Button className='flex flex-[0.25] items-center justify-center border-[1px] border-solid border-[#EA7C69] bg-transparent'>

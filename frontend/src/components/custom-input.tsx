@@ -12,9 +12,10 @@ type Props = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   field: any
   type?: 'text' | 'password'
+  required?: boolean
 }
 
-function CustomInput({ className, placeholder, field, label, classNameInput, type = 'text' }: Props) {
+function CustomInput({ className, required, placeholder, field, label, classNameInput, type = 'text' }: Props) {
   const [visible, setVisible] = useState<boolean>(false)
 
   const togglePasswordVisibility = () => {
@@ -23,7 +24,9 @@ function CustomInput({ className, placeholder, field, label, classNameInput, typ
 
   return (
     <FormItem className={className}>
-      <FormLabel className='truncate'>{label}</FormLabel>
+      <FormLabel className='flex items-center gap-2 truncate'>
+        {label} {required && <span className='text-xl text-red-600'>*</span>}
+      </FormLabel>
       <FormControl>
         <div className='relative'>
           <Input

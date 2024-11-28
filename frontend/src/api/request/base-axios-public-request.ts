@@ -9,8 +9,7 @@ export const publicGet = (url: string, params?: any) => publicAxiosInstance.get(
 export const publicGetWitCancelToken = (url: string, cancelToken: any, params?: any) =>
   publicAxiosInstance.get(url, { cancelToken, params }).then((res) => res.data)
 
-export const publicPost =(url: string, body?: any) =>
-  publicAxiosInstance.post(url, body).then((res) => res.data)
+export const publicPost = (url: string, body?: any) => publicAxiosInstance.post(url, body).then((res) => res.data)
 
 export const publicPostUpload = (url: string, params?: any, callback?: any) =>
   publicAxiosInstance
