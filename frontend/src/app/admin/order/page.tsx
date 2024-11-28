@@ -1,5 +1,7 @@
 'use client'
 
+import { useState } from 'react'
+import { PaginationOrder } from '~/components/pagination-order'
 import Table from '~/components/table'
 import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
@@ -7,7 +9,8 @@ import { Order } from '~/definitions/types'
 import { useGetOrdersQuery } from '~/hooks/data/orders.data'
 
 export default function OrderPage() {
-  const { data: orders } = useGetOrdersQuery()
+  const [page, setPage] = useState<number>(1)
+  const { data: orders } = useGetOrdersQuery({ page: page })
   console.log(orders)
   return (
     <main className='flex flex-col gap-4'>
@@ -31,6 +34,7 @@ export default function OrderPage() {
           return <Table order={order} key={index} />
         })}
       </section>
+      <PaginationOrder page={page} setPage={setPage} totalPage={2} />
     </main>
   )
 }

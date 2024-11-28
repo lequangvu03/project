@@ -2,9 +2,23 @@
 import { Order, OrderItem } from '~/definitions/types'
 import { Button } from './ui/button'
 import { formatDateTime, formatTime } from '~/utils/format-datetime'
+import { OrderStatus } from '~/definitions/constant/types.constant'
 
 type Props = {
   order: Order
+}
+
+function getStatusFromValue(value: number): string {
+  switch (value) {
+    case OrderStatus.Pending:
+      return 'Pending'
+    case OrderStatus.Completed:
+      return 'Completed'
+    case OrderStatus.Cancelled:
+      return 'Cancelled'
+    default:
+      return 'Unknown Status' // Giá trị không hợp lệ
+  }
 }
 
 export default function Table({ order }: Props) {
@@ -17,7 +31,7 @@ export default function Table({ order }: Props) {
           </div>
           <div className='flex flex-1 flex-col'>
             <h2 className='text-[16px] font-light leading-8'>Order {order.table_number}</h2>
-            <p className='text-[12px] leading-6 text-gray-400'>Order # 990</p>
+            <p className='text-[12px] leading-6 text-gray-400'>Order # {order._id}</p>
           </div>
           <div className='flex flex-col gap-2'>
             <div className='flex items-center gap-1 rounded-lg bg-[#FFEDBE] px-4 py-1'>
@@ -29,7 +43,7 @@ export default function Table({ order }: Props) {
                   stroke-linejoin='round'
                 />
               </svg>
-              <p className='text-gray-800'>{order.order_status}</p>
+              <p className='text-gray-800'>{getStatusFromValue(order.order_status)}</p>
             </div>
 
             <div className='flex items-center gap-4'>
@@ -77,9 +91,8 @@ export default function Table({ order }: Props) {
           <p className='text-[16px] font-light leading-[24px] text-white'>
             $
             {order.order_items.reduce(function (total: number, amount: OrderItem) {
-              return total + amount.quantity;
+              return total + amount.quantity
             }, 0)}
-
           </p>
         </header>
         <footer className='flex items-center gap-2'>
