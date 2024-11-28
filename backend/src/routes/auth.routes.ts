@@ -5,8 +5,7 @@ import {
   logoutController,
   refreshTokenController,
   registerController,
-  verifyEmailController,
-  verifyOtpLoginController
+  verifyEmailController
 } from '~/controllers/auth.controllers'
 import {
   emailVerifyTokenValidator,
@@ -57,7 +56,11 @@ authRouter.get('/verify-email', emailVerifyTokenValidator, wrapRequestHandler(ve
  * Method: POST
  * body: {email: string}
  */
-authRouter.post('/sendOtp', sendOtpForgotPasswordValidator, wrapRequestHandler(forgotPasswordController.requestOTP))
+authRouter.post(
+  '/send-otp-forgot-password',
+  sendOtpForgotPasswordValidator,
+  wrapRequestHandler(forgotPasswordController.requestOTP)
+)
 
 /**
  * Description.submid email to reset password, sen email to user
@@ -65,7 +68,11 @@ authRouter.post('/sendOtp', sendOtpForgotPasswordValidator, wrapRequestHandler(f
  * Method: POST
  * body: {email: string}
  */
-authRouter.post('/verifyOtp', verifyOtpForgotPasswordValidator, wrapRequestHandler(verifyOtpLoginController))
+authRouter.post(
+  '/verify-otp-forgot-password',
+  verifyOtpForgotPasswordValidator,
+  wrapRequestHandler(forgotPasswordController.verifyOTP)
+)
 
 /**
  * Description.submid email to reset password, sen email to user

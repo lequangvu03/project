@@ -14,7 +14,6 @@ interface UserType {
   role?: RoleType
   avatar_url?: string
   permissions?: permissionType[]
-  ipAddress?: string[]
 }
 
 export default class User {
@@ -30,7 +29,6 @@ export default class User {
   role: RoleType
   avatar_url?: string
   permissions?: permissionType[]
-  ipAddress?: string[]
 
   constructor(user: UserType) {
     const date = Date.now()
@@ -48,6 +46,5 @@ export default class User {
       user.avatar_url ||
       'https://res.cloudinary.com/dflvvu32c/image/upload/v1724205205/cd4bd9b0ea2807611ba3a67c331bff0b_pjwbyx.png'
     this.permissions = user.permissions || [0, 4]
-    this.ipAddress = user.ipAddress || []
   }
 }
