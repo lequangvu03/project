@@ -12,6 +12,8 @@ import { Tabs, TabsList, TabsTrigger } from '~/components/ui/tabs'
 import { TagType } from '~/definitions/constant/types.constant'
 import useQueryParams from '~/hooks/useQueryParams'
 import TableDishes from './data-table'
+import { useAddCategoryMutation } from '~/hooks/data/categories.data'
+import { toast } from 'sonner'
 
 const Categories = dynamic(() => import('~/components/categories'), {
   loading: () => (
@@ -30,8 +32,8 @@ export default function Page() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const { tag } = useQueryParams()
-
-  const form = useForm({
+  const addCategoryMutation = useAddCategoryMutation()
+  const form = useForm<{ name: string; description: string }>({
     defaultValues: {
       name: '',
       description: ''
@@ -44,13 +46,23 @@ export default function Page() {
     router.push(`/admin/menu/?${params.toString()}`)
   }
 
+  const handleAddCategory = form.handleSubmit(async (data) => {
+    try {
+      const response = await addCategoryMutation.mutateAsync(data)
+      toast(response?.message)
+      form.reset()
+    } catch (error: any) {
+      console.log(error?.response?.m)
+    }
+  })
+
   return (
     <main className='flex flex-col gap-4'>
       <div className='h-[1px] w-full bg-slate-700 leading-[0px]' />
       <section className='flex items-center justify-between'>
         <h2 className='text-[20px] font-semibold text-white'>Categories</h2>
         <CustomSheet
-          isConfirmationRequired
+          isConfirmationRequired={form.formState.isDirty}
           title='New category'
           render={
             <div className='h-full space-y-5 py-9'>
@@ -64,13 +76,13 @@ export default function Page() {
                 <FormField
                   control={form.control}
                   name='description'
-                  render={({ field }) => <CustomInput label='Address' field={field} />}
+                  render={({ field }) => <CustomInput label='Description' field={field} />}
                 />
                 <div className='!mt-9 flex items-center justify-end gap-5'>
-                  <Button className='h-auto bg-transparent px-12 py-3 text-base text-white underline transition-all hover:bg-transparent hover:text-[var(--primary-color)]'>
-                    Cancel
-                  </Button>
-                  <Button className='h-auto bg-[var(--primary-color)] px-12 py-3 text-base text-black transition-all hover:bg-[var(--primary-color)] hover:shadow-md hover:shadow-[var(--primary-color)]'>
+                  <Button
+                    onClick={handleAddCategory}
+                    className='h-auto bg-[var(--primary-color)] px-12 py-3 text-base text-white transition-all hover:bg-[var(--primary-color)] hover:shadow-md hover:shadow-[var(--primary-color)]'
+                  >
                     Add
                   </Button>
                 </div>

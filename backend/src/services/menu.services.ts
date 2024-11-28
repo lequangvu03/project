@@ -60,7 +60,8 @@ class MenuService {
     sortBy,
     sortOrder,
     categoryId,
-    tag
+    tag,
+    name
   }: {
     limit?: number
     page?: number
@@ -68,6 +69,7 @@ class MenuService {
     sortOrder?: string
     categoryId?: string
     tag?: number
+    name?: string
   }) {
     const matchFilter: any = {}
     const sortQuery: { [key: string]: 1 | -1 } = {
@@ -77,6 +79,10 @@ class MenuService {
     // Nếu có categoryId, thêm điều kiện lọc cho category_id
     if (categoryId) {
       matchFilter.category_id = new ObjectId(categoryId)
+    }
+    // Nếu có name, thêm điều kiện lọc cho tên
+    if (name) {
+      matchFilter.name = { $regex: new RegExp(name, 'i') } // Tìm kiếm không phân biệt hoa thường
     }
 
     // Nếu có tag, thêm điều kiện lọc cho tag
@@ -135,7 +141,7 @@ class MenuService {
     const menus = await databaseService.menuItems.aggregate(pipeline).toArray()
 
     // Tính tổng số lượng (nếu cần)
-    const total = menus.length
+    const total = await databaseService.menuItems.countDocuments(matchFilter)
 
     return { menus, total }
   }

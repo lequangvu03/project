@@ -171,7 +171,7 @@ export default function TableDishes() {
 
   const handleDelete = async (id: string) => {
     try {
-      await deleteDishMutation.mutateAsync([id])
+      await deleteDishMutation.mutateAsync(id)
       toast.success('Delete menu item successfully')
     } catch (_) {
       toast.error('Failed to delete menu item')
