@@ -32,9 +32,6 @@ class UserService {
     if (typeof data.permissions === 'string') {
       data.permissions = JSON.parse(data.permissions)
     }
-    if (typeof data.ipAddress === 'string') {
-      data.ipAddress = JSON.parse(data.ipAddress)
-    }
     await databaseService.users.updateOne({ _id: new ObjectId(id) }, { $set: data })
   }
   async deleteProfile(id: string) {
