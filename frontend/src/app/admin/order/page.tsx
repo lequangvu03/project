@@ -1,8 +1,14 @@
+'use client'
+
 import Table from '~/components/table'
 import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
+import { Order } from '~/definitions/types'
+import { useGetOrdersQuery } from '~/hooks/data/orders.data'
 
 export default function OrderPage() {
+  const { data: orders } = useGetOrdersQuery()
+  console.log(orders)
   return (
     <main className='flex flex-col gap-4'>
       <section className='h-[1px] w-full bg-slate-600' />
@@ -21,9 +27,9 @@ export default function OrderPage() {
       </section>
 
       <section className='grid grid-cols-3 gap-8'>
-        {Array.from({ length: 8 }, (_, index) => (
-          <Table key={index} />
-        ))}
+        {orders?.result?.orders?.map(function (order: Order, index: number) {
+          return <Table order={order} key={index} />
+        })}
       </section>
     </main>
   )
