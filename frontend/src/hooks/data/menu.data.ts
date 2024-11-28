@@ -21,6 +21,9 @@ export const useDeleteDishQuery = () => {
       queryClient.invalidateQueries({
         queryKey: ['DISHES']
       })
+      queryClient.invalidateQueries({
+        queryKey: ['DISHES']
+      })
     }
   })
 }

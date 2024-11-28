@@ -13,10 +13,8 @@ const menuServices = {
       )
     )
   },
-  deleteDish: (ids: string[]) => {
-    return sendDelete(`/menu`, {
-      ids
-    })
+  deleteDish: (id: string) => {
+    return sendDelete(`/menu/${id}`)
   }
 }
 
