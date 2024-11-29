@@ -54,6 +54,7 @@ export const USER_MESSAGES = {
   GET_PROFILE_BY_ID_SUCCESS: 'Get profile by id success',
   USER_NOT_FOUND: 'User not found',
   NAME_MUST_BE_A_STRING: 'Name must be a string',
+  INVALID_USER_ID: 'Invalid user id',
   PERMISSIONS_MUST_BE_AN_ARRAY: 'Permissions must be an array',
   DELETE_PROFILE_SUCCESS: 'Delete profile success',
   UPDATE_PROFILE_SUCCESS: 'Update profile success',
