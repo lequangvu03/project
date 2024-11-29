@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb'
-import { TagType } from '~/constants/enums'
+import { menuItemStatus, TagType } from '~/constants/enums'
 
 interface MenuItemType {
   _id: ObjectId
@@ -14,6 +14,7 @@ interface MenuItemType {
     ingredient_id: ObjectId
     quantity_required: number
   }>
+  status: menuItemStatus
   created_at?: number
   updated_at?: number
 }
@@ -31,6 +32,7 @@ export default class MenuItem {
     ingredient_id: ObjectId
     quantity_required: number
   }>
+  status: menuItemStatus
   created_at?: number
   updated_at?: number
 
@@ -45,6 +47,7 @@ export default class MenuItem {
     this.stock = menuItem.stock
     this.image = menuItem.image || ''
     this.ingredients = menuItem.ingredients || []
+    this.status = menuItem.status
     this.created_at = menuItem.created_at || date
     this.updated_at = menuItem.updated_at || date
   }

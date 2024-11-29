@@ -1,21 +1,26 @@
 // ~/hooks/useSocket.ts
 'use client' // Thêm dòng này
 
+import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { io, Socket } from 'socket.io-client'
 
 const SOCKET_URL = 'http://localhost:5000'
 
 const useSocket = (event: string) => {
-  const [data, setData] = useState<any>(null)
+  const [message, setMessage] = useState<any>(null)
   const [socket, setSocket] = useState<Socket | null>(null)
-
+  const { data } = useSession()
   useEffect(() => {
-    const newSocket = io(SOCKET_URL)
+    const newSocket = io(SOCKET_URL, {
+      query: {
+        role: (data as any)?.role
+      }
+    })
     setSocket(newSocket)
 
     newSocket.on(event, (receivedData: any) => {
-      setData(receivedData)
+      setMessage(receivedData)
     })
 
     return () => {
@@ -24,7 +29,7 @@ const useSocket = (event: string) => {
     }
   }, [event])
 
-  return data
+  return message
 }
 
 export default useSocket

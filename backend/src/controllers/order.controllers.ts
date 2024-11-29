@@ -51,13 +51,23 @@ export const addOrderController = async (
     message: 'Có đơn hàng mới!',
     order: result
   })
+  //   const adminSockets = Array.from(userSocketMap.entries())
+  //   .filter(([_, user]) => user.role === 'admin') // Chỉ chọn admin
+  //   .map(([socketId]) => socketId)
 
+  // // Gửi thông báo tới admin
+  // adminSockets.forEach((adminSocketId) => {
+  //   io.to(adminSocketId).emit('new_order', {
+  //     message: 'Có đơn hàng mới!',
+  //     order: result
+  //   })
+  // })
   await databaseService.notifications.insertOne(
     new Notification({
       _id: new ObjectId(),
       recipient_id: new ObjectId('6708780f6d7474a209b66137'),
       message: `Đơn hàng mới số bàn: ${result.table_number} giá tiền ${result.total_price}`,
-      type: NotificationType.OrderCreated,
+      title: 'Đơn hàng mới',
       status: NotificationStatus.Unread
     })
   )
