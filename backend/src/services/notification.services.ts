@@ -9,7 +9,8 @@ class NotificationService {
       .skip(limit * (page - 1))
       .limit(limit)
       .toArray()
-    return notifications
+    const total = await databaseService.notifications.countDocuments()
+    return { notifications, total }
   }
 }
 const notificationService = new NotificationService()
