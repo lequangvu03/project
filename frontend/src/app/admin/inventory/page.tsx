@@ -10,7 +10,7 @@ import { useState } from 'react'
 function InventoryPage() {
   const [page, setPage] = useState<number>(1)
   const { data: product } = useGetProductsQuery({ page: page, limit: 6 })
-  console.log(product)
+
   return (
     <div className='mx-auto w-full max-w-7xl'>
       <header className='mb-5 flex items-center justify-between'>
