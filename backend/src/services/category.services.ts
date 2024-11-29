@@ -2,7 +2,13 @@ import { ObjectId } from 'mongodb'
 import databaseService from '~/services/database.services'
 
 class CategoryService {
-  async checkCategoryNameExist(categoryName: string) {
+  async checkCategoryNameExist(categoryName: string, id?: string) {
+    if (id) {
+      const categories = await databaseService.categories.findOne({ _id: new ObjectId(id) })
+      if (categories?.name == categoryName) {
+        return false
+      }
+    }
     const category = await databaseService.categories.findOne({ name: categoryName })
     return category
   }
@@ -13,8 +19,6 @@ class CategoryService {
 
   async getAllCategories(id?: string) {
     const pipeline = []
-
-    // Nếu có `id`, thêm bước `$match`
     if (id) {
       try {
         pipeline.push({
@@ -27,7 +31,6 @@ class CategoryService {
       }
     }
 
-    // Tiếp tục các bước lookup và xử lý
     pipeline.push(
       {
         $lookup: {
@@ -52,12 +55,12 @@ class CategoryService {
         $project: {
           _id: 1, // Chỉ lấy _id
           name: 1, // Chỉ lấy name
+          description: 1, // Thêm trường description
           totalProducts: { $size: '$products' } // Đếm số lượng sản phẩm trong trường 'products'
         }
       }
     )
 
-    // Thực hiện aggregate pipeline
     const categories = await databaseService.categories.aggregate(pipeline).toArray()
 
     // Tính tổng số lượng
@@ -67,6 +70,16 @@ class CategoryService {
 
     return { categories, total }
   }
+
+  // async getAllCategories(id?: string) {
+  //   if (id) {
+  //     const category = await databaseService.categories.findOne({ _id: new ObjectId(id) })
+  //     return category
+  //   }
+  //   const categories = await databaseService.categories.find().toArray()
+  //   const total = await databaseService.categories.countDocuments()
+  //   return { categories, total }
+  // }
 
   async addCategory(name: string, description?: string) {
     const category = await databaseService.categories.insertOne({

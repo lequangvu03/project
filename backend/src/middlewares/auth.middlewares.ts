@@ -298,6 +298,12 @@ export const verifyOtpForgotPasswordValidator = validate(
             if (otp.expires_at && otp.expires_at < Date.now()) {
               throw new Error(AUTH_MESSAGES.OTP_INVALID_OR_EXPIRED)
             }
+            const user = await databaseService.users.findOne({
+              email: value,
+              password: hashPassword(req.body.password),
+              verify: UserVerifyStatus.Verified
+            })
+            req.user = user
             return true
           }
         }

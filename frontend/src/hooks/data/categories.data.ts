@@ -8,10 +8,11 @@ export const useGetCategoriesQuery = () => {
   })
 }
 
-export const useGetCategoryByIdQuery = (id: string) => {
+export const useGetCategoryByIdQuery = (id: string, enabled?: boolean) => {
   return useQuery({
     queryKey: ['CATEGORIES_DETAILS', id],
-    queryFn: () => categoriesServices.getCategoryById(id)
+    queryFn: () => categoriesServices.getCategoryById(id),
+    enabled: enabled
   })
 }
 
@@ -32,6 +33,18 @@ export const useDeleteCategoryMutation = () => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: categoriesServices.deleteCategory,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['CATEGORIES']
+      })
+    }
+  })
+}
+
+export const useUpdateCategoryMutation = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: categoriesServices.updateCategory,
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['CATEGORIES']

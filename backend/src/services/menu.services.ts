@@ -4,6 +4,7 @@ import path from 'path'
 import { ppid } from 'process'
 import sharp from 'sharp'
 import { UPLOAD_IMAGE_DIR } from '~/constants/dir'
+import { menuItemStatus } from '~/constants/enums'
 import MenuItem from '~/models/schemas/menuItems.schema'
 import databaseService from '~/services/database.services'
 import cloudinary from '~/utils/cloudinary'
@@ -11,7 +12,7 @@ import { getNameFromFullname } from '~/utils/file'
 
 class MenuService {
   async checkNameExists(name: string) {
-    const menuItem = await databaseService.menuItems.findOne({ name })
+    const menuItem = await databaseService.menuItems.findOne({ name, status: menuItemStatus.Available })
     return menuItem
   }
   // async getMenu() {
@@ -60,7 +61,8 @@ class MenuService {
     sortBy,
     sortOrder,
     categoryId,
-    tag
+    tag,
+    name
   }: {
     limit?: number
     page?: number
@@ -68,8 +70,11 @@ class MenuService {
     sortOrder?: string
     categoryId?: string
     tag?: number
+    name?: string
   }) {
-    const matchFilter: any = {}
+    const matchFilter: any = {
+      status: menuItemStatus.Available
+    }
     const sortQuery: { [key: string]: 1 | -1 } = {
       [sortBy || 'created_at']: sortOrder === 'ascend' ? 1 : -1
     }
@@ -77,6 +82,10 @@ class MenuService {
     // Nếu có categoryId, thêm điều kiện lọc cho category_id
     if (categoryId) {
       matchFilter.category_id = new ObjectId(categoryId)
+    }
+    // Nếu có name, thêm điều kiện lọc cho tên
+    if (name) {
+      matchFilter.name = { $regex: new RegExp(name, 'i') } // Tìm kiếm không phân biệt hoa thường
     }
 
     // Nếu có tag, thêm điều kiện lọc cho tag
@@ -135,7 +144,7 @@ class MenuService {
     const menus = await databaseService.menuItems.aggregate(pipeline).toArray()
 
     // Tính tổng số lượng (nếu cần)
-    const total = menus.length
+    const total = await databaseService.menuItems.countDocuments(matchFilter)
 
     return { menus, total }
   }
@@ -221,23 +230,26 @@ class MenuService {
 
   async deleteMenuItems(Ids: string) {
     // Chuyển đổi tất cả các ID từ chuỗi sang ObjectId
-    const id = new ObjectId(Ids)
-    // Lấy tất cả các mục trong cơ sở dữ liệu dựa trên các ObjectId
-    const item = await databaseService.menuItems.findOne({
-      _id: id
-    })
+    // const id = new ObjectId(Ids)
+    // // Lấy tất cả các mục trong cơ sở dữ liệu dựa trên các ObjectId
+    // const item = await databaseService.menuItems.findOne({
+    //   _id: id
+    // })
 
-    // Duyệt qua từng item và xóa ảnh nếu có
-    const avatarUrl = item?.image
-    if (avatarUrl) {
-      const publicId = avatarUrl.split('/').pop()?.split('.')[0]
-      // Nếu có publicId, xóa ảnh khỏi Cloudinary
-      if (publicId) {
-        await cloudinary.uploader.destroy(publicId)
-      }
-    }
-
-    await databaseService.menuItems.deleteOne({ _id: item?._id })
+    // // Duyệt qua từng item và xóa ảnh nếu có
+    // const avatarUrl = item?.image
+    // if (avatarUrl) {
+    //   const publicId = avatarUrl.split('/').pop()?.split('.')[0]
+    //   // Nếu có publicId, xóa ảnh khỏi Cloudinary
+    //   if (publicId) {
+    //     await cloudinary.uploader.destroy(publicId)
+    //   }
+    // }
+    // await databaseService.menuItems.deleteOne({ _id: item?._id })
+    await databaseService.menuItems.updateOne(
+      { _id: new ObjectId(Ids) },
+      { $set: { status: menuItemStatus.Unavailable } }
+    )
     return { message: 'Items deleted successfully' }
   }
 }

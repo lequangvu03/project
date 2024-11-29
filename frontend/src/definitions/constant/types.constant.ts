@@ -9,4 +9,8 @@ export enum TagType {
   New
 }
 
-
+export enum OrderStatus {
+  Pending,
+  Completed,
+  Cancelled
+}
