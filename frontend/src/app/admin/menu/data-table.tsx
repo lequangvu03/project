@@ -29,20 +29,43 @@ import {
 import Image from 'next/image'
 import { toast } from 'sonner'
 import CustomSheet from '~/components/custom-sheet'
+import Loading from '~/components/loading'
 import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/components/ui/table'
 import { useDeleteDishQuery, useGetDishesQuery } from '~/hooks/data/menu.data'
 import useQueryParams from '~/hooks/useQueryParams'
 import { IMenuItem } from '~/models/menu.model'
-import Loading from '~/components/loading'
+import { Form, FormField } from '~/components/ui/form'
+import CustomInput from '~/components/custom-input'
+import { useForm } from 'react-hook-form'
+import PlaceholderImage from '~/assets/images/inventory-placeholder.png'
+import { TagType } from '~/definitions/constant/types.constant'
 
 export default function TableDishes() {
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = useState({})
-
+  const form = useForm<{
+    name: string
+    description: string
+    price: string
+    category_id: string
+    stock: string
+    image: File | string
+    tag: TagType
+  }>({
+    defaultValues: {
+      name: '',
+      image: '',
+      price: '',
+      category_id: '',
+      description: '',
+      stock: '',
+      tag: TagType.Normal
+    }
+  })
   const { categoryId, tag } = useQueryParams()
 
   const { data: dishesData, isPending } = useGetDishesQuery({
@@ -121,7 +144,98 @@ export default function TableDishes() {
 
         return (
           <div className='flex w-full items-center gap-4'>
-            <CustomSheet isConfirmationRequired render={<div>Form</div>} title='Edit dish'>
+            <CustomSheet
+              isConfirmationRequired
+              render={
+                <div>
+                  <div className='mt-6 flex flex-col items-center justify-center gap-4'>
+                    <Image
+                      src={PlaceholderImage}
+                      alt='placeholder image'
+                      className='max-w-[240px] overflow-hidden rounded-[10px] bg-[var(--bg-input)]'
+                    />
+                    <p className='text-[var(--primary-color)] underline'>Change inventory image</p>
+                  </div>
+                  <Form {...form}>
+                    <div className='mt-8 space-y-6'>
+                      <div className='flex w-full items-center gap-5'>
+                        <FormField
+                          control={form.control}
+                          name='name'
+                          render={({ field }) => (
+                            <CustomInput
+                              className='flex-grow'
+                              classNameInput='bg-[var(--bg-input)]'
+                              label='Name'
+                              field={field}
+                            />
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name='description'
+                          render={({ field }) => (
+                            <CustomInput
+                              className='flex-grow'
+                              classNameInput='bg-[var(--bg-input)]'
+                              label='Description'
+                              field={field}
+                            />
+                          )}
+                        />
+                      </div>
+                      <div className='flex w-full items-center gap-5'>
+                        <FormField
+                          control={form.control}
+                          name='price'
+                          render={({ field }) => (
+                            <CustomInput
+                              className='flex-grow'
+                              classNameInput='bg-[var(--bg-input)]'
+                              label='Price'
+                              field={field}
+                            />
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name='stock'
+                          render={({ field }) => (
+                            <CustomInput
+                              className='flex-grow'
+                              classNameInput='bg-[var(--bg-input)]'
+                              label='Stock'
+                              field={field}
+                            />
+                          )}
+                        />
+                      </div>
+                      <FormField
+                        control={form.control}
+                        name='tag'
+                        render={({ field }) => (
+                          <CustomInput
+                            className='flex-grow'
+                            classNameInput='bg-[var(--bg-input)]'
+                            label='Tag '
+                            field={field}
+                          />
+                        )}
+                      />
+                      <div className='!mt-9 flex items-center justify-end gap-5'>
+                        <Button className='h-auto bg-transparent px-12 py-3 text-base text-white underline transition-all hover:bg-transparent hover:text-[var(--primary-color)]'>
+                          Cancel
+                        </Button>
+                        <Button className='h-auto bg-[var(--primary-color)] px-12 py-3 text-base text-white transition-all hover:bg-[#FAC1D9] hover:text-black hover:shadow-md hover:shadow-[#FAC1D9]'>
+                          Save
+                        </Button>
+                      </div>
+                    </div>
+                  </Form>
+                </div>
+              }
+              title='Edit dish'
+            >
               <div className='cursor-pointer hover:opacity-60 active:opacity-60'>
                 <Pencil />
               </div>
@@ -171,8 +285,8 @@ export default function TableDishes() {
 
   const handleDelete = async (id: string) => {
     try {
-      await deleteDishMutation.mutateAsync(id)
-      toast.success('Delete menu item successfully')
+      const response = await deleteDishMutation.mutateAsync(id)
+      toast.success(response?.message)
     } catch (_) {
       toast.error('Failed to delete menu item')
     }

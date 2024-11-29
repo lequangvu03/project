@@ -22,6 +22,7 @@ import { AuthSchema, TLoginForm } from '~/schemaValidations/auth.schema'
 import CustomInput from '../../../components/custom-input'
 import { Checkbox } from '../../../components/ui/checkbox'
 import { Form, FormField } from '../../../components/ui/form'
+
 type Props = {
   className?: string
 }
@@ -36,6 +37,7 @@ export default function FormLogin({ className, ...props }: Props) {
     },
     resolver: zodResolver(AuthSchema)
   })
+
   useEffect(() => {
     const remember = getRememberMeFromCS()
     if (remember) {
