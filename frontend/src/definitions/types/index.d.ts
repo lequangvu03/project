@@ -16,3 +16,18 @@ export interface Order {
   created_at: number;        
   updated_at: number;        
 }
+
+type Product = {
+  _id: string;
+  name: string;
+  description: string;
+  price: number;
+  tag: number[]; 
+  category_id: string;
+  stock: number;
+  image: string;
+  ingredients: string; 
+  created_at: number; 
+  updated_at: number; 
+  category_name: string;
+};
