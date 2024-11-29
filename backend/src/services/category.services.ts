@@ -55,10 +55,12 @@ class CategoryService {
         $project: {
           _id: 1, // Chỉ lấy _id
           name: 1, // Chỉ lấy name
+          description: 1, // Thêm trường description
           totalProducts: { $size: '$products' } // Đếm số lượng sản phẩm trong trường 'products'
         }
       }
     )
+
     const categories = await databaseService.categories.aggregate(pipeline).toArray()
 
     // Tính tổng số lượng
@@ -68,6 +70,7 @@ class CategoryService {
 
     return { categories, total }
   }
+
   // async getAllCategories(id?: string) {
   //   if (id) {
   //     const category = await databaseService.categories.findOne({ _id: new ObjectId(id) })
