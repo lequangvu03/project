@@ -7,3 +7,7 @@ export const getAllNotificationController = async (req: Request, res: Response, 
   const result = await notificationService.getNotifications({ limit, page })
   return res.status(200).json({ message: 'get notification success', result })
 }
+export const updateStatusReadNotificationController = async (req: Request, res: Response, error: NextFunction) => {
+  const result = await notificationService.updateReadNotifications(req.params.id.toString())
+  return res.status(200).json({ message: 'get notification success', result })
+}

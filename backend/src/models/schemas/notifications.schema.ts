@@ -7,6 +7,7 @@ interface NotificationType {
   message: string
   title: string
   status: number
+  orderId?: string
   created_at?: number
   updated_at?: number
 }
@@ -17,6 +18,7 @@ export default class Notification {
   message: string
   title: string
   status: number
+  orderId?: string
   created_at: number
   updated_at: number
 
@@ -27,6 +29,7 @@ export default class Notification {
     this.message = notification.message
     this.title = notification.title
     this.status = notification.status
+    this.orderId = notification.orderId
     this.created_at = notification.created_at || date
     this.updated_at = notification.updated_at || date
   }

@@ -47,9 +47,16 @@ export const addOrderController = async (
   //ep kieu customer_id và cái list order item_id
   const data = req.body
   const result = await orderServices.addOrder(data)
+  const noti = new Notification({
+    _id: new ObjectId(),
+    recipient: notificationRoleType.All,
+    message: `Đơn hàng mới số bàn: ${result.table_number} giá tiền ${result.total_price}`,
+    title: 'Đơn hàng mới',
+    orderId: result._id?.toString(),
+    status: NotificationStatus.Unread
+  })
   io.emit('new_order', {
-    message: 'Có đơn hàng mới!',
-    order: result
+    noti
   })
   //   const adminSockets = Array.from(userSocketMap.entries())
   //   .filter(([_, user]) => user.role === 'admin') // Chỉ chọn admin
@@ -62,15 +69,7 @@ export const addOrderController = async (
   //     order: result
   //   })
   // })
-  await databaseService.notifications.insertOne(
-    new Notification({
-      _id: new ObjectId(),
-      recipient: notificationRoleType.All,
-      message: `Đơn hàng mới số bàn: ${result.table_number} giá tiền ${result.total_price}`,
-      title: 'Đơn hàng mới',
-      status: NotificationStatus.Unread
-    })
-  )
+  await databaseService.notifications.insertOne(noti)
   return res.status(200).json({ message: ORDER_MESSAGE.ADD_MENU_ITEM_SUCCESS, result })
 }
 export const updateOrderController = async (
