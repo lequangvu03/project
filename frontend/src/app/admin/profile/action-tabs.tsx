@@ -1,43 +1,46 @@
 /* eslint-disable no-unused-vars */
 'use client'
 
-import { Image, LogOut, Settings, User } from 'lucide-react'
+import { Check, Image, LogOut, Settings, User } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { ReactNode, useRef } from 'react'
+import { ReactNode, useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import ButtonLogout from '~/components/button-logout'
 import CustomInput from '~/components/custom-input'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger
+} from '~/components/ui/alert-dialog'
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar'
 import { Button } from '~/components/ui/button'
 import { Form, FormField } from '~/components/ui/form'
 import { Switch } from '~/components/ui/switch'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs'
+import { PermissionType, RoleType } from '~/definitions/constant/types.constant'
+import { useGetMyProfileQuery, useGetProfilesQuery, useUpdateMyProfileMutation } from '~/hooks/data/profiles.data'
+import usePermissions from '~/hooks/usePermissions'
 import useQueryParams from '~/hooks/useQueryParams'
 import { cn } from '~/lib/utils'
+import useAuthStore from '~/stores/auth.store'
 
 enum Tab {
   Profile = 'PROFILE',
   Access = 'ACCESS'
 }
 
-const tabs = [
-  {
-    key: Tab.Profile,
-    label: 'My Profile',
-    icon: <User />
-  },
-  {
-    key: Tab.Access,
-    label: 'Manage Access',
-    icon: <Settings />
-  }
-]
-
 function ActionTabs() {
   const searchParams = useQueryParams()
   const router = useRouter()
   const { tab = Tab.Profile } = searchParams
-
+  const authStore = useAuthStore()
   const form = useForm({
     defaultValues: {
       name: '',
@@ -47,6 +50,22 @@ function ActionTabs() {
       confirmPassword: ''
     }
   })
+  const tabs = useMemo(() => {
+    const _tabs = [
+      {
+        key: Tab.Profile,
+        label: 'My Profile',
+        icon: <User />
+      },
+      {
+        key: Tab.Access,
+        label: 'Manage Access',
+        icon: <Settings />
+      }
+    ]
+
+    return authStore.permissions.includes(PermissionType.Settings) ? _tabs : [_tabs[0]]
+  }, [authStore])
 
   const handleActiveTab = (tab: Tab) => {
     const params = new URLSearchParams(searchParams)
@@ -140,18 +159,65 @@ function LayoutTabContent({ children, className, tab }: { children: ReactNode; c
 
 function Profile() {
   const ref = useRef<HTMLInputElement | null>(null)
-  const form = useForm({
+  const authStore = useAuthStore()
+  const form = useForm<{ name?: string; email?: string; avatar?: File | null }>({
     defaultValues: {
       name: '',
       email: '',
-      address: '',
-      newPassword: '',
-      confirmPassword: ''
+      avatar: null
     }
   })
+  const updateMyProfileMutation = useUpdateMyProfileMutation()
+
+  const [preview, setPreview] = useState<string | null>(null)
+  const myProfileQuery = useGetMyProfileQuery()
+  const profile = myProfileQuery.data?.result
+  const avatar = form.watch('avatar')
+
+  useEffect(() => {
+    if (profile) {
+      const profile = myProfileQuery.data?.result
+      form.setValue('name', profile?.name)
+      form.setValue('email', profile?.email)
+    }
+  }, [profile])
 
   const openFileDialog = () => {
     ref.current?.click()
+  }
+
+  useEffect(() => {
+    console.log(avatar)
+    if (avatar instanceof File) {
+      const url = URL.createObjectURL(avatar)
+      setPreview(url)
+
+      return () => URL.revokeObjectURL(url)
+    } else {
+      setPreview(null)
+    }
+  }, [avatar])
+
+  const handleUpdateProfile = form.handleSubmit(async (data) => {
+    try {
+      const response = await updateMyProfileMutation.mutateAsync(data)
+      toast(response?.message)
+    } catch (_) {
+      console.log('Failed to update profile')
+    }
+  })
+
+  const discardChanges = () => {
+    const profile = myProfileQuery.data?.result
+    if (profile) {
+      setPreview(null)
+
+      form.reset({
+        name: profile?.name,
+        email: profile?.email,
+        avatar: null
+      })
+    }
   }
 
   return (
@@ -163,17 +229,31 @@ function Profile() {
           onClick={openFileDialog}
         >
           <Avatar className='relative h-[140px] w-[140px]'>
-            <AvatarImage src='https://github.com/shadcn.png' alt='avatar' />
-            <AvatarFallback className='text-black'>LQV</AvatarFallback>
+            <AvatarImage src={preview || authStore.avatar} alt='avatar' />
+            <AvatarFallback className='uppercase text-black'>{profile?.email?.[0]}</AvatarFallback>
           </Avatar>
           <button className='absolute bottom-0 right-5 z-10'>
             <Image className='size-5' />
-            <input ref={ref} type='file' accept='image/*' hidden />
+            <input
+              onChange={(e) => {
+                const file = e.target.files?.[0]
+                if (file) {
+                  form.setValue('avatar', file)
+                }
+              }}
+              ref={ref}
+              type='file'
+              accept='image/*'
+              hidden
+            />
           </button>
         </div>
         <div>
-          <p className='text-2xl font-medium'>John Doe</p>
-          <span className='text-[var(--primary-color)]'>Manager</span>
+          <p className='text-2xl font-medium'>{profile?.name || profile?.email}</p>
+          <span className='text-[var(--primary-color)]'>
+            {profile?.role === RoleType.Admin && 'Admin'}
+            {profile?.role === RoleType.Employee && 'Employee'}
+          </span>
         </div>
       </div>
       <div className='space-y-5'>
@@ -188,32 +268,37 @@ function Profile() {
             name='name'
             render={({ field }) => <CustomInput label='Name' field={field} />}
           />
-          <FormField
-            control={form.control}
-            name='address'
-            render={({ field }) => <CustomInput label='Address' field={field} />}
-          />
-          <div className='flex w-full items-center gap-5'>
-            <FormField
-              control={form.control}
-              name='newPassword'
-              render={({ field }) => (
-                <CustomInput className='flex-grow' label='New Password' type='password' field={field} />
-              )}
-            />
-            <FormField
-              control={form.control}
-              name='confirmPassword'
-              render={({ field }) => (
-                <CustomInput className='flex-grow' label='Confirm Password' type='password' field={field} />
-              )}
-            />
-          </div>
+
           <div className='!mt-9 flex items-center justify-end gap-5'>
-            <Button className='h-auto bg-transparent px-12 py-3 text-base text-white underline transition-all hover:bg-transparent hover:text-[var(--primary-color)]'>
-              Discard Changes
-            </Button>
-            <Button className='h-auto bg-[var(--primary-color)] px-12 py-3 text-base text-black transition-all hover:bg-[var(--primary-color)] hover:shadow-md hover:shadow-[var(--primary-color)]'>
+            <AlertDialog>
+              <AlertDialogTrigger asChild className='cursor-pointer hover:opacity-60 active:opacity-60'>
+                <Button
+                  disabled={!form.formState.isDirty}
+                  className='h-auto bg-transparent px-12 py-3 text-base text-white underline transition-all hover:bg-transparent hover:text-[var(--primary-color)]'
+                >
+                  Discard Changes
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent className='bg-[var(--secondary-color)]'>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete your account and remove your data from
+                    our servers.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={discardChanges}>Continue</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+
+            <Button
+              disabled={!form.formState.isDirty}
+              onClick={handleUpdateProfile}
+              className='h-auto bg-[var(--primary-color)] px-12 py-3 text-base text-black text-white transition-all hover:bg-[var(--primary-color)] hover:shadow-md hover:shadow-[var(--primary-color)]'
+            >
               Save Changes
             </Button>
           </div>
@@ -226,72 +311,76 @@ function Profile() {
 const permissions = [
   {
     label: 'Dashboard',
-    key: 'dashboard'
+    key: PermissionType.Dashboard
   },
   {
     label: 'Reports',
-    key: 'reports'
+    key: PermissionType.Reports
   },
   {
     label: 'Inventory',
-    key: 'inventory'
+    key: PermissionType.Inventory
   },
   {
     label: 'Orders',
-    key: 'orders'
+    key: PermissionType.Orders
   },
   {
     label: 'Customers',
-    key: 'customers'
+    key: PermissionType.Customers
   },
   {
     label: 'Settings',
-    key: 'settings'
+    key: PermissionType.Settings
   }
 ]
 
 function ManageAccess() {
+  const getProfilesQuery = useGetProfilesQuery()
+  const authStore = useAuthStore()
+  const profiles = useMemo(() => {
+    return getProfilesQuery.data?.result?.users?.sort((p1: any, p2: any) => p1?.role - p2?.role)
+  }, [getProfilesQuery.data])
+
   return (
-    <div>
-      <div className='border-b border-b-slate-500'>
-        <div className='flex items-start gap-8'>
-          <div>
-            <h3 className='text-xl font-medium'>LOUIS</h3>
-            <span className='text-[var(--primary-color)]'>louis@gmail.com</span>
-          </div>
-          <span className='inline-block rounded-sm bg-[var(--primary-color)] px-5 py-1 text-black'>Admin</span>
-        </div>
-        <ul className='my-8 flex flex-wrap items-center gap-10'>
-          {permissions.map(({ key, label }) => (
-            <li className='flex flex-grow flex-col justify-center gap-4' key={key}>
-              <span>{label}</span>
-              <Switch
-                checked
-                disabled
-                className='data-[state=checked]:bg-[var(--primary-color)] data-[state=unchecked]:bg-[#3D4142]'
-              />
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div className='border-b border-b-slate-500'>
-        <div className='mt-6 flex items-start gap-8'>
-          <div>
-            <h3 className='text-xl font-medium'>Le Vu</h3>
-            <span className='text-[var(--primary-color)]'>levu@gmail.com</span>
-          </div>
-          <span className='inline-block rounded-sm bg-[var(--primary-color)] px-5 py-1 text-black'>Admin</span>
-        </div>
-        <ul className='my-8 flex flex-wrap items-center gap-10'>
-          {permissions.map(({ key, label }) => (
-            <li className='flex flex-grow flex-col justify-center gap-4' key={key}>
-              <span>{label}</span>
-              <Switch className='data-[state=checked]:bg-[var(--primary-color)] data-[state=unchecked]:bg-[#3D4142]' />
-            </li>
-          ))}
-        </ul>
-      </div>
-    </div>
+    <ul>
+      {profiles?.map((profile: any) => {
+        return (
+          <li key={profile?._id} className='mb-6 border-b border-b-slate-500'>
+            <div className='flex items-start justify-between gap-8'>
+              <div className='flex items-center gap-x-4'>
+                <Avatar className='relative h-[80px] w-[80px]'>
+                  <AvatarImage src={profile?.avatar_url} alt='avatar' />
+                  <AvatarFallback className='uppercase text-black'>
+                    {(profile?.name || (profile?.email as string))[0]}
+                  </AvatarFallback>
+                </Avatar>
+                <div>
+                  <h3 className='text-xl font-medium'>{profile?.name}</h3>
+                  <span className='text-[var(--primary-color)]'>{profile?.email}</span>
+                </div>
+                {profile?.email === authStore.email && <Check className='h-10 w-10 text-green-500' />}
+              </div>
+              <span className={'align-end inline-block rounded-sm bg-[var(--primary-color)] px-5 py-1 text-black'}>
+                {profile?.role === RoleType.Admin ? 'Admin' : 'Employee'}
+              </span>
+            </div>
+            <ul className='my-8 flex flex-wrap items-center gap-10'>
+              {permissions.map(({ key, label }) => (
+                <li className='flex flex-grow flex-col justify-center gap-4' key={key}>
+                  <span>{label}</span>
+                  <Switch
+                    checked
+                    disabled={profile?.role === RoleType.Admin}
+                    className='data-[state=checked]:bg-[var(--primary-color)] data-[state=unchecked]:bg-[#3D4142]'
+                  />
+                </li>
+              ))}
+            </ul>
+          </li>
+        )
+      })}
+    </ul>
   )
 }
 

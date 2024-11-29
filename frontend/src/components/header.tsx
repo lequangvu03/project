@@ -1,17 +1,39 @@
 'use client'
 
-import Link from 'next/link'
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
-import { usePathname } from 'next/navigation'
-import { routes } from '~/routers'
 import dayjs from 'dayjs'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { useLayoutEffect } from 'react'
+import { RoleType } from '~/definitions/constant/types.constant'
+import { useGetMyProfileQuery } from '~/hooks/data/profiles.data'
+import { routes } from '~/routers'
+import useAuthStore from '~/stores/auth.store'
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
+import { Skeleton } from './ui/skeleton'
+import Image from 'next/image'
 
 export const dynamic = 'force-dynamic'
 
 export default function Header() {
   const pathname = usePathname()
   const exactRoute = routes.find((route) => route.redirect.includes(pathname))
+  const myProfileData = useGetMyProfileQuery()
+  const authStore = useAuthStore()
 
+  useLayoutEffect(() => {
+    if (myProfileData.data?.result) {
+      const { role, permissions, avatar_url, email, name } = myProfileData.data.result
+
+      authStore.updateAuthStore({
+        role: role,
+        permissions: permissions,
+        avatar: avatar_url,
+        email,
+        name: name
+      })
+    }
+  }, [myProfileData.data])
+  console.log(myProfileData.data)
   return (
     <header className='sticky top-8 z-10 flex h-[100px] items-center justify-between rounded-2xl bg-[var(--secondary-color)] px-4 shadow-sm shadow-border'>
       <section className='flex flex-col'>
@@ -21,20 +43,26 @@ export default function Header() {
         </h4>
       </section>
 
-      <section className='flex items-center gap-[2px]'>
-        <Link
-          href='/admin/profile'
-          className='flex items-center justify-between gap-1 rounded-full bg-[var(--bg-input)] px-3 py-2 transition-all hover:opacity-80'
-        >
-          <Avatar className='h-10 w-10'>
-            <AvatarImage className='h-full w-full' src='https://github.com/shadcn.png' alt='@shadcn' />
-            <AvatarFallback className='bg-white text-black'>K</AvatarFallback>
-          </Avatar>
-          <div className='gap flex flex-col px-2'>
-            <h2 className='text-[16px] font-semibold text-gray-400'>Nguyen Duy Khanh</h2>
-            <p className='text-[12px] font-normal text-gray-400'>Blockchain Engineer</p>
-          </div>
-        </Link>
+      <section className='flex items-center justify-end gap-[2px]'>
+        {myProfileData.isPending ? (
+          <Skeleton className='h-[58px] w-[264px] rounded-full bg-[var(--bg-input)]' />
+        ) : (
+          <Link
+            href='/admin/profile'
+            className='flex items-center justify-between gap-1 rounded-full bg-[var(--bg-input)] px-3 py-2 transition-all hover:opacity-80'
+          >
+            <Avatar className='h-10 w-10'>
+              <AvatarImage className='h-full w-full' src={authStore.avatar} alt='avatar' />
+              <AvatarFallback className='bg-white uppercase text-black'>{authStore.email[0]}</AvatarFallback>
+            </Avatar>
+            <div className='gap flex flex-col overflow-hidden px-2'>
+              <h2 className='max-w-[180px] truncate text-[16px] font-semibold text-gray-400'>{authStore.email}</h2>
+              <p className='text-[12px] font-normal text-gray-400'>
+                {authStore.role === RoleType.Admin ? 'Admin' : 'Employee'}
+              </p>
+            </div>
+          </Link>
+        )}
       </section>
     </header>
   )

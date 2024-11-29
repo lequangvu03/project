@@ -1,6 +1,7 @@
 'use client'
 
-import { Pencil, Trash } from 'lucide-react'
+import { useQueryClient } from '@tanstack/react-query'
+import { EllipsisVertical, Pencil, Trash } from 'lucide-react'
 import { StaticImport } from 'next/dist/shared/lib/get-img-props'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -22,6 +23,23 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger
 } from '~/components/ui/alert-dialog'
+
+import {
+  Menubar,
+  MenubarCheckboxItem,
+  MenubarContent,
+  MenubarItem,
+  MenubarMenu,
+  MenubarRadioGroup,
+  MenubarRadioItem,
+  MenubarSeparator,
+  MenubarShortcut,
+  MenubarSub,
+  MenubarSubContent,
+  MenubarSubTrigger,
+  MenubarTrigger
+} from '~/components/ui/menubar'
+
 import { Button } from '~/components/ui/button'
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from '~/components/ui/context-menu'
 import { Form, FormField } from '~/components/ui/form'
@@ -44,12 +62,14 @@ type Props = {
 export default function Category({ _id, icon = orderIcon.burger, name, amount, className }: Props) {
   const searchParams = useQueryParams()
   const router = useRouter()
+  const queryClient = useQueryClient()
   const updateCategoryMutation = useUpdateCategoryMutation()
   const deleteCategoryMutation = useDeleteCategoryMutation()
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>('')
-  const getCategoryByIdQuery = useGetCategoryByIdQuery(_id as string, !!selectedCategoryId)
+  const [selectedMenuId, setSelectedMenuId] = useState<string>('')
+  const getCategoryByIdQuery = useGetCategoryByIdQuery(selectedCategoryId as string, !!selectedCategoryId)
   const isActive = searchParams?.categoryId === _id
-  const form = useForm<{ name: string; description: string }>({
+  const categoryForm = useForm<{ name: string; description: string }>({
     defaultValues: {
       name: '',
       description: ''
@@ -59,52 +79,58 @@ export default function Category({ _id, icon = orderIcon.burger, name, amount, c
   useEffect(() => {
     if (getCategoryByIdQuery.data) {
       const category = getCategoryByIdQuery?.data?.result?.categories[0]
-      form.setValue('name', category?.name)
-      form.setValue('description', category?.description || '')
+      categoryForm.setValue('name', category?.name)
+      categoryForm.setValue('description', category?.description || '')
     }
-  }, [getCategoryByIdQuery.data])
+  }, [getCategoryByIdQuery.data, selectedCategoryId])
 
   const handleDelete = async (id: string) => {
     try {
-      await deleteCategoryMutation.mutateAsync(id)
+      const response = await deleteCategoryMutation.mutateAsync(id)
       router.replace('/admin/menu')
-      toast.success('Delete menu item successfully')
-      setSelectedCategoryId('')
-      form.reset()
+      toast.success(response?.message)
     } catch (_) {
       toast.error('Failed to delete menu item')
     }
   }
 
-  const handleEditCategory = form.handleSubmit(async (data) => {
+  const handleEditCategory = categoryForm.handleSubmit(async (data) => {
     try {
       const response = await updateCategoryMutation.mutateAsync({
         id: selectedCategoryId,
         body: data
       })
+      categoryForm.reset()
+      setSelectedCategoryId('')
       toast(response?.message)
     } catch (error) {
       console.log(error)
     }
   })
-  console.log(selectedCategoryId)
+
+  const handleSelectedCategoryId = () => {
+    setSelectedCategoryId(_id as string)
+    queryClient.invalidateQueries({
+      queryKey: ['CATEGORIES_DETAILS', _id]
+    })
+  }
+
   return (
     <>
       {_id ? (
         <ContextMenu>
-          <ContextMenuTrigger asChild onContextMenu={() => setSelectedCategoryId(_id)}>
+          <ContextMenuTrigger asChild onContextMenu={handleSelectedCategoryId}>
             <Link
               href={`/admin/menu/?categoryId=${_id}`}
               className={cn(
-                'block cursor-pointer rounded-xl border-2 border-transparent bg-[var(--secondary-color)] px-3 py-4 shadow-2xl transition-all hover:border-[var(--primary-color)]',
+                'block min-w-[150px] cursor-pointer rounded-xl border-2 border-transparent bg-[var(--secondary-color)] px-3 py-4 shadow-2xl transition-all hover:border-[var(--primary-color)]',
                 {
                   'bg-[var(--primary-color)]': isActive
-                },
-                className
+                }
               )}
             >
               <div className='flex w-full items-center justify-end'>
-                <Image src={icon} alt='Food Icon' className='pointer-events-none select-none' />
+                <Image src={icon} alt='Food Icon' className='pointer-events-none invisible select-none' />
               </div>
               <section>
                 <h2
@@ -126,23 +152,28 @@ export default function Category({ _id, icon = orderIcon.burger, name, amount, c
           </ContextMenuTrigger>
           <ContextMenuContent>
             <ContextMenuItem
+              onClick={handleSelectedCategoryId}
               asChild
               className='cursor-pointer rounded-sm p-2 text-white hover:bg-[var(--secondary-color)]'
             >
               <CustomSheet
-                isConfirmationRequired={form.formState.isDirty}
+                onConfirm={() => {
+                  categoryForm.reset()
+                  setSelectedCategoryId('')
+                }}
+                isConfirmationRequired={categoryForm.formState.isDirty}
                 title='New category'
                 render={
                   <div className='h-full space-y-5 py-9'>
-                    <Form {...form}>
+                    <Form {...categoryForm}>
                       <FormField
-                        control={form.control}
+                        control={categoryForm.control}
                         name='name'
                         render={({ field }) => <CustomInput required field={field} label='Name' />}
                       />
 
                       <FormField
-                        control={form.control}
+                        control={categoryForm.control}
                         name='description'
                         render={({ field }) => <CustomInput label='Description' field={field} />}
                       />
@@ -196,7 +227,7 @@ export default function Category({ _id, icon = orderIcon.burger, name, amount, c
         <Link
           href='/admin/menu'
           className={cn(
-            'block cursor-pointer rounded-xl border-2 border-transparent bg-[var(--secondary-color)] px-3 py-4 shadow-2xl transition-all hover:border-[var(--primary-color)]',
+            'block w-[150px] min-w-[150px] cursor-pointer rounded-xl border-2 border-transparent bg-[var(--secondary-color)] px-3 py-4 shadow-2xl transition-all hover:border-[var(--primary-color)]',
             {
               'bg-[var(--primary-color)]': isActive
             },
@@ -204,7 +235,7 @@ export default function Category({ _id, icon = orderIcon.burger, name, amount, c
           )}
         >
           <div className='flex w-full items-center justify-end'>
-            <Image src={icon} alt='Food Icon' className='pointer-events-none select-none' />
+            <Image src={icon} alt='Food Icon' className='pointer-events-none invisible select-none' />
           </div>
           <section>
             <h2

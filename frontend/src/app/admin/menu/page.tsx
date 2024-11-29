@@ -107,7 +107,7 @@ export default function Page() {
                 </TabsTrigger>
                 <TabsTrigger
                   className='h-auto px-5 py-2 data-[state=active]:bg-[var(--primary-color)]'
-                  value={`${TagType.Nomarl}`}
+                  value={`${TagType.Normal}`}
                 >
                   Normal menu
                 </TabsTrigger>

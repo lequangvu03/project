@@ -73,7 +73,10 @@ function CustomSheet({ children, render, title, isConfirmationRequired = false, 
           <AlertDialogFooter>
             <AlertDialogCancel
               className='bg-primary text-black hover:bg-primary/90 hover:text-black'
-              onClick={() => setOpenSheet(false)}
+              onClick={() => {
+                setOpenSheet(false)
+                if (onConfirm) onConfirm()
+              }}
             >
               Confirm
             </AlertDialogCancel>
