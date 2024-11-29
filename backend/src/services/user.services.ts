@@ -32,7 +32,12 @@ class UserService {
     if (typeof data.permissions === 'string') {
       data.permissions = JSON.parse(data.permissions)
     }
-    await databaseService.users.updateOne({ _id: id }, { $set: data })
+    const profile = await databaseService.users.findOneAndUpdate(
+      { _id: id },
+      { $set: data },
+      { returnDocument: 'after' }
+    )
+    return profile
   }
   async deleteProfile(id: string) {
     const user = await databaseService.users.deleteOne({ _id: new ObjectId(id) })
