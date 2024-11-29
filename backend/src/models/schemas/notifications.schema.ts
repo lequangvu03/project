@@ -1,8 +1,9 @@
 import { ObjectId } from 'mongodb'
+import { notificationRoleType, RoleType } from '~/constants/enums'
 
 interface NotificationType {
   _id?: ObjectId
-  recipient_id: ObjectId
+  recipient: notificationRoleType
   message: string
   title: string
   status: number
@@ -12,7 +13,7 @@ interface NotificationType {
 
 export default class Notification {
   _id?: ObjectId
-  recipient_id: ObjectId
+  recipient: notificationRoleType
   message: string
   title: string
   status: number
@@ -22,7 +23,7 @@ export default class Notification {
   constructor(notification: NotificationType) {
     const date = Date.now()
     this._id = notification._id
-    this.recipient_id = notification.recipient_id
+    this.recipient = notification.recipient
     this.message = notification.message
     this.title = notification.title
     this.status = notification.status

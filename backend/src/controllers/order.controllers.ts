@@ -7,7 +7,7 @@ import { io } from '~/utils/socket'
 import { ObjectId } from 'mongodb'
 import Notification from '~/models/schemas/notifications.schema'
 import databaseService from '~/services/database.services'
-import { NotificationStatus, NotificationType } from '~/constants/enums'
+import { notificationRoleType, NotificationStatus, NotificationType } from '~/constants/enums'
 
 /**
  * @description: returns a list of all orders for admin to show on the tablet screen
@@ -65,7 +65,7 @@ export const addOrderController = async (
   await databaseService.notifications.insertOne(
     new Notification({
       _id: new ObjectId(),
-      recipient_id: new ObjectId('6708780f6d7474a209b66137'),
+      recipient: notificationRoleType.All,
       message: `Đơn hàng mới số bàn: ${result.table_number} giá tiền ${result.total_price}`,
       title: 'Đơn hàng mới',
       status: NotificationStatus.Unread

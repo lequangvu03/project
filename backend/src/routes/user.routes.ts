@@ -4,7 +4,8 @@ import {
   getAllProfileController,
   getMeProfileController,
   getProfileByIdController,
-  updatedProfileController
+  updatedProfileController,
+  updateProfileMeController
 } from '~/controllers/user.contollers'
 import { accessTokenValidator, isAdmin } from '~/middlewares/auth.middlewares'
 import { handleRequest } from '~/middlewares/menu.middlewares'
@@ -29,6 +30,13 @@ userRouter.get('/', accessTokenValidator, wrapRequestHandler(getAllProfileContro
  * response: {message: string, result: {profiles: profileType[], total: number}}
  */
 userRouter.get('/me', accessTokenValidator, wrapRequestHandler(getMeProfileController))
+userRouter.put(
+  '/me',
+  accessTokenValidator,
+  handleRequest,
+  updateProfileValidator,
+  wrapRequestHandler(updateProfileMeController)
+)
 
 /**
  * path: api/profile/:id
