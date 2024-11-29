@@ -1,3 +1,5 @@
+import { ObjectId } from 'mongodb'
+import { notificationRoleType, NotificationStatus } from '~/constants/enums'
 import databaseService from '~/services/database.services'
 
 class NotificationService {
@@ -11,6 +13,13 @@ class NotificationService {
       .toArray()
     const total = await databaseService.notifications.countDocuments()
     return { notifications, total }
+  }
+  async updateReadNotifications(id: string) {
+    const result = await databaseService.notifications.updateOne(
+      { _id: new ObjectId(id) },
+      { $set: { status: NotificationStatus.Read } }
+    )
+    return result
   }
 }
 const notificationService = new NotificationService()
