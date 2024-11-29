@@ -3,78 +3,80 @@ import databaseService from '~/services/database.services'
 
 class CategoryService {
   async checkCategoryNameExist(categoryName: string, id?: string) {
-    const categories = await databaseService.categories.findOne({ _id: new ObjectId(id) })
-    if (categories?.name == categoryName) {
-      return false
+    if (id) {
+      const categories = await databaseService.categories.findOne({ _id: new ObjectId(id) })
+      if (categories?.name == categoryName) {
+        return false
+      }
     }
-    await databaseService.categories.findOne({ name: categoryName })
-    return true
+    const category = await databaseService.categories.findOne({ name: categoryName })
+    return category
   }
   async checkCategoryExist(categoryId: string) {
     const category = await databaseService.categories.findOne({ _id: new ObjectId(categoryId) })
     return category
   }
 
-  // async getAllCategories(id?: string) {
-  //   const pipeline = []
-  //   if (id) {
-  //     try {
-  //       pipeline.push({
-  //         $match: {
-  //           _id: new ObjectId(id) // Chuyển id sang ObjectId
-  //         }
-  //       })
-  //     } catch (error) {
-  //       throw new Error('Invalid ID format') // Báo lỗi nếu id không hợp lệ
-  //     }
-  //   }
-
-  //   pipeline.push(
-  //     {
-  //       $lookup: {
-  //         from: 'menu_items', // Bảng menu_items
-  //         localField: '_id', // Trường _id trong categories
-  //         foreignField: 'category_id', // Trường category_id trong menu_items
-  //         as: 'products' // Lưu kết quả vào trường 'products'
-  //       }
-  //     },
-  //     {
-  //       $addFields: {
-  //         products: {
-  //           $filter: {
-  //             input: '$products',
-  //             as: 'product',
-  //             cond: { $eq: ['$$product.category_id', '$_id'] }
-  //           }
-  //         }
-  //       }
-  //     },
-  //     {
-  //       $project: {
-  //         _id: 1, // Chỉ lấy _id
-  //         name: 1, // Chỉ lấy name
-  //         totalProducts: { $size: '$products' } // Đếm số lượng sản phẩm trong trường 'products'
-  //       }
-  //     }
-  //   )
-  //   const categories = await databaseService.categories.aggregate(pipeline).toArray()
-
-  //   // Tính tổng số lượng
-  //   const total = id
-  //     ? categories.length // Nếu có id, chỉ tính số kết quả tìm được
-  //     : await databaseService.categories.countDocuments()
-
-  //   return { categories, total }
-  // }
   async getAllCategories(id?: string) {
+    const pipeline = []
     if (id) {
-      const category = await databaseService.categories.findOne({ _id: new ObjectId(id) })
-      return category
+      try {
+        pipeline.push({
+          $match: {
+            _id: new ObjectId(id) // Chuyển id sang ObjectId
+          }
+        })
+      } catch (error) {
+        throw new Error('Invalid ID format') // Báo lỗi nếu id không hợp lệ
+      }
     }
-    const categories = await databaseService.categories.find().toArray()
-    const total = await databaseService.categories.countDocuments()
+
+    pipeline.push(
+      {
+        $lookup: {
+          from: 'menu_items', // Bảng menu_items
+          localField: '_id', // Trường _id trong categories
+          foreignField: 'category_id', // Trường category_id trong menu_items
+          as: 'products' // Lưu kết quả vào trường 'products'
+        }
+      },
+      {
+        $addFields: {
+          products: {
+            $filter: {
+              input: '$products',
+              as: 'product',
+              cond: { $eq: ['$$product.category_id', '$_id'] }
+            }
+          }
+        }
+      },
+      {
+        $project: {
+          _id: 1, // Chỉ lấy _id
+          name: 1, // Chỉ lấy name
+          totalProducts: { $size: '$products' } // Đếm số lượng sản phẩm trong trường 'products'
+        }
+      }
+    )
+    const categories = await databaseService.categories.aggregate(pipeline).toArray()
+
+    // Tính tổng số lượng
+    const total = id
+      ? categories.length // Nếu có id, chỉ tính số kết quả tìm được
+      : await databaseService.categories.countDocuments()
+
     return { categories, total }
   }
+  // async getAllCategories(id?: string) {
+  //   if (id) {
+  //     const category = await databaseService.categories.findOne({ _id: new ObjectId(id) })
+  //     return category
+  //   }
+  //   const categories = await databaseService.categories.find().toArray()
+  //   const total = await databaseService.categories.countDocuments()
+  //   return { categories, total }
+  // }
 
   async addCategory(name: string, description?: string) {
     const category = await databaseService.categories.insertOne({
