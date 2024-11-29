@@ -1,4 +1,4 @@
-import { sendDelete, sendGet, sendPost } from "~/api/request"
+import { sendDelete, sendGet, sendPost, sendPatch } from "~/api/request"
 
 const productServices = {
     getProducts: ({ page, limit = 9 }: { page: number, limit: number }) => {
@@ -14,7 +14,7 @@ const productServices = {
         return sendGet("/menu", {id})
     },
     updateProduct: function ({ id, body }: { id: string, body: any }) {
-        return;
+        return sendPatch("/menu", { id, body });
     }
 }
 

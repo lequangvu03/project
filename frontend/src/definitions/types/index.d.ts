@@ -17,7 +17,7 @@ export interface Order {
   updated_at: number;        
 }
 
-type Product = {
+export type Product = {
   _id: string;
   name: string;
   description: string;
@@ -31,3 +31,14 @@ type Product = {
   updated_at: number; 
   category_name: string;
 };
+
+
+export interface NotificationType {
+    _id: string;
+    recipient_id: string;
+    message: string;
+    title: string;
+    status: number;
+    created_at: number;
+    updated_at: number;
+}

@@ -100,7 +100,7 @@ function ProductList({ products, page, setPage, totalPage }: Props) {
                       </AlertDialogHeader>
                       <AlertDialogFooter>
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction onClick={() => handleDelete(product._id)}>Continue</AlertDialogAction>
+                        <AlertDialogAction onClick={() => handleDelete(product._id)}>Delete</AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>
                   </AlertDialog>
