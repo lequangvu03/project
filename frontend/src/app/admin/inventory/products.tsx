@@ -43,14 +43,14 @@ function ProductList({ products, page, setPage, totalPage }: Props) {
                     width={100}
                     height={100}
                     className='h-[80px] w-[80px] rounded-[10px] object-cover'
-                    src='https://github.com/shadcn.png'
+                    src={product.image}
                     alt='avatar'
                   />
                   <div className='shrink-0'>
-                    <span className='whitespace-nowrap'>Chicken Parmesan</span>
+                    <span className='whitespace-nowrap'>{product.name}</span>
                     <p className='whitespace-nowrap'>
-                      <span>Stocked Prodcts: </span>
-                      <span>10 In Stock</span>
+                      <span>Stocked: </span>
+                      <span>{product.stock}</span>
                     </p>
                   </div>
                 </div>
@@ -70,7 +70,7 @@ function ProductList({ products, page, setPage, totalPage }: Props) {
               <TableCell>
                 <div className='flex flex-col border-l border-l-slate-500 p-4'>
                   <span>Retail Price</span>
-                  <span>$250.00</span>
+                  <span>$ {product.price}</span>
                 </div>
               </TableCell>
               <TableCell className='text-right'>
