@@ -14,19 +14,23 @@ export const io = new Server(server, {
     methods: ['GET', 'POST']
   }
 })
-
+export const userSocketMap = new Map<string, { role: string }>()
 // Sự kiện khi client kết nối
 io.on('connection', (socket) => {
-  console.log('A user connected:', socket.id)
-
+  const role = socket.handshake.query.role as string // Lấy role từ query
+  console.log(`A user connected: ${socket.id} with role: ${role}`)
+  if (role) {
+    userSocketMap.set(socket.id, { role })
+  }
   // Lắng nghe sự kiện tùy chỉnh, ví dụ: khi admin nhận được thông báo
   socket.on('disconnect', () => {
     console.log('User disconnected:', socket.id)
+    userSocketMap.delete(socket.id) // Xóa người dùng khỏi map khi họ ngắt kết nối
   })
 })
 
 // Khởi động server lắng nghe
-const PORT =  5000
+const PORT = 5000
 server.listen(PORT, () => {
   console.log(`Socket.IO server running on port ${PORT}`)
 })
