@@ -10,7 +10,7 @@ import {
 } from '~/controllers/user.contollers'
 import { accessTokenValidator, isAdmin } from '~/middlewares/auth.middlewares'
 import { handleRequest } from '~/middlewares/menu.middlewares'
-import { addProfileValidator, getProfileByIdValidator, updateProfileValidator } from '~/middlewares/user.middlewares'
+import { addProfileValidator, getProfileByIdValidator, updateMyProfileValidator, updateProfileValidator } from '~/middlewares/user.middlewares'
 import { wrapRequestHandler } from '~/utils/handlers'
 
 export const userRouter = Router()
@@ -38,7 +38,7 @@ userRouter.put(
   '/me',
   accessTokenValidator,
   handleRequest,
-  updateProfileValidator,
+  updateMyProfileValidator,
   wrapRequestHandler(updateProfileMeController)
 )
 
