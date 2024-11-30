@@ -1,14 +1,29 @@
 import { NotificationType } from '~/definitions/types'
 import { Button } from './ui/button'
 import { formatDateTime } from '~/utils/format-datetime'
+import { useMarkAllAsReadMutation, useReadNotificationMutation } from '~/hooks/data/notifications.data'
+import { useRouter } from 'next/navigation'
 
 type Props = {
   notification: NotificationType
 }
 
 export default function Notification({ notification }: Props) {
+  const isRead = notification.status === 1
+  const router = useRouter()
+  const useReadNotification = useReadNotificationMutation()
+
+  const handleClick = async (id: string, orderId?: string) => {
+    await useReadNotification.mutateAsync(id)
+    if (orderId) {
+      router.replace(`/admin/order/${orderId}`)
+    }
+  }
   return (
-    <div className='flex h-[90px] w-full items-center gap-4 border-[0.15px] border-b-gray-800 px-4 py-2'>
+    <div
+      onClick={() => handleClick(notification._id, notification.orderId)}
+      className='flex h-[90px] w-full cursor-pointer items-center gap-4 border-[0.15px] border-b-gray-800 px-4 py-2'
+    >
       <section className='flex h-[50px] w-[50px] items-center justify-center rounded-sm bg-[#EA7C69]'>
         <svg width='20' height='20' viewBox='0 0 30 30' fill='none' xmlns='http://www.w3.org/2000/svg'>
           <g clip-path='url(#clip0_158_11204)'>
@@ -26,11 +41,16 @@ export default function Notification({ notification }: Props) {
       </section>
       <section className='flex flex-1 items-center justify-between'>
         <div className='flex flex-col'>
-          <h3 className='text-[16px] font-light text-gray-300'>{notification.title}</h3>
-          <p className='text-[13px] font-light text-gray-300'>{notification.message}</p>
+          <h3 className={`text-[16px] font-light ${isRead ? 'text-gray-500' : 'text-gray-300'}`}>
+            {notification.title}
+          </h3>
+          <p className={`text-[16px] font-light ${isRead ? 'text-gray-500' : 'text-gray-300'}`}>
+            {formatDateTime(notification.updated_at ?? 0)}
+          </p>
         </div>
-        <p className='text-[16px] font-light text-gray-300'>{formatDateTime(notification.updated_at)}</p>
+        <p className='text-[16px] font-light text-gray-300'>{formatDateTime(notification.updated_at ?? 0)}</p>
       </section>
+
       <Button className='flex items-center gap-4 border-[1px] border-solid border-[#EA7C69]'>
         <svg width='14' height='16' viewBox='0 0 14 16' fill='none' xmlns='http://www.w3.org/2000/svg'>
           <path

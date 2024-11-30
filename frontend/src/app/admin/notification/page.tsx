@@ -5,24 +5,58 @@ import Notification from '~/components/notification'
 import { PaginationOrder } from '~/components/pagination-order'
 import { Button } from '~/components/ui/button'
 import { NotificationType } from '~/definitions/types'
-import { useGetNotificationAllQuery } from '~/hooks/data/notifications.data'
+import { useGetNotificationAllQuery, useMarkAllAsReadMutation } from '~/hooks/data/notifications.data'
 
 export default function Page() {
   const [page, setPage] = useState<number>(1)
-  const [status, setStatus] = useState<number>(1)
-  const { data: notifications } = useGetNotificationAllQuery({ page: page, limit: 12, status })
-
+  const [status, setStatus] = useState<number>(-1)
+  const markAllAsReadMutation = useMarkAllAsReadMutation()
+  const { data: notifications } = useGetNotificationAllQuery({
+    page: page,
+    limit: 12,
+    status: status
+  })
+  const handleMarkAllAsRead = async () => {
+    const ids = notifications?.result.notifications.map((notification: NotificationType) => notification._id as string)
+    await markAllAsReadMutation.mutateAsync(ids)
+  }
   if (notifications?.result) {
     return (
       <main className='bg-[var(--secondary-color)]'>
         <section className='flex items-center justify-between rounded-sm p-4'>
           <div className='flex items-center gap-2'>
-            <Button className='bg-[#EA7C69]'>All</Button>
-            <Button className='bg-transparent text-gray-400'>Read</Button>
-            <Button className='bg-transparent text-gray-400'>Unread</Button>
+            <Button
+              className={`${status === -1 ? 'bg-[#EA7C69] text-white' : 'bg-transparent text-gray-400'}`}
+              onClick={() => {
+                setStatus(-1)
+                setPage(1)
+              }}
+            >
+              All
+            </Button>
+            <Button
+              className={`${status === 1 ? 'bg-[#EA7C69] text-white' : 'bg-transparent text-gray-400'}`}
+              onClick={() => {
+                setStatus(1)
+                setPage(1)
+              }}
+            >
+              Read
+            </Button>
+            <Button
+              className={`${status === 0 ? 'bg-[#EA7C69] text-white' : 'bg-transparent text-gray-400'}`}
+              onClick={() => {
+                setStatus(0)
+                setPage(1)
+              }}
+            >
+              Unread
+            </Button>
           </div>
           <div>
-            <Button className='bg-[#EA7C69]'>Mark all as read</Button>
+            <Button onClick={handleMarkAllAsRead} className='bg-[#EA7C69]'>
+              Mark all as read
+            </Button>
           </div>
         </section>
         <section>

@@ -19,5 +19,6 @@ export const notificationRouter = Router()
 
 notificationRouter.get('/', accessTokenValidator, wrapRequestHandler(getAllNotificationController))
 
-notificationRouter.put('/read/:id', accessTokenValidator, wrapRequestHandler(updateStatusReadNotificationController))
 notificationRouter.put('/read/all', accessTokenValidator, wrapRequestHandler(updateAllStatusReadNotificationController))
+
+notificationRouter.put('/read/:id', accessTokenValidator, wrapRequestHandler(updateStatusReadNotificationController))

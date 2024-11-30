@@ -8,12 +8,12 @@ import { ChartData } from '~/definitions/types'
 export const description = 'A multiple line chart'
 
 const chartConfig = {
-  desktop: {
-    label: 'Desktop',
+  revenue: {
+    label: 'revenue',
     color: 'hsl(var(--chart-1))'
   },
-  mobile: {
-    label: 'Mobile',
+  profit: {
+    label: 'profit',
     color: 'hsl(var(--chart-2))'
   }
 } satisfies ChartConfig
@@ -44,8 +44,8 @@ export default function DashboardChart({ chartData }: { chartData: ChartData[] }
               tickFormatter={(value) => value.slice(0, 3)}
             />
             <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
-            <Line dataKey='desktop' type='monotone' stroke='var(--color-desktop)' strokeWidth={2} dot={false} />
-            <Line dataKey='mobile' type='monotone' stroke='var(--color-mobile)' strokeWidth={2} dot={false} />
+            <Line dataKey='revenue' type='monotone' stroke='var(--color-revenue)' strokeWidth={2} dot={false} />
+            <Line dataKey='profit' type='monotone' stroke='var(--color-profit)' strokeWidth={2} dot={false} />
           </LineChart>
         </ChartContainer>
       </CardContent>

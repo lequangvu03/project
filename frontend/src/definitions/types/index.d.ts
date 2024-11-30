@@ -44,13 +44,14 @@ export type Product = {
 
 
 export interface NotificationType {
-    _id: string;
-    recipient_id: string;
-    message: string;
-    title: string;
-    status: number;
-    created_at: number;
-    updated_at: number;
+  _id?: ObjectId
+  recipient: notificationRoleType
+  message: string
+  title: string
+  status: number
+  orderId?: string
+  created_at?: number
+  updated_at?: number
 }
 
 
