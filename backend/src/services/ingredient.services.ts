@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb'
 import databaseService from '~/services/database.services'
-import inventoryLogService from './inventory.log.services'
+import inventoryLogService from './inboundOrder.services'
 import ingredients from '~/models/schemas/ingredients.schema'
 import { ChangeType } from '~/constants/enums'
 
