@@ -62,7 +62,8 @@ class MenuService {
     sortOrder,
     categoryId,
     tag,
-    name
+    name,
+    id
   }: {
     limit?: number
     page?: number
@@ -71,6 +72,7 @@ class MenuService {
     categoryId?: string
     tag?: number
     name?: string
+    id?: string
   }) {
     const matchFilter: any = {
       status: menuItemStatus.Available
@@ -86,6 +88,9 @@ class MenuService {
     // Nếu có name, thêm điều kiện lọc cho tên
     if (name) {
       matchFilter.name = { $regex: new RegExp(name, 'i') } // Tìm kiếm không phân biệt hoa thường
+    }
+    if (id) {
+      matchFilter._id = new ObjectId(id)
     }
 
     // Nếu có tag, thêm điều kiện lọc cho tag
