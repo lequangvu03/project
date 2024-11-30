@@ -6,6 +6,11 @@ import {
   updateInboundOrdersController
 } from '~/controllers/inboundOrder.controllers'
 import { accessTokenValidator } from '~/middlewares/auth.middlewares'
+import {
+  addInboundOrdersValidator,
+  deleteInboundOrdersValidator,
+  updateInboundOrdersValidator
+} from '~/middlewares/inboundOrder.middlewares'
 import { wrapRequestHandler } from '~/utils/handlers'
 
 export const inboundOrderRouter = Router()
@@ -34,7 +39,12 @@ inboundOrderRouter.get('/', accessTokenValidator, wrapRequestHandler(getAllInbou
   }
 * */
 
-inboundOrderRouter.post('/', accessTokenValidator, wrapRequestHandler(addInboundOrdersController))
+inboundOrderRouter.post(
+  '/',
+  accessTokenValidator,
+  addInboundOrdersValidator,
+  wrapRequestHandler(addInboundOrdersController)
+)
 /**
  * path: api/inbound-order/:id
  * method: PUT
@@ -43,7 +53,12 @@ inboundOrderRouter.post('/', accessTokenValidator, wrapRequestHandler(addInbound
  * description: Update an inbound order
  * response: {message: string, result: InboundOrderType}
  * */
-inboundOrderRouter.put('/:id', accessTokenValidator, wrapRequestHandler(updateInboundOrdersController))
+inboundOrderRouter.put(
+  '/:id',
+  accessTokenValidator,
+  updateInboundOrdersValidator,
+  wrapRequestHandler(updateInboundOrdersController)
+)
 
 /**
  * path: api/inbound-order/
@@ -51,6 +66,11 @@ inboundOrderRouter.put('/:id', accessTokenValidator, wrapRequestHandler(updateIn
  * header: {Authorization: Bearer <access_token>}
  * body: {}
  * description: Delete an inbound order
- * response: {message: string, result: EmployeeType}
+ * response: {message: string, result: InboundOrderType}
  * */
-inboundOrderRouter.delete('/:id', accessTokenValidator, wrapRequestHandler(deleteInboundOrdersController))
+inboundOrderRouter.delete(
+  '/:id',
+  accessTokenValidator,
+  deleteInboundOrdersValidator,
+  wrapRequestHandler(deleteInboundOrdersController)
+)
