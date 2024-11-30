@@ -10,6 +10,31 @@ return await ordersServices.getOrders ({page})
     })
 }
 
+export const useAddOrderMutation = function () {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: ordersServices.addOrder,
+        onSuccess: function () {
+            queryClient.invalidateQueries({
+                queryKey: ["ORDERS"]
+            })
+        }
+    })
+}
+
+export const useUpdateOrderMutation = function () {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: ordersServices.updateOrder,
+        onSuccess: function () {
+            queryClient.invalidateQueries({
+                queryKey: ["ORDERS"]
+            })
+        }
+    })
+}
 
 export const useDeleteOrderMutation = function () {
     const queryClient = useQueryClient();
@@ -23,3 +48,4 @@ export const useDeleteOrderMutation = function () {
         }
     })
 } 
+

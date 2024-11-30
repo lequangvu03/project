@@ -9,6 +9,20 @@ export const useGetIngredientsQuery = function () {
     })
 }
 
+
+export const useAddIngredientQuery = function () {
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: ingredientsServices.addIngredient,
+        onSuccess: function () {
+            queryClient.invalidateQueries({
+                queryKey: ["INGREDIENTS"],
+            })
+        }
+    })
+}
+
 export const useUpdateIngredientMutation = function () {
     const queryClient = useQueryClient()
     return useMutation({
@@ -16,6 +30,19 @@ export const useUpdateIngredientMutation = function () {
         onSuccess: function () {
             queryClient.invalidateQueries({
                 queryKey: ["INGREDIENTS"],
+            })
+        }
+    })
+}
+
+export const useDeleteIngredientQuery = function () {
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: ingredientsServices.deleteIngredient,
+        onSuccess: function () {
+            queryClient.invalidateQueries({
+                queryKey: ["INGREDIENTS"]
             })
         }
     })
