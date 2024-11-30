@@ -59,6 +59,7 @@ export default class User {
     this.position = user.position
     this.salary = user.salary
     this.contact_info = user.contact_info
-    ;(this.age = user.age), (this.timing = user.timing)
+    this.age = user.age
+    this.timing = user.timing
   }
 }

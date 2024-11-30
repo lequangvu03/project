@@ -17,6 +17,8 @@ import { employeeRouter } from './routes/employee.routes'
 import { userRouter } from '~/routes/user.routes'
 import { dashboardRouter } from '~/routes/dashboard.routes'
 import { inboundOrderRouter } from './routes/inboundOrder.routes'
+import { paymenntRouter } from '~/routes/payment.routes'
+
 databaseService.connect().then(() => {
   databaseService.indexUsers()
   databaseService.indexRefreshTokens()
@@ -38,7 +40,9 @@ app.use('/api/notification', notificationRouter)
 app.use('/api/employee', employeeRouter)
 app.use('/api/profile', userRouter)
 app.use('/api/dashboard', dashboardRouter)
-app.use('/api/inbound-order', inboundOrderRouter)
+app.use('/api/inboundOrder', inboundOrderRouter)
+app.use('/api/payment', paymenntRouter)
+
 app.use(defaultErrorHandler)
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)

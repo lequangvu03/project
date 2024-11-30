@@ -1,4 +1,5 @@
 import { ObjectId } from 'mongodb'
+import { OrderStatus, PaymentStatus } from '~/constants/enums'
 
 interface OrderItemType {
   item_id: ObjectId
@@ -10,8 +11,8 @@ interface OrderType {
   table_number: number
   order_items: OrderItemType[]
   total_price: number
-  payment_status: number
-  order_status: number
+  payment_status: PaymentStatus
+  order_status: OrderStatus
   created_at?: number
   updated_at?: number
 }
@@ -22,8 +23,8 @@ export default class Order {
   order_time: number
   total_price: number
   order_items: OrderItemType[]
-  payment_status: number
-  order_status: number
+  payment_status: PaymentStatus
+  order_status: OrderStatus
   created_at: number
   updated_at: number
 
