@@ -51,6 +51,7 @@ export enum NotificationType {
   EmployeeAssigned,
   EmployeeRemoved
 }
+
 export enum NotificationStatus {
   Unread,
   Read
@@ -72,4 +73,12 @@ export enum TagType {
   Nomarl,
   Special,
   New
+}
+export enum PositionEmployeeType {
+  Waiter, // Nhân viên phục vụ
+  Cashier, // Nhân viên thu ngân
+  Chef, // Nhân viên bếp
+  Cleaner, // Nhân viên dọn dẹp
+  Manager, // Quản lý
+  Security // Nhân viên bảo vệ
 }

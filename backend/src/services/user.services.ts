@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb'
-import { TableStatus } from '~/constants/enums'
+import { TableStatus, UserVerifyStatus } from '~/constants/enums'
 import User from '~/models/schemas/user.schema'
 import databaseService from '~/services/database.services'
 import cloudinary from '~/utils/cloudinary'
@@ -17,6 +17,11 @@ class UserService {
   async getProfileById(id: string) {
     const user = await databaseService.users.findOne({ _id: new ObjectId(id) })
     return user
+  }
+  async addProfile({ name, email, password, role }: { name: string; email: string; password: string; role: number }) {
+    const user = new User({ name, email, password, role, verify: UserVerifyStatus.Verified })
+    const result = await databaseService.users.insertOne(user)
+    return result
   }
   async updateProfile(id: ObjectId, data: User) {
     if (data.avatar_url !== '') {

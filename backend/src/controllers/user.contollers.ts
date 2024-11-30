@@ -7,6 +7,11 @@ export const getAllProfileController = async (req: Request, res: Response, error
   const result = await userService.getAllProfile()
   return res.status(200).json({ message: USER_MESSAGES.GET_ALL_Profile_SUCCESS, result })
 }
+export const addUserController = async (req: Request, res: Response, error: NextFunction) => {
+  const { name, email, password, role } = req.body
+  const result = await userService.addProfile({ name, email, password, role })
+  return res.status(201).json({ message: USER_MESSAGES.ADD_NEW_USER_SUCCESS, result })
+}
 export const getMeProfileController = async (req: Request, res: Response, error: NextFunction) => {
   const result = req.user
   return res.status(200).json({ message: USER_MESSAGES.GET_ALL_Profile_SUCCESS, result })
@@ -28,7 +33,7 @@ export const updateProfileMeController = async (req: Request, res: Response, err
   }
   const user = req.user
   if (!user?._id) {
-    return res.status(400).json({ message: USER_MESSAGES.INVALID_USER_ID });
+    return res.status(400).json({ message: USER_MESSAGES.INVALID_USER_ID })
   }
   const result = await userService.updateProfile(user._id, req.body)
   return res.status(200).json({ message: USER_MESSAGES.UPDATE_PROFILE_SUCCESS, result })

@@ -19,9 +19,6 @@ export const addEmployeeValidator = validate(
       position: {
         notEmpty: {
           errorMessage: EMPLOYEE_MESSAGE.CONTACT_INFO_IS_REQUIRED
-        },
-        isString: {
-          errorMessage: EMPLOYEE_MESSAGE.POSITION_MUST_BE_A_STRING
         }
       },
       salary: {
@@ -67,31 +64,26 @@ export const updateEmployeeValidator = validate(
         },
         isString: {
           errorMessage: EMPLOYEE_MESSAGE.EMPLOYEE_NAME_MUST_BE_A_STRING
-        }
+        },
+        optional: true
       },
       position: {
         notEmpty: {
           errorMessage: EMPLOYEE_MESSAGE.POSITION_IS_REQUIRED
         },
-        isString: {
-          errorMessage: EMPLOYEE_MESSAGE.POSITION_MUST_BE_A_STRING
-        }
+        optional: true
       },
       salary: {
-        notEmpty: {
-          errorMessage: EMPLOYEE_MESSAGE.SALARY_IS_REQUIRED
-        },
         isNumeric: {
           errorMessage: EMPLOYEE_MESSAGE.SALARY_MUST_BE_NUMBER
-        }
+        },
+        optional: true
       },
       contact_info: {
-        notEmpty: {
-          errorMessage: EMPLOYEE_MESSAGE.CONTACT_INFO_IS_REQUIRED
-        },
         isString: {
           errorMessage: EMPLOYEE_MESSAGE.CONTACT_INFO_MUST_BE_STRING
-        }
+        },
+        optional: true
       }
     },
     ['body', 'params']
