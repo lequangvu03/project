@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import { ObjectId } from 'mongodb'
-import { BOOKING_MESSAGE, INBOUND_ORDER_MESSAGE } from '~/constants/messages'
+import { INBOUND_ORDER_MESSAGE } from '~/constants/messages'
 import inboundOrderService from '~/services/inboundOrder.services'
 import { constructInboundOrdersArray } from '~/utils/helper'
 // Phiếu nhập
@@ -21,7 +21,7 @@ export const addInboundOrdersController = async (req: Request, res: Response, er
 }
 export const updateInboundOrdersController = async (req: Request, res: Response, error: NextFunction) => {
   const { inbound_order_items, total_price } = req.body
-  const id = new ObjectId(req.params.id)
+  const id = req.params.id.toString()
   // xử lý mảng inbound order
   const inbound_order_items_array = constructInboundOrdersArray(inbound_order_items)
   // update inbound order theo id
@@ -32,5 +32,7 @@ export const updateInboundOrdersController = async (req: Request, res: Response,
   return res.status(200).json({ message: INBOUND_ORDER_MESSAGE.UPDATE_INBOUND_ORDER_SUCCESS, result })
 }
 export const deleteInboundOrdersController = async (req: Request, res: Response, error: NextFunction) => {
-  return res.status(200).json({ message: BOOKING_MESSAGE.DELETE_BOOKING_SUCCESS })
+  const id = req.params.id.toString()
+  const result = await inboundOrderService.deleteInboundOrders(id)
+  return res.status(200).json({ message: INBOUND_ORDER_MESSAGE.DELETE_INBOUND_ORDER_SUCCESS, result })
 }

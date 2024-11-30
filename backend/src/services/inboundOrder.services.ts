@@ -20,7 +20,7 @@ class InboundOrderService {
     return inboundOrders
   }
 
-  async updateInboundOrders(id: ObjectId, data: InboundOrder) {
+  async updateInboundOrders(id: string, data: InboundOrder) {
     // 1. ghi nhập thông tin nhập kho (khi tạo 1 inventory mới)
     console.log(data)
     const updatedInboundOrder = await databaseService.inboundOrders.updateOne(
@@ -36,7 +36,7 @@ class InboundOrderService {
     )
     return updatedInboundOrder
   }
-  async deleteeInboundOrders(id: string) {
+  async deleteInboundOrders(id: string) {
     const inboundOrders = await databaseService.inboundOrders.deleteOne({ _id: new ObjectId(id) })
     return inboundOrders
   }

@@ -211,10 +211,16 @@ export const INBOUND_ORDER_MESSAGE = {
   GET_ALL_INBOUND_ITEMS_SUCCESS: 'Get all inbound orders success',
   ADD_INBOUND_ORDERS_SUCCESS: 'Created new inbound order success',
   UPDATE_INBOUND_ORDER_SUCCESS: 'Update Inbound order success',
-  QUANTITY_MUST_BE_A_NUMBER: 'Quantity must be a number',
-  QUANTITY_IS_REQUIRED: 'Quantity must be required',
-  QUANTITY_IS_GREATER_THAN_ZERO: 'Quantity must be >= 0',
+  DELETE_INBOUND_ORDER_SUCCESS: 'Delete inbound order success',
+  TOTAL_PRICE_MUST_BE_A_NUMBER: 'Total price must be a number',
+  TOTAL_PRICE_IS_REQUIRED: 'Total price must be required',
+  TOTAL_PRICE_IS_GREATER_THAN_ZERO: 'Total price must be >= 0',
   INBOUND_ORDERS_MUST_BE_AN_ARRAY: 'Inbound items must be an array',
   INBOUND_ORDERS_IS_REQUIRED: 'Inbound items must be required',
-  INBOUND_ORDERS_NOT_FOUND: 'Inbound items not found'
+  INBOUND_ORDERS_NOT_FOUND: 'Inbound order not found',
+  QUANTITY_IS_REQUIRED_IN_INBOUND_ORDER: 'Quantity is required in InboundOrder Item Type',
+  QUANTITY_MUST_BE_GREATER_THAN_ZERO: 'Quantity must be greater than 0',
+  QUANTITY_MUST_BE_A_NUMBER: 'Quantity must be a number',
+  ITEM_ID_IS_REQUIRED: 'Item_id is required in InboundOrder Item Type',
+  ITEM_ID_IS_OBJECT_ID: 'Item_id is Object ID type'
 }
