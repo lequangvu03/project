@@ -2,6 +2,7 @@ import { checkSchema } from 'express-validator'
 import { ObjectId } from 'mongodb'
 import { INVENTORY_MESSAGE, TABLE_MESSAGES } from '~/constants/messages'
 import databaseService from '~/services/database.services'
+import ingredientsService from '~/services/ingredient.services'
 import { validate } from '~/utils/validation'
 
 export const addIngredientValidator = validate(
@@ -16,8 +17,8 @@ export const addIngredientValidator = validate(
         },
         custom: {
           options: async (value) => {
-            const table = await databaseService.ingredients.findOne({ name: value })
-            if (table) {
+            const ingredient = await databaseService.ingredients.findOne({ name: value })
+            if (ingredient) {
               throw new Error(INVENTORY_MESSAGE.INVENTORY_ITEM_IS_EXIST)
             }
           }
@@ -54,9 +55,9 @@ export const updateIngredientValidator = validate(
           errorMessage: INVENTORY_MESSAGE.INVENTORY_NAME_MUST_BE_STRING
         },
         custom: {
-          options: async (value) => {
-            const table = await databaseService.ingredients.findOne({ name: value })
-            if (table) {
+          options: async (value, { req }) => {
+            const isExsitIngredient = await ingredientsService.checkIngredientNameExist(value, req?.params?.id ?? '')
+            if (isExsitIngredient) {
               throw new Error(INVENTORY_MESSAGE.INVENTORY_ITEM_IS_EXIST)
             }
           }

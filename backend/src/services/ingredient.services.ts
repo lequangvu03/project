@@ -24,15 +24,25 @@ class IngredientsService {
     )
     return newingredient
   }
-
+  async checkIngredientNameExist(name: string, id?: string) {
+    if (id) {
+      const ingredient = await databaseService.ingredients.findOne({ _id: new ObjectId(id) })
+      if (ingredient?.name == name) {
+        return false
+      }
+    }
+    const ingredient = await databaseService.ingredients.findOne({ name: name })
+    return ingredient
+  }
   async updateIngredient(id: string, data: ingredients) {
-    const updatedingredient = await databaseService.ingredients.updateOne(
+    const updatedingredient = await databaseService.ingredients.findOneAndUpdate(
       { _id: new ObjectId(id) },
       {
         $set: {
           ...data
         }
-      }
+      },
+      { returnDocument: 'after' }
     )
     return updatedingredient
   }
