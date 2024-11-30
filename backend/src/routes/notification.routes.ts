@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import {
   getAllNotificationController,
+  updateAllStatusReadNotificationController,
   updateStatusReadNotificationController
 } from '~/controllers/notification.controllers'
 import { accessTokenValidator } from '~/middlewares/auth.middlewares'
@@ -19,3 +20,4 @@ export const notificationRouter = Router()
 notificationRouter.get('/', accessTokenValidator, wrapRequestHandler(getAllNotificationController))
 
 notificationRouter.put('/read/:id', accessTokenValidator, wrapRequestHandler(updateStatusReadNotificationController))
+notificationRouter.put('/read/all', accessTokenValidator, wrapRequestHandler(updateAllStatusReadNotificationController))
