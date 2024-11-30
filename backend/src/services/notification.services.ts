@@ -3,11 +3,15 @@ import { notificationRoleType, NotificationStatus } from '~/constants/enums'
 import databaseService from '~/services/database.services'
 
 class NotificationService {
-  async getNotifications({ limit, page }: { limit?: number; page?: number }) {
+  async getNotifications({ limit, page, status }: { limit?: number; page?: number; status?: number }) {
     limit = limit && Number.isInteger(limit) ? limit : 10 // Mặc định là 10
     page = page && Number.isInteger(page) && page > 0 ? page : 1 // Mặc định là 1
+    const filter: Record<string, any> = {}
+    if (status === 0 || status === 1) {
+      filter.status = status
+    }
     const notifications = await databaseService.notifications
-      .find()
+      .find(filter)
       .skip(limit * (page - 1))
       .limit(limit)
       .toArray()
