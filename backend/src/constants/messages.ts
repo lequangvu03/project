@@ -209,6 +209,13 @@ export const EMPLOYEE_MESSAGE = {
   EMPPLOYEE_ID_IS_REQUIRED: 'please enter employee id'
 }
 export const INBOUND_ORDER_MESSAGE = {
-  GET_ALL_INBOUND_ITEMS_SUCCESS: 'get all inbound orders success',
-  ADD_INBOUND_ITEM_SUCCESS: 'created new inbound order success'
+  GET_ALL_INBOUND_ITEMS_SUCCESS: 'Get all inbound orders success',
+  ADD_INBOUND_ORDERS_SUCCESS: 'Created new inbound order success',
+  UPDATE_INBOUND_ORDER_SUCCESS: 'Update Inbound order success',
+  QUANTITY_MUST_BE_A_NUMBER: 'Quantity must be a number',
+  QUANTITY_IS_REQUIRED: 'Quantity must be required',
+  QUANTITY_IS_GREATER_THAN_ZERO: 'Quantity must be >= 0',
+  INBOUND_ORDERS_MUST_BE_AN_ARRAY: 'Inbound items must be an array',
+  INBOUND_ORDERS_IS_REQUIRED: 'Inbound items must be required',
+  INBOUND_ORDERS_NOT_FOUND: 'Inbound items not found'
 }

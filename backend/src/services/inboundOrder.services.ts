@@ -12,6 +12,7 @@ class InboundOrderService {
   async addInboundOrders(data: InboundOrder) {
     // 1. ghi nhập thông tin nhập kho (khi tạo 1 inventory mới)
     console.log(data)
+
     const inboundOrders = await databaseService.inboundOrders.insertOne({
       _id: new ObjectId(),
       ...data
@@ -19,7 +20,22 @@ class InboundOrderService {
     return inboundOrders
   }
 
-  async updateInboundOrders() {}
+  async updateInboundOrders(id: ObjectId, data: InboundOrder) {
+    // 1. ghi nhập thông tin nhập kho (khi tạo 1 inventory mới)
+    console.log(data)
+    const updatedInboundOrder = await databaseService.inboundOrders.updateOne(
+      {
+        _id: new ObjectId(id)
+      },
+      {
+        $set: {
+          inbound_order_items: data.inbound_order_items,
+          total_price: data.total_price
+        }
+      }
+    )
+    return updatedInboundOrder
+  }
   async deleteeInboundOrders(id: string) {
     const inboundOrders = await databaseService.inboundOrders.deleteOne({ _id: new ObjectId(id) })
     return inboundOrders
