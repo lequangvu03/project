@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb'
-import InventoryLog from '~/models/schemas/inventoryLogs.schema'
+import InventoryLog from '~/models/schemas/inboundOrder.schema'
 import databaseService from '~/services/database.services'
 
 class InventoryLogService {

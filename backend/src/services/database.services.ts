@@ -6,7 +6,7 @@ import Category from '~/models/schemas/categorys.schema'
 import Employee from '~/models/schemas/employees.schema'
 import ingredients from '~/models/schemas/ingredients.schema'
 import ingredient from '~/models/schemas/ingredients.schema'
-import InventoryLog from '~/models/schemas/inventoryLogs.schema'
+import InventoryLog from '~/models/schemas/inboundOrder.schema'
 import MenuItem from '~/models/schemas/menuItems.schema'
 import Notification from '~/models/schemas/notifications.schema'
 import Order from '~/models/schemas/orders.schema'
@@ -14,6 +14,7 @@ import Otp from '~/models/schemas/otps.chema'
 import RefreshToken from '~/models/schemas/refreshtoken.schema'
 import Table from '~/models/schemas/tables.schema'
 import User from '~/models/schemas/user.schema'
+import InboundOrder from '~/models/schemas/inboundOrder.schema'
 
 const uri = `mongodb+srv://${envConfig.dbUsername}:${envConfig.dbPassword}@cluster-project1.7ubyq.mongodb.net/`
 
@@ -84,8 +85,8 @@ class DatabaseService {
   get ingredients(): Collection<ingredients> {
     return this.db.collection('ingredients')
   }
-  get inventoryLogs(): Collection<InventoryLog> {
-    return this.db.collection('inventory_logs')
+  get inboundOrders(): Collection<InboundOrder> {
+    return this.db.collection('inbound_orders')
   }
   get employees(): Collection<Employee> {
     return this.db.collection('employees')

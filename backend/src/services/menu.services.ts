@@ -232,6 +232,10 @@ class MenuService {
     }
     await databaseService.menuItems.updateOne({ _id: new ObjectId(menuItemId) }, { $set: updateData })
   }
+  async updateAllMenuItem(data: any) {
+    await databaseService.menuItems.updateMany({}, { $set: { ...data } })
+    return { message: 'Items updated successfully' }
+  }
 
   async deleteMenuItems(Ids: string) {
     // Chuyển đổi tất cả các ID từ chuỗi sang ObjectId

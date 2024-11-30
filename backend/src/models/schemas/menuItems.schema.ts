@@ -14,6 +14,7 @@ interface MenuItemType {
     ingredient_id: ObjectId
     quantity_required: number
   }>
+  quantity_sold: number
   status: menuItemStatus
   created_at?: number
   updated_at?: number
@@ -32,6 +33,7 @@ export default class MenuItem {
     ingredient_id: ObjectId
     quantity_required: number
   }>
+  quantity_sold: number
   status: menuItemStatus
   created_at?: number
   updated_at?: number
@@ -48,6 +50,7 @@ export default class MenuItem {
     this.image = menuItem.image || ''
     this.ingredients = menuItem.ingredients || []
     this.status = menuItem.status
+    this.quantity_sold = menuItem.quantity_sold || 0
     this.created_at = menuItem.created_at || date
     this.updated_at = menuItem.updated_at || date
   }
