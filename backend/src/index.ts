@@ -16,6 +16,7 @@ import { notificationRouter } from '~/routes/notification.routes'
 import { employeeRouter } from './routes/employee.routes'
 import { userRouter } from '~/routes/user.routes'
 import { dashboardRouter } from '~/routes/dashboard.routes'
+import { paymenntRouter } from '~/routes/payment.routes'
 databaseService.connect().then(() => {
   databaseService.indexUsers()
   databaseService.indexRefreshTokens()
@@ -36,7 +37,8 @@ app.use('/api/ingredient', ingredientRouter)
 app.use('/api/notification', notificationRouter)
 app.use('/api/employee', employeeRouter)
 app.use('/api/profile', userRouter)
-app.use('/api/dashboard',dashboardRouter)
+app.use('/api/dashboard', dashboardRouter)
+app.use('/api/payment', paymenntRouter)
 
 app.use(defaultErrorHandler)
 app.listen(port, () => {

@@ -58,7 +58,7 @@ export const USER_MESSAGES = {
   INVALID_USER_ID: 'Invalid user id',
   PERMISSIONS_MUST_BE_AN_ARRAY: 'Permissions must be an array',
   DELETE_PROFILE_SUCCESS: 'Delete profile success',
-  UPDATE_PROFILE_SUCCESS: 'Update profile success',
+  UPDATE_PROFILE_SUCCESS: 'Update profile success'
 } as const
 export const TABLE_MESSAGES = {
   TABLE_NUMBER_MUST_BE_NUMBER: 'Table number must be number',
@@ -146,7 +146,8 @@ export const ORDER_MESSAGE = {
   ORDER_STATUS_IS_REQUIRED: 'Order status is required',
   PAYMENT_STATUS_MUST_BE_A_NUMBER: 'Payment status must be a number',
   ORDER_STATUS_MUST_BE_A_NUMBER: 'Order status must be a number',
-  ORDER_IS_NOT_FOUND: 'Order is not found'
+  ORDER_IS_NOT_FOUND: 'Order is not found',
+  PAYMENT_SUCCESS: 'Payment success'
 }
 export const BOOKING_MESSAGE = {
   GET_ALL_BOOKING_SUCCESS: 'Get all bookings success',
@@ -188,7 +189,7 @@ export const INVENTORY_MESSAGE = {
   STATUS_MUST_BE_REQUIRED: 'status is required',
   PERISHABLE_MUST_BE_0_OR_1: 'perishable  must be 0 or 1',
   INVENTORY_ITEM_IS_NOT_FOUND: 'inventory item is not found, try other id',
-  INVENTORY_ITEM_IS_EXIST: 'inventory item is exist, try other name',
+  INVENTORY_ITEM_IS_EXIST: 'inventory item is exist, try other name'
 }
 
 export const EMPLOYEE_MESSAGE = {
