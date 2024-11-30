@@ -11,6 +11,7 @@ import {
   deleteEmployeeValidator,
   updateEmployeeValidator
 } from '~/middlewares/employee.middlewares'
+import { updateProfileValidator } from '~/middlewares/user.middlewares'
 import { wrapRequestHandler } from '~/utils/handlers'
 
 export const employeeRouter = Router()
@@ -27,25 +28,13 @@ employeeRouter.get('/', accessTokenValidator, wrapRequestHandler(getAllEmployees
 
 /**
  * path: api/employee/
- * method: POST
- * header: {Authorization: Bearer <access_token>}
- * body: {name: string, contact_info: string, position: string, salary: number}
- * description: Add a new employee
- * response: {message: string, result: EmployeeType}
- * */
-
-// TODO: addBookingValidator
-employeeRouter.post('/', accessTokenValidator, addEmployeeValidator, wrapRequestHandler(addEmployeeController))
-
-/**
- * path: api/employee/
  * method: PUT
  * header: {Authorization: Bearer <access_token>}
  * body: {name: string, contact_info: string, position: string, salary: number}
  * description: Update a employee
  * response: {message: string, result: EmployeeType}
  * */
-employeeRouter.put('/:id', accessTokenValidator, updateEmployeeValidator, wrapRequestHandler(updateEmployeeController))
+employeeRouter.put('/:id', accessTokenValidator, updateProfileValidator, wrapRequestHandler(updateEmployeeController))
 
 /**
  * path: api/employee/

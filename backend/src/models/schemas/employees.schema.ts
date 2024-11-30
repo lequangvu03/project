@@ -1,9 +1,10 @@
 import { ObjectId } from 'mongodb'
+import { PositionEmployeeType } from '~/constants/enums'
 
 interface EmployeeType {
   _id?: ObjectId
   name: string
-  position: string
+  position: PositionEmployeeType
   salary: number
   contact_info: string
 }
@@ -11,7 +12,7 @@ interface EmployeeType {
 export default class Employee {
   _id?: ObjectId
   name: string
-  position: string
+  position: PositionEmployeeType
   salary: number
   contact_info: string
 

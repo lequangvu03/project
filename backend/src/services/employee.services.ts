@@ -1,35 +1,59 @@
 import { ObjectId } from 'mongodb'
+import { RoleType } from '~/constants/enums'
 import databaseService from '~/services/database.services'
 
 class EmployeeService {
-  async getAllEmployees() {
-    const employees = await databaseService.employees.find().toArray()
-    const total = await databaseService.employees.countDocuments()
+  async getAllEmployees({
+    limit,
+    page,
+    sortBy,
+    sortOrder,
+    name
+  }: {
+    limit: number
+    page: number
+    sortBy?: string
+    sortOrder?: string
+    name?: string
+  }) {
+    const matchFilter: any = {
+      role: RoleType.Employee
+    }
+    limit = limit && Number.isInteger(limit) ? limit : 10 // Mặc định là 10
+    page = page && Number.isInteger(page) && page > 0 ? page : 1 // Mặc định là 1
+    const sortQuery: { [key: string]: 1 | -1 } = {
+      [sortBy || 'created_at']: sortOrder === 'ascend' ? 1 : -1
+    }
+    if (name) {
+      matchFilter.name = { $regex: new RegExp(name, 'i') }
+    }
+    const employees = await databaseService.users
+      .find(matchFilter)
+      .sort(sortQuery)
+      .skip(limit * (page - 1)) // Sử dụng giá trị đã kiểm tra
+      .limit(limit) // Sử dụng giá trị đã kiểm tra
+      .toArray()
+    const total = await databaseService.users.countDocuments(matchFilter)
     return { employees, total }
   }
 
-  async addEmployee(nameInput: string, contactInfo: string, positionInput: string, salaryInput: number) {
+  async addEmployee(data: any) {
     const newEmployee = await databaseService.employees.insertOne({
       _id: new ObjectId(),
-      name: nameInput,
-      contact_info: contactInfo,
-      position: positionInput,
-      salary: salaryInput
+      ...data
     })
 
     return newEmployee
   }
-  async updateEmployee(id: string, nameInput: string, contactInfo: string, positionInput: string, salaryInput: number) {
-    const updatedEmployee = await databaseService.employees.updateOne(
+  async updateEmployee(id: string, data: any) {
+    const updatedEmployee = await databaseService.users.findOneAndUpdate(
       { _id: new ObjectId(id) },
       {
         $set: {
-          name: nameInput,
-          contact_info: contactInfo,
-          position: positionInput,
-          salary: salaryInput
+          ...data
         }
-      }
+      },
+      { returnDocument: 'after' }
     )
     return updatedEmployee
   }

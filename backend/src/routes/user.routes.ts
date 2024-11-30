@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import {
+  addUserController,
   deleteProfileController,
   getAllProfileController,
   getMeProfileController,
@@ -9,7 +10,7 @@ import {
 } from '~/controllers/user.contollers'
 import { accessTokenValidator, isAdmin } from '~/middlewares/auth.middlewares'
 import { handleRequest } from '~/middlewares/menu.middlewares'
-import { getProfileByIdValidator, updateProfileValidator } from '~/middlewares/user.middlewares'
+import { addProfileValidator, getProfileByIdValidator, updateProfileValidator } from '~/middlewares/user.middlewares'
 import { wrapRequestHandler } from '~/utils/handlers'
 
 export const userRouter = Router()
@@ -22,6 +23,8 @@ export const userRouter = Router()
  * response: {message: string, result: {profiles: profileType[], total: number}}
  */
 userRouter.get('/', accessTokenValidator, wrapRequestHandler(getAllProfileController))
+
+userRouter.post('/', accessTokenValidator, addProfileValidator, wrapRequestHandler(addUserController))
 /**
  * path: api/profile/me
  * method: GET
@@ -30,6 +33,7 @@ userRouter.get('/', accessTokenValidator, wrapRequestHandler(getAllProfileContro
  * response: {message: string, result: {profiles: profileType[], total: number}}
  */
 userRouter.get('/me', accessTokenValidator, wrapRequestHandler(getMeProfileController))
+
 userRouter.put(
   '/me',
   accessTokenValidator,
