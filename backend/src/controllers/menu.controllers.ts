@@ -10,6 +10,7 @@ export const getAllMenuController = async (req: Request, res: Response, next: Ne
     const sortBy = req.query.sortBy as string | undefined
     const sortOrder = req.query.sortOrder as 'asc' | 'desc' | undefined
     const name = req.query.name as string
+    const id = req.query.id as string
     const result = await menuService.getMenu({
       limit,
       page,
@@ -17,7 +18,8 @@ export const getAllMenuController = async (req: Request, res: Response, next: Ne
       sortOrder,
       categoryId: categoryId as string,
       tag: tag ? +tag : undefined,
-      name
+      name,
+      id
     })
 
     return res.status(200).json({ message: MENU_MESSAGES.GET_ALL_MENU_ITEM_SUCCESS, result })
