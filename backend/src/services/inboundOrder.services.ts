@@ -1,16 +1,17 @@
 import { ObjectId } from 'mongodb'
-import InventoryLog from '~/models/schemas/inboundOrder.schema'
+import InboundOrder from '~/models/schemas/inboundOrder.schema'
 import databaseService from '~/services/database.services'
 
 class InboundOrderService {
-  async getAllInventoryLogs() {
+  async getAllInboundOrders() {
     const inboundOrders = await databaseService.inboundOrders.find().toArray()
     const total = await databaseService.inboundOrders.countDocuments()
     return { inboundOrders, total }
   }
 
-  async addInboundOrders(data: InventoryLog) {
+  async addInboundOrders(data: InboundOrder) {
     // 1. ghi nhập thông tin nhập kho (khi tạo 1 inventory mới)
+    console.log(data)
     const inboundOrders = await databaseService.inboundOrders.insertOne({
       _id: new ObjectId(),
       ...data

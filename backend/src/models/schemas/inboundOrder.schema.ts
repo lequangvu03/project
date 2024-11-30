@@ -1,7 +1,7 @@
 import { ObjectId } from 'mongodb'
 import { ChangeType } from '~/constants/enums'
 
-interface InboundOrderItemType {
+export interface InboundOrderItemType {
   item_id: ObjectId
   quantity: number
 }

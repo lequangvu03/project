@@ -58,7 +58,7 @@ export const USER_MESSAGES = {
   INVALID_USER_ID: 'Invalid user id',
   PERMISSIONS_MUST_BE_AN_ARRAY: 'Permissions must be an array',
   DELETE_PROFILE_SUCCESS: 'Delete profile success',
-  UPDATE_PROFILE_SUCCESS: 'Update profile success',
+  UPDATE_PROFILE_SUCCESS: 'Update profile success'
 } as const
 export const TABLE_MESSAGES = {
   TABLE_NUMBER_MUST_BE_NUMBER: 'Table number must be number',
@@ -188,7 +188,7 @@ export const INVENTORY_MESSAGE = {
   STATUS_MUST_BE_REQUIRED: 'status is required',
   PERISHABLE_MUST_BE_0_OR_1: 'perishable  must be 0 or 1',
   INVENTORY_ITEM_IS_NOT_FOUND: 'inventory item is not found, try other id',
-  INVENTORY_ITEM_IS_EXIST: 'inventory item is exist, try other name',
+  INVENTORY_ITEM_IS_EXIST: 'inventory item is exist, try other name'
 }
 
 export const EMPLOYEE_MESSAGE = {
@@ -206,4 +206,8 @@ export const EMPLOYEE_MESSAGE = {
   CONTACT_INFO_IS_REQUIRED: 'contact info is required',
   CONTACT_INFO_MUST_BE_STRING: 'contact info must be a string',
   EMPPLOYEE_ID_IS_REQUIRED: 'please enter employee id'
+}
+export const INBOUND_ORDER_MESSAGE = {
+  GET_ALL_INBOUND_ITEMS_SUCCESS: 'get all inbound orders success',
+  ADD_INBOUND_ITEM_SUCCESS: 'created new inbound order success'
 }
