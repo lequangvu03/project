@@ -18,7 +18,7 @@ class UserService {
     const user = await databaseService.users.findOne({ _id: new ObjectId(id) })
     return user
   }
-  async updateProfile(id: string, data: User) {
+  async updateProfile(id: ObjectId, data: User) {
     if (data.avatar_url !== '') {
       const item = await databaseService.users.findOne({ _id: new ObjectId(id) })
       const avatarUrl = item?.avatar_url
@@ -32,7 +32,12 @@ class UserService {
     if (typeof data.permissions === 'string') {
       data.permissions = JSON.parse(data.permissions)
     }
-    await databaseService.users.updateOne({ _id: new ObjectId(id) }, { $set: data })
+    const profile = await databaseService.users.findOneAndUpdate(
+      { _id: id },
+      { $set: data },
+      { returnDocument: 'after' }
+    )
+    return profile
   }
   async deleteProfile(id: string) {
     const user = await databaseService.users.deleteOne({ _id: new ObjectId(id) })

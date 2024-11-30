@@ -4,7 +4,7 @@ export enum RoleType {
 }
 
 export enum TagType {
-  Nomarl,
+  Normal,
   Special,
   New
 }
@@ -13,4 +13,13 @@ export enum OrderStatus {
   Pending,
   Completed,
   Cancelled
+}
+
+export enum PermissionType {
+  Dashboard,
+  Reports,
+  Inventory,
+  Orders,
+  Customers,
+  Settings
 }

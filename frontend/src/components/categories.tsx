@@ -12,7 +12,6 @@ function Categories() {
     return categories?.reduce((total, category) => total + category.totalProducts, 0) || 0
   }, [categoriesData])
 
-  console.log({ categoriesData, categories })
   return (
     <div>
       <section className='flex flex-wrap gap-4'>

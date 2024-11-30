@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
+import { ObjectId } from 'mongodb'
 import { USER_MESSAGES } from '~/constants/messages'
 import mediaService from '~/services/media.services'
 import userService from '~/services/user.services'
@@ -18,7 +19,18 @@ export const updatedProfileController = async (req: Request, res: Response, erro
   if (Object.keys(req.files).length > 0) {
     req.body.avatar_url = await mediaService.uploadImage(req.files.image[0])
   }
-  const result = await userService.updateProfile(req.params.id, req.body)
+  const result = await userService.updateProfile(new ObjectId(req.params.id), req.body)
+  return res.status(200).json({ message: USER_MESSAGES.UPDATE_PROFILE_SUCCESS, result })
+}
+export const updateProfileMeController = async (req: Request, res: Response, error: NextFunction) => {
+  if (Object.keys(req.files).length > 0) {
+    req.body.avatar_url = await mediaService.uploadImage(req.files.image[0])
+  }
+  const user = req.user
+  if (!user?._id) {
+    return res.status(400).json({ message: USER_MESSAGES.INVALID_USER_ID });
+  }
+  const result = await userService.updateProfile(user._id, req.body)
   return res.status(200).json({ message: USER_MESSAGES.UPDATE_PROFILE_SUCCESS, result })
 }
 export const deleteProfileController = async (req: Request, res: Response, error: NextFunction) => {

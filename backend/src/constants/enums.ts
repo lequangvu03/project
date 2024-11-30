@@ -31,6 +31,15 @@ export enum PaymentStatus {
   Unpaid,
   Paid
 }
+export enum menuItemStatus {
+  Available,
+  Unavailable
+}
+export enum notificationRoleType {
+  All,
+  Admin,
+  Employee
+}
 export enum NotificationType {
   OrderCreated,
   OrderUpdated,
