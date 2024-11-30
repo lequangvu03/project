@@ -39,12 +39,7 @@ inboundOrderRouter.get('/', accessTokenValidator, wrapRequestHandler(getAllInbou
   }
 * */
 
-inboundOrderRouter.post(
-  '/',
-  accessTokenValidator,
-  addInboundOrdersValidator,
-  wrapRequestHandler(addInboundOrdersController)
-)
+inboundOrderRouter.post('/', accessTokenValidator, wrapRequestHandler(addInboundOrdersController))
 /**
  * path: api/inbound-order/:id
  * method: PUT
@@ -53,12 +48,7 @@ inboundOrderRouter.post(
  * description: Update an inbound order
  * response: {message: string, result: InboundOrderType}
  * */
-inboundOrderRouter.put(
-  '/:id',
-  accessTokenValidator,
-  updateInboundOrdersValidator,
-  wrapRequestHandler(updateInboundOrdersController)
-)
+inboundOrderRouter.put('/:id', accessTokenValidator, wrapRequestHandler(updateInboundOrdersController))
 
 /**
  * path: api/inbound-order/
