@@ -24,29 +24,50 @@ export function PaginationOrder({ page, setPage, totalPage }: Props) {
   }
 
   const renderPageLinks = () => {
-    const pages = []
-    for (let i = 1; i <= totalPage; i++) {
+    const pages: any = []
+
+    // Hiển thị logic rút gọn: 2 trang đầu, 2 trang cuối, và xung quanh trang hiện tại
+    const startPages = [1, 2]
+    const endPages = [totalPage - 1, totalPage]
+    const siblingPages = [page - 1, page, page + 1].filter((p) => p > 2 && p < totalPage - 1)
+
+    const uniquePages = Array.from(new Set([...startPages, ...siblingPages, ...endPages])).sort((a, b) => a - b)
+
+    uniquePages.forEach((currentPage, index) => {
+      const prevPage = uniquePages[index - 1]
+
+      // Chèn dấu ... giữa các cụm trang
+      if (prevPage && currentPage > prevPage + 1) {
+        pages.push(
+          <PaginationItem key={`ellipsis-${index}`}>
+            <PaginationEllipsis />
+          </PaginationItem>
+        )
+      }
+
       pages.push(
-        <PaginationItem key={i}>
+        <PaginationItem key={currentPage}>
           <PaginationLink
             href='#'
-            isActive={i === page}
+            isActive={currentPage === page}
             onClick={(e) => {
               e.preventDefault()
-              handlePageChange(i)
+              handlePageChange(currentPage)
             }}
           >
-            {i}
+            {currentPage}
           </PaginationLink>
         </PaginationItem>
       )
-    }
+    })
+
     return pages
   }
 
   return (
     <Pagination>
       <PaginationContent>
+        {/* Nút Previous */}
         <PaginationItem>
           <PaginationPrevious
             href='#'
@@ -57,8 +78,11 @@ export function PaginationOrder({ page, setPage, totalPage }: Props) {
             aria-disabled={page === 1}
           />
         </PaginationItem>
+
+        {/* Các nút số trang */}
         {renderPageLinks()}
-        {totalPage > 5 && <PaginationEllipsis />}
+
+        {/* Nút Next */}
         <PaginationItem>
           <PaginationNext
             href='#'

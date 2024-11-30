@@ -6,6 +6,11 @@ import {
   updateInboundOrdersController
 } from '~/controllers/inboundOrder.controllers'
 import { accessTokenValidator } from '~/middlewares/auth.middlewares'
+import {
+  addInboundOrdersValidator,
+  deleteInboundOrdersValidator,
+  updateInboundOrdersValidator
+} from '~/middlewares/inboundOrder.middlewares'
 import { wrapRequestHandler } from '~/utils/handlers'
 
 export const inboundOrderRouter = Router()
@@ -15,7 +20,7 @@ export const inboundOrderRouter = Router()
  * method: GET
  * header: {Authorization: Bearer <access_token>}
  * description: Get all inbound order
- * response: {message: string, result: {employees: InboundOrderType[], total: number}}
+ * response: {message: string, result: {inboundOrders: InboundOrderType[], total: number}}
  * */
 
 inboundOrderRouter.get('/', accessTokenValidator, wrapRequestHandler(getAllInboundOrderController))
@@ -24,27 +29,48 @@ inboundOrderRouter.get('/', accessTokenValidator, wrapRequestHandler(getAllInbou
  * path: api/inbound-order/
  * method: POST
  * header: {Authorization: Bearer <access_token>}
- * description: create an inbound order
- * response: {message: string, result: {inbound-order: InboundOrderType}}
- * */
+ * body: {total_price: number, inbound_order_items: InboundOrderItemType[]}
+ * description: Create an inbound order
+ * response: {message: string, result: InboundOrderType} 
+  example request: 
+  {
+    "total_price": 120000, 
+    "inbound_order_items": [{"quantity": 10, "item_id": "674a77d3b35b6c1cf234433d"}]
+  }
+* */
 
-inboundOrderRouter.post('/', accessTokenValidator, wrapRequestHandler(addInboundOrdersController))
+inboundOrderRouter.post(
+  '/',
+  accessTokenValidator,
+  addInboundOrdersValidator,
+  wrapRequestHandler(addInboundOrdersController)
+)
 /**
- * path: api/employee/
+ * path: api/inbound-order/:id
  * method: PUT
  * header: {Authorization: Bearer <access_token>}
- * body: {name: string, contact_info: string, position: string, salary: number}
- * description: Update a employee
- * response: {message: string, result: EmployeeType}
+ * body: {total_price: number, inbound_order_items: InboundOrderItemType[]}
+ * description: Update an inbound order
+ * response: {message: string, result: InboundOrderType}
  * */
-inboundOrderRouter.put('/:id', accessTokenValidator, wrapRequestHandler(updateInboundOrdersController))
+inboundOrderRouter.put(
+  '/:id',
+  accessTokenValidator,
+  updateInboundOrdersValidator,
+  wrapRequestHandler(updateInboundOrdersController)
+)
 
 /**
- * path: api/employee/
+ * path: api/inbound-order/
  * method: DELETE
  * header: {Authorization: Bearer <access_token>}
- * body: {table_number: number}
- * description: Delete a employee
- * response: {message: string, result: EmployeeType}
+ * body: {}
+ * description: Delete an inbound order
+ * response: {message: string, result: InboundOrderType}
  * */
-inboundOrderRouter.delete('/:id', accessTokenValidator, wrapRequestHandler(deleteInboundOrdersController))
+inboundOrderRouter.delete(
+  '/:id',
+  accessTokenValidator,
+  deleteInboundOrdersValidator,
+  wrapRequestHandler(deleteInboundOrdersController)
+)

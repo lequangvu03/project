@@ -9,3 +9,17 @@ return await ordersServices.getOrders ({page})
         }
     })
 }
+
+
+export const useDeleteOrderMutation = function () {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: ordersServices.deleteOrder,
+        onSuccess: function () {
+            queryClient.invalidateQueries({
+                queryKey: ["ORDERS"]
+            })
+        }
+    })
+} 
