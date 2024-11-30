@@ -17,6 +17,8 @@ import { Table, TableBody, TableCaption, TableCell, TableRow } from '~/component
 import SheetInventory from './sheet-inventory'
 import { Product } from '~/definitions/types'
 import { PaginationOrder } from '~/components/pagination-order'
+import { useDeleteProductMutation } from '~/hooks/data/products.data'
+import { toast } from 'sonner'
 
 type Props = {
   page: number
@@ -25,8 +27,14 @@ type Props = {
   setPage: React.Dispatch<React.SetStateAction<number>>
 }
 function ProductList({ products, page, setPage, totalPage }: Props) {
-  const handleDelete = (id: string) => {
-    console.log(`Delete product ${id}`)
+  const deleteProductMutation: any = useDeleteProductMutation()
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteProductMutation.mutateAsync(id)
+      toast.success('Delete menu item successfully')
+    } catch (error) {
+      console.log(error)
+    }
   }
   return (
     <Table className='overflow-hidden rounded-[10px] bg-[var(--secondary-color)] text-white'>
@@ -64,7 +72,7 @@ function ProductList({ products, page, setPage, totalPage }: Props) {
               <TableCell className='border-slate-400'>
                 <div className='flex flex-col p-4'>
                   <span>Category</span>
-                  <span>Chicken</span>
+                  <span>{product.category_name}</span>
                 </div>
               </TableCell>
               <TableCell>
@@ -92,7 +100,7 @@ function ProductList({ products, page, setPage, totalPage }: Props) {
                       </AlertDialogHeader>
                       <AlertDialogFooter>
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction onClick={() => handleDelete('id')}>Continue</AlertDialogAction>
+                        <AlertDialogAction onClick={() => handleDelete(product._id)}>Delete</AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>
                   </AlertDialog>

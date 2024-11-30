@@ -1,6 +1,12 @@
+import { NotificationType } from '~/definitions/types'
 import { Button } from './ui/button'
+import { formatDateTime } from '~/utils/format-datetime'
 
-export default function Notification() {
+type Props = {
+  notification: NotificationType
+}
+
+export default function Notification({ notification }: Props) {
   return (
     <div className='flex h-[90px] w-full items-center gap-4 border-[0.15px] border-b-gray-800 px-4 py-2'>
       <section className='flex h-[50px] w-[50px] items-center justify-center rounded-sm bg-[#EA7C69]'>
@@ -20,12 +26,10 @@ export default function Notification() {
       </section>
       <section className='flex flex-1 items-center justify-between'>
         <div className='flex flex-col'>
-          <h3 className='text-[16px] font-light text-gray-300'>Low Inventory Alert</h3>
-          <p className='text-[13px] font-light text-gray-300'>
-            This is to notify you that the following items are running low in stock:
-          </p>
+          <h3 className='text-[16px] font-light text-gray-300'>{notification.title}</h3>
+          <p className='text-[13px] font-light text-gray-300'>{notification.message}</p>
         </div>
-        <p className='text-[16px] font-light text-gray-300'>07/04/2024</p>
+        <p className='text-[16px] font-light text-gray-300'>{formatDateTime(notification.updated_at)}</p>
       </section>
       <Button className='flex items-center gap-4 border-[1px] border-solid border-[#EA7C69]'>
         <svg width='14' height='16' viewBox='0 0 14 16' fill='none' xmlns='http://www.w3.org/2000/svg'>
