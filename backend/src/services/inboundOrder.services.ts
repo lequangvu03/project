@@ -10,19 +10,16 @@ class InboundOrderService {
   }
 
   async addInboundOrders(data: InboundOrder) {
-    // 1. ghi nhập thông tin nhập kho (khi tạo 1 inventory mới)
-    console.log(data)
-
     const inboundOrders = await databaseService.inboundOrders.insertOne({
       _id: new ObjectId(),
-      ...data
+      ...data,
+      created_at: Date.now(),
+      updated_at: Date.now()
     })
     return inboundOrders
   }
 
   async updateInboundOrders(id: string, data: InboundOrder) {
-    // 1. ghi nhập thông tin nhập kho (khi tạo 1 inventory mới)
-    console.log(data)
     const updatedInboundOrder = await databaseService.inboundOrders.updateOne(
       {
         _id: new ObjectId(id)
@@ -30,7 +27,8 @@ class InboundOrderService {
       {
         $set: {
           inbound_order_items: data.inbound_order_items,
-          total_price: data.total_price
+          total_price: data.total_price,
+          updated_at: Date.now()
         }
       }
     )
