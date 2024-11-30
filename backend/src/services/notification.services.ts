@@ -25,6 +25,20 @@ class NotificationService {
     )
     return result
   }
+  async updateAllReadNotifications(ids: string[]) {
+    if (!Array.isArray(ids) || ids.length === 0) {
+      throw new Error('Invalid input: ids must be a non-empty array')
+    }
+
+    // Chuyển đổi các id từ string sang ObjectId để sử dụng trong MongoDB
+    const objectIds = ids.map((id) => new ObjectId(id))
+    const result = await databaseService.notifications.updateMany(
+      { _id: { $in: objectIds } }, // Lọc các thông báo theo danh sách _id
+      { $set: { status: 1 } } // Cập nhật trạng thái thành đã đọc
+    )
+
+    return result
+  }
 }
 const notificationService = new NotificationService()
 

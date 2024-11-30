@@ -12,3 +12,8 @@ export const updateStatusReadNotificationController = async (req: Request, res: 
   const result = await notificationService.updateReadNotifications(req.params.id.toString())
   return res.status(200).json({ message: 'get notification success', result })
 }
+export const updateAllStatusReadNotificationController = async (req: Request, res: Response, error: NextFunction) => {
+  const { ids } = req.body
+  const result = await notificationService.updateAllReadNotifications(ids)
+  return res.status(200).json({ message: 'get notification success', result })
+}
