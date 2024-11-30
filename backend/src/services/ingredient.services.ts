@@ -48,8 +48,7 @@ class IngredientsService {
   }
   async deleteIngredient(id: string) {
     const deletedingredient = await databaseService.ingredients.deleteOne({ _id: new ObjectId(id) })
-    const deletedInventoryLog = await databaseService.inventoryLogs.deleteOne({ item_id: new ObjectId(id) })
-    return { deletedingredient, deletedInventoryLog }
+    return deletedingredient
   }
 }
 const ingredientsService = new IngredientsService()

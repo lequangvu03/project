@@ -15,17 +15,7 @@ export const handleRequest = async (req: Request, res: Response, next: NextFunct
     const form = formidable({
       maxFiles: 1,
       keepExtensions: true,
-      maxFileSize: 3000 * 1024, // 300KB
-      filter: function ({ name, mimetype }) {
-        const validMimeTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/jfif']
-        const valid = name === 'image' && mimetype && validMimeTypes.includes(mimetype)
-
-        if (!valid) {
-          form.emit('error' as any, new Error('File type is not valid') as any)
-        }
-
-        return !!valid // Trả về boolean
-      }
+      maxFileSize: 3000 * 1024
     })
 
     const result = await new Promise<any>((resolve, reject) => {

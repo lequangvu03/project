@@ -4,6 +4,7 @@ import {
   deleteMenuItemController,
   getAllMenuController,
   getMenuByCategoryController,
+  updateAllMenuItemController,
   updateMenuItemController
 } from '~/controllers/menu.controllers'
 import { accessTokenValidator, isAdmin } from '~/middlewares/auth.middlewares'
@@ -93,7 +94,14 @@ menuRouter.put(
   updateMenuItemValidator,
   wrapRequestHandler(updateMenuItemController)
 )
-
+menuRouter.put(
+  '/',
+  accessTokenValidator,
+  isAdmin,
+  handleRequest,
+  updateMenuItemValidator,
+  wrapRequestHandler(updateAllMenuItemController)
+)
 /**
  * @route   DELETE api/menu/:id
  * @desc    Delete a menu item by its ID

@@ -1,5 +1,5 @@
 import Order from '~/models/schemas/orders.schema'
-import OrderItem from '~/models/schemas/orderItems.schema'
+
 import databaseService from './database.services'
 import { Filter, ObjectId } from 'mongodb'
 import { OrderStatus, PaymentStatus } from '~/constants/enums'
