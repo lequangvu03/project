@@ -11,8 +11,8 @@ interface MenuItemType {
   stock: number
   image?: string
   ingredients: Array<{
-    ingredient_id: ObjectId
-    quantity_required: number
+    _id: ObjectId
+    quantity: number
   }>
   quantity_sold: number
   status: menuItemStatus
@@ -30,8 +30,8 @@ export default class MenuItem {
   stock: number
   image?: string
   ingredients: Array<{
-    ingredient_id: ObjectId
-    quantity_required: number
+    _id: ObjectId
+    quantity: number
   }>
   quantity_sold: number
   status: menuItemStatus

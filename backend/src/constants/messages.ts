@@ -146,7 +146,8 @@ export const ORDER_MESSAGE = {
   ORDER_STATUS_IS_REQUIRED: 'Order status is required',
   PAYMENT_STATUS_MUST_BE_A_NUMBER: 'Payment status must be a number',
   ORDER_STATUS_MUST_BE_A_NUMBER: 'Order status must be a number',
-  ORDER_IS_NOT_FOUND: 'Order is not found'
+  ORDER_IS_NOT_FOUND: 'Order is not found',
+  PAYMENT_SUCCESS: 'Payment success'
 }
 export const BOOKING_MESSAGE = {
   GET_ALL_BOOKING_SUCCESS: 'Get all bookings success',
