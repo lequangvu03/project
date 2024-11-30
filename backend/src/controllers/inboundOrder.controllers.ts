@@ -4,6 +4,7 @@ import { BOOKING_MESSAGE, INBOUND_ORDER_MESSAGE } from '~/constants/messages'
 import { InboundOrderItemType } from '~/models/schemas/inboundOrder.schema'
 import bookingService from '~/services/booking.services'
 import inboundOrderService from '~/services/inboundOrder.services'
+import { constructInboundOrdersArray } from '~/utils/helper'
 // Phiếu nhập
 export const getAllInboundOrderController = async (req: Request, res: Response, error: NextFunction) => {
   const result = await inboundOrderService.getAllInboundOrders()
@@ -21,13 +22,7 @@ export const getAllInboundOrderController = async (req: Request, res: Response, 
 export const addInboundOrdersController = async (req: Request, res: Response, error: NextFunction) => {
   const { inbound_order_items, total_price } = req.body
   // xử lý mảng inbound order
-  const inbound_order_items_array = [] as InboundOrderItemType[]
-  inbound_order_items.forEach((item: InboundOrderItemType) => {
-    inbound_order_items_array.push({
-      item_id: new ObjectId(item.item_id),
-      quantity: item.quantity
-    } as InboundOrderItemType)
-  })
+  const inbound_order_items_array = constructInboundOrdersArray(inbound_order_items)
   console.log(inbound_order_items_array)
   // tạo inbound order mới
   const newInboundOrder = await inboundOrderService.addInboundOrders({
