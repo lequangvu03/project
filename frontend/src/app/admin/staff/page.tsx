@@ -1,3 +1,9 @@
 export default function Page() {
-  return <div></div>
+  return (
+    <div>
+      <header>
+        <h3>Staff (22)</h3>
+      </header>
+    </div>
+  )
 }
