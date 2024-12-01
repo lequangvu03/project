@@ -6,10 +6,10 @@ import Inventory from '~/components/inventory'
 import { Button } from '~/components/ui/button'
 import { Ingredient } from '~/definitions/types'
 import { useAddInboundOrderMutation } from '~/hooks/data/inbound-order.data'
-import { useGetIngredientsQuery } from '~/hooks/data/ingredients.data'
+import { useGetAllIngredientsQuery, useGetIngredientsQuery } from '~/hooks/data/ingredients.data'
 
 export default function Page() {
-  const { data: ingredients } = useGetIngredientsQuery()
+  const { data: ingredients } = useGetAllIngredientsQuery()
   const [orderItems, setOrderItems] = useState<
     Record<string, { ingredient: Ingredient; quantity: number; order: number }>
   >({})
@@ -94,7 +94,7 @@ export default function Page() {
         <div className='flex flex-[0.65] flex-col gap-8'>
           <div className='h-[1px] w-full bg-slate-600' />
           <div className='grid grid-cols-4 gap-8'>
-            {ingredients?.result?.ingredients?.map((ingredient: Ingredient, index: number) => (
+            {ingredients?.result?.map((ingredient: Ingredient, index: number) => (
               <Inventory
                 ingredient={ingredient}
                 key={index}

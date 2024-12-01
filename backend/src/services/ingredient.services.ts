@@ -5,7 +5,7 @@ import ingredients from '~/models/schemas/ingredients.schema'
 import { ChangeType } from '~/constants/enums'
 
 class IngredientsService {
-  async getAllIngredients({
+  async getIngredients({
     limit,
     page,
     sortBy,
@@ -37,6 +37,10 @@ class IngredientsService {
       .toArray()
     const total = await databaseService.ingredients.countDocuments(matchFilter)
     return { ingredients, total }
+  }
+  async getAllIngredients(){
+    const ingredients = await databaseService.ingredients.find().toArray()
+    return ingredients
   }
 
   async addIngredient(data: ingredients) {
