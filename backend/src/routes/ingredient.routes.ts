@@ -3,6 +3,7 @@ import {
   addIngredientController,
   deleteIngredientController,
   getAllIngredientsController,
+  getIngredientsController,
   updateIngredientController
 } from '~/controllers/ingredient.controllers'
 import { accessTokenValidator } from '~/middlewares/auth.middlewares'
@@ -24,8 +25,8 @@ export const ingredientRouter = Router()
  * response: {message: string, result: {bookings: ingredientType[], total: number}}
  * */
 
-ingredientRouter.get('/', accessTokenValidator, wrapRequestHandler(getAllIngredientsController))
-
+ingredientRouter.get('/', accessTokenValidator, wrapRequestHandler(getIngredientsController))
+ingredientRouter.get('/all', accessTokenValidator, wrapRequestHandler(getAllIngredientsController))
 /**
  * path: api/inventory_item/
  * method: POST

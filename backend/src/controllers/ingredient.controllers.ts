@@ -4,16 +4,19 @@ import bookingService from '~/services/booking.services'
 import ingredientsService from '~/services/ingredient.services'
 
 // get oke
-export const getAllIngredientsController = async (req: Request, res: Response, error: NextFunction) => {
+export const getIngredientsController = async (req: Request, res: Response, error: NextFunction) => {
   const limit = Number(req.query.limit)
   const page = Number(req.query.page)
   const sortBy = req.query.sortBy as string | undefined
   const sortOrder = req.query.sortOrder as 'asc' | 'desc' | undefined
   const id = req.query.id as string
-  const result = await ingredientsService.getAllIngredients({ limit, page, sortBy, sortOrder, id })
+  const result = await ingredientsService.getIngredients({ limit, page, sortBy, sortOrder, id })
   return res.status(200).json({ message: INVENTORY_MESSAGE.GET_ALL_INVENTORY_SUCCESS, result })
 }
-
+export const getAllIngredientsController = async (req: Request, res: Response, error: NextFunction) => {
+  const result = await ingredientsService.getAllIngredients()
+  return res.status(200).json({ message: INVENTORY_MESSAGE.GET_ALL_INVENTORY_SUCCESS, result })
+}
 // add oke
 export const addIngredientController = async (req: Request, res: Response, error: NextFunction) => {
   const result = await ingredientsService.addIngredient(req.body)
