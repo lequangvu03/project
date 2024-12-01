@@ -65,7 +65,7 @@ export default function InboundTable({ order }: Props) {
             return (
               <div key={index} className='flex items-center justify-between gap-4 text-[14px] font-light text-gray-200'>
                 <div>{orderItem.quantity}</div>
-                <div className='flex-1'>{orderItem.item_name}</div>
+                <div className='flex-1 ml-8'>{orderItem.item_name}</div>
                 <div>$ {orderItem.item_price}</div>
               </div>
             )

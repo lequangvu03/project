@@ -1,7 +1,7 @@
 import { sendDelete, sendGet, sendPatch, sendPost } from '~/api/request'
 
 const inboundOrderService = {
-  getInboundOrders: function ({ page = 1, limit = 9 }: { page: number; limit?: number }) {
+  getInboundOrders: function ({ page = 1, limit = 12 }: { page: number; limit?: number }) {
     return sendGet(`/inboundOrder?page=${page}&limit=${limit}&sortBy=created_at&sortOrder=asc`)
   },
 

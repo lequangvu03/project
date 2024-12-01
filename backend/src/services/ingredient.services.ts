@@ -5,13 +5,37 @@ import ingredients from '~/models/schemas/ingredients.schema'
 import { ChangeType } from '~/constants/enums'
 
 class IngredientsService {
-  async getAllIngredients(id?: string) {
-    if (id) {
-      const ingredient = await databaseService.ingredients.findOne({ _id: new ObjectId(id) })
-      return ingredient
+  async getAllIngredients({
+    limit,
+    page,
+    sortBy,
+    sortOrder,
+    id
+  }: {
+    limit: number
+    page: number
+    sortBy?: string
+    sortOrder?: string
+    id?: string
+  }) {
+    const matchFilter: any = {}
+    // Gán giá trị mặc định nếu `limit` hoặc `page` không được truyền
+    limit = limit && Number.isInteger(limit) ? limit : 10 // Mặc định là 10
+    page = page && Number.isInteger(page) && page > 0 ? page : 1 // Mặc định là 1
+
+    const sortQuery: { [key: string]: 1 | -1 } = {
+      [sortBy || 'created_at']: sortOrder === 'ascend' ? 1 : -1
     }
-    const ingredients = await databaseService.ingredients.find().toArray()
-    const total = await databaseService.ingredients.countDocuments()
+    if (id) {
+      matchFilter._id = new ObjectId(id)
+    }
+    const ingredients = await databaseService.ingredients
+      .find(matchFilter)
+      .sort(sortQuery)
+      .skip(limit * (page - 1)) // Sử dụng giá trị đã kiểm tra
+      .limit(limit) // Sử dụng giá trị đã kiểm tra
+      .toArray()
+    const total = await databaseService.ingredients.countDocuments(matchFilter)
     return { ingredients, total }
   }
 
