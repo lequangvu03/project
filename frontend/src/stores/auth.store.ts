@@ -6,7 +6,13 @@ type AuthState = {
   email: string
   avatar: string
   name: string
-  updateAuthStore: (data: { permissions?: PermissionType[]; role?: RoleType; email?: string; avatar?: string }) => void
+  updateAuthStore: (data: {
+    permissions?: PermissionType[]
+    role?: RoleType
+    email?: string
+    avatar?: string
+    name: string
+  }) => void
 }
 
 const useAuthStore = create<AuthState>((set) => ({
