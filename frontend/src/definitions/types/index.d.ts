@@ -1,35 +1,35 @@
 export interface OrderItem {
-  item_id: string;           
-  quantity: number;    
-  item_name: number;
-  item_price: number;    
+  item_id: string
+  quantity: number
+  item_name: number
+  item_price: number
 }
 export interface InboundOrderItem {
   _id: ObjectId
   quantity: number
-  item_name: number;
-  item_price: number;   
+  item_name: number
+  item_price: number
 }
-export type Ingredient =  {
-  _id: string;        
-  name: string;       
-  stock: number;      
-  unit: string;       
-  price: number;      
-  created_at: number; 
-  updated_at: number; 
+export type Ingredient = {
+  _id: string
+  name: string
+  stock: number
+  unit: string
+  price: number
+  created_at: number
+  updated_at: number
 }
 
 export interface Order {
-  _id: string;               
-  table_number: number;      
-  order_time: number;        
-  total_price: number;       
-  order_items: OrderItem[];  
-  payment_status: number;    
-  order_status: number;      
-  created_at: number;        
-  updated_at: number;        
+  _id: string
+  table_number: number
+  order_time: number
+  total_price: number
+  order_items: OrderItem[]
+  payment_status: number
+  order_status: number
+  created_at: number
+  updated_at: number
 }
 
 export interface InboundOrderType {
@@ -40,20 +40,19 @@ export interface InboundOrderType {
   updated_at?: number
 }
 export type Product = {
-  _id: string;
-  name: string;
-  description: string;
-  price: number;
-  tag: number[]; 
-  category_id: string;
-  stock: number;
-  image: string;
-  ingredients: string; 
-  created_at: number; 
-  updated_at: number; 
-  category_name: string;
-};
-
+  _id: string
+  name: string
+  description: string
+  price: number
+  tag: number[]
+  category_id: string
+  stock: number
+  image: string
+  ingredients: string
+  created_at: number
+  updated_at: number
+  category_name: string
+}
 
 export interface NotificationType {
   _id?: ObjectId
@@ -66,34 +65,53 @@ export interface NotificationType {
   updated_at?: number
 }
 
-
 export type TopSellingItem = {
-  name: string;
-  quantity_sold: number;
-  price: number;
-  image: string;
-};
+  name: string
+  quantity_sold: number
+  price: number
+  image: string
+}
 
 export type RecentOrder = {
-  order_id: string;
-  table_number: number;
-  order_status: number;
-  total_price: number;
-  created_at: number;
+  order_id: string
+  table_number: number
+  order_status: number
+  total_price: number
+  created_at: number
 }
 
 export type ChartData = {
-  month: string;
-  revenue: number;
-  profit: number;
-};
+  month: string
+  revenue: number
+  profit: number
+}
 
 export type BusinessData = {
-  daily_sales: number;
-  monthly_revenue: number;
-  table_occupancy: number;
-  monthly_profit: number;
-  top_selling_items: TopSellingItem[];
-  recent_orders: RecentOrder[];
-  chart_data: ChartData[];
-};
+  daily_sales: number
+  monthly_revenue: number
+  table_occupancy: number
+  monthly_profit: number
+  top_selling_items: TopSellingItem[]
+  recent_orders: RecentOrder[]
+  chart_data: ChartData[]
+}
+
+export interface User {
+  _id: string
+  email: string
+  name: string
+  password: string
+  created_at: number
+  updated_at: number
+  email_verify_token: string
+  forgot_password_token: string
+  verify: number
+  role: number
+  avatar_url: string
+  permissions: number[]
+  position: string | null
+  salary: number | null
+  contact_info: string | null
+  age: number | null
+  timing: string | null
+}
