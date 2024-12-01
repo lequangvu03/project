@@ -4,7 +4,12 @@ export interface OrderItem {
   item_name: number;
   item_price: number;    
 }
-
+export interface InboundOrderItem {
+  _id: ObjectId
+  quantity: number
+  item_name: number;
+  item_price: number;   
+}
 export type Ingredient =  {
   _id: string;        
   name: string;       
@@ -27,6 +32,13 @@ export interface Order {
   updated_at: number;        
 }
 
+export interface InboundOrderType {
+  _id?: ObjectId
+  inbound_order_items: InboundOrderItem[]
+  total_price: number
+  created_at?: number
+  updated_at?: number
+}
 export type Product = {
   _id: string;
   name: string;
