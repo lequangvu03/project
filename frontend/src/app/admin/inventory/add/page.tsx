@@ -6,10 +6,10 @@ import Inventory from '~/components/inventory'
 import { Button } from '~/components/ui/button'
 import { Ingredient } from '~/definitions/types'
 import { useAddInboundOrderMutation } from '~/hooks/data/inbound-order.data'
-import { useGetIngredientsQuery } from '~/hooks/data/ingredients.data'
+import { useGetAllIngredientsQuery, useGetIngredientsQuery } from '~/hooks/data/ingredients.data'
 
 export default function Page() {
-  const { data: ingredients } = useGetIngredientsQuery()
+  const { data: ingredients } = useGetAllIngredientsQuery()
   const [orderItems, setOrderItems] = useState<
     Record<string, { ingredient: Ingredient; quantity: number; order: number }>
   >({})

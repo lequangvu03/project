@@ -1,14 +1,21 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import ingredientsServices from "~/services/ingredients.services"
 
-export const useGetIngredientsQuery = function () {
+export const useGetIngredientsQuery = function ({ page }: { page?: number }) {
     return useQuery({
         queryKey: ["INGREDIENTS"],
-        queryFn: ingredientsServices.getIngredients
-        
+        queryFn: async () => {
+          return await ingredientsServices.getIngredients({ page })
+        }
     })
 }
-
+export const useGetAllIngredientsQuery = function () {
+  return useQuery({
+      queryKey: ["INGREDIENTS"],
+      queryFn: () => ingredientsServices.getAllIngredients()
+      
+  })
+}
 
 export const useAddIngredientQuery = function () {
     const queryClient = useQueryClient()
