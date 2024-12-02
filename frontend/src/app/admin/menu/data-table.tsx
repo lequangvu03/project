@@ -41,12 +41,15 @@ import CustomInput from '~/components/custom-input'
 import { useForm } from 'react-hook-form'
 import PlaceholderImage from '~/assets/images/inventory-placeholder.png'
 import { TagType } from '~/definitions/constant/types.constant'
+import { PaginationOrder } from '~/components/pagination-order'
 
 export default function TableDishes() {
+  const [page, setPage] = useState<number>(1)
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = useState({})
+
   const form = useForm<{
     name: string
     description: string
@@ -70,9 +73,10 @@ export default function TableDishes() {
 
   const { data: dishesData, isPending } = useGetDishesQuery({
     categoryId: categoryId,
-    tag: tag === 'ALL' ? '' : tag
+    tag: tag === 'ALL' ? '' : tag,
+    page: page
   })
-
+  const totalPage = Math.ceil((dishesData?.result?.total || 0) / 10)
   const deleteDishMutation = useDeleteDishQuery()
 
   const dishes = useMemo(() => {
@@ -343,6 +347,7 @@ export default function TableDishes() {
           </Table>
         )}
       </div>
+      <PaginationOrder page={page} setPage={setPage} totalPage={totalPage} />
     </div>
   )
 }

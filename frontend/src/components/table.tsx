@@ -3,7 +3,7 @@ import { Order, OrderItem } from '~/definitions/types'
 import { Button } from './ui/button'
 import { formatDateTime, formatTime } from '~/utils/format-datetime'
 import { OrderStatus } from '~/definitions/constant/types.constant'
-import { useDeleteOrderMutation } from '~/hooks/data/orders.data'
+import { useDeleteOrderMutation, usePaymentOrderMutation } from '~/hooks/data/orders.data'
 import { toast } from 'sonner'
 import {
   AlertDialog,
@@ -36,11 +36,19 @@ function getStatusFromValue(value: number): string {
 
 export default function Table({ order }: Props) {
   const deleteOrderMutation: any = useDeleteOrderMutation()
+  const paymentOrderMutation = usePaymentOrderMutation()
   const handleDelete = async (id: string) => {
     try {
-      console.log(id)
       await deleteOrderMutation.mutateAsync(id)
       toast.success('Delete menu item successfully')
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  const handlePayment = async (id: string) => {
+    try {
+      await paymentOrderMutation.mutateAsync(id)
+      toast.success('Payment successfully')
     } catch (error) {
       console.log(error)
     }
@@ -95,7 +103,7 @@ export default function Table({ order }: Props) {
           <div className='flex-1 overflow-hidden text-ellipsis whitespace-nowrap'>Items</div>
           <div>Price</div>
         </header>
-        <aside className='flex flex-col gap-2'>
+        <aside className='flex max-h-[100px] min-h-[100px] flex-col gap-2 overflow-auto'>
           {order.order_items.map(function (orderItem: OrderItem, index: number) {
             return (
               <div key={index} className='flex items-center justify-between gap-4 text-[14px] font-light text-gray-200'>
@@ -153,7 +161,11 @@ export default function Table({ order }: Props) {
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
-          <Button className='flex flex-1 items-center justify-center border-[1px] bg-[#EA7C69] text-white'>
+          <Button
+            onClick={() => handlePayment(order._id)}
+            disabled={order.order_status == 0 ? false : true}
+            className='flex flex-1 items-center justify-center border-[1px] bg-[#EA7C69] text-white'
+          >
             Pay Bill
           </Button>
         </footer>

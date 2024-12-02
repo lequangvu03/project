@@ -1,8 +1,8 @@
 import { sendDelete, sendGet, sendPost, sendPut } from '~/api/request'
 
 const ordersServices = {
-  getOrders: function ({ page = 1, limit = 9 }: { page: number; limit?: number }) {
-    return sendGet(`/order?page=${page}&limit=${limit}&sortBy=created_at&sortOrder=asc`)
+  getOrders: function ({ page = 1, limit = 9, status }: { page: number; limit?: number; status?: number }) {
+    return sendGet(`/order?page=${page}&limit=${limit}&sortBy=created_at&sortOrder=asc&status=${status}`)
   },
 
   addOrder: function (body: {
@@ -35,6 +35,9 @@ const ordersServices = {
 
   deleteOrder: function (id: string) {
     return sendDelete('/order/' + id)
+  },
+  paymentOrder: function (id: string) {
+    return sendPost('/payment/' + id)
   }
 }
 

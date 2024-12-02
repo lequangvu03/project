@@ -160,7 +160,7 @@ export default function IngredientTable() {
           className='max-w-sm'
         />
       </div>
-      <div className='-mx-8'>
+      <div className='-mx-8 pl-8'>
         {isPending ? (
           <div className='flex items-center justify-center'>
             <Loading />

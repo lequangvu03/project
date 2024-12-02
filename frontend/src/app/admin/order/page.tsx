@@ -10,22 +10,52 @@ import { useGetOrdersQuery } from '~/hooks/data/orders.data'
 
 export default function OrderPage() {
   const [page, setPage] = useState<number>(1)
-  const { data: orders } = useGetOrdersQuery({ page: page })
+  const [status, setStatus] = useState<number>(-1)
+  const { data: orders } = useGetOrdersQuery({ page: page, status: status })
   if (orders?.result) {
     return (
       <main className='flex flex-col gap-4'>
         <section className='h-[1px] w-full bg-slate-600' />
         <section className='flex items-center justify-between'>
           <div className='flex items-center gap-2'>
-            <Button>All</Button>
-            <Button>Completed</Button>
-            <Button>Cancelled</Button>
-            <Button>In Progress</Button>
+            <Button
+              onClick={() => {
+                setStatus(-1)
+                setPage(1)
+              }}
+            >
+              All
+            </Button>
+            <Button
+              onClick={() => {
+                setStatus(0)
+                setPage(1)
+              }}
+            >
+              In Progress
+            </Button>
+            <Button
+              onClick={() => {
+                setStatus(1)
+                setPage(1)
+              }}
+            >
+              Completed
+            </Button>
+
+            <Button
+              onClick={() => {
+                setStatus(2)
+                setPage(1)
+              }}
+            >
+              Cancelled
+            </Button>
           </div>
 
           <div className='flex items-center gap-4'>
-            <Button className=''>Add new order</Button>
             <Input className='' />
+            <Button className=''>Add new order</Button>
           </div>
         </section>
 
