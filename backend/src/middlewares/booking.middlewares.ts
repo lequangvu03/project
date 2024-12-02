@@ -87,7 +87,8 @@ export const addBookingValidator = validate(
 
             return true
           }
-        }
+        },
+        optional: true
       }
     },
     ['body']
@@ -119,7 +120,8 @@ export const updateBookingValidator = validate(
             }
             return true
           }
-        }
+        },
+        optional: true
       },
       customer_phone: {
         isString: {
@@ -132,7 +134,8 @@ export const updateBookingValidator = validate(
             }
             return true
           }
-        }
+        },
+        optional: true
       },
       table_number: {
         isNumeric: {
@@ -149,7 +152,8 @@ export const updateBookingValidator = validate(
             }
             return true
           }
-        }
+        },
+        optional: true
       },
       booking_time: {
         isNumeric: {
@@ -160,7 +164,6 @@ export const updateBookingValidator = validate(
             if (!value) {
               throw new Error(BOOKING_MESSAGE.BOOKING_TIME_IS_REQUIRED)
             }
-
             const bookingTime = parseInt(value, 10)
             const duration = 2 * 60 * 60 * 1000
             const endTime = bookingTime + duration
@@ -172,10 +175,10 @@ export const updateBookingValidator = validate(
             if (overlappingBooking) {
               throw new Error(BOOKING_MESSAGE.BOOKING_TIME_CONFLICT)
             }
-
             return true
           }
-        }
+        },
+        optional: true
       }
     },
     ['body', 'params']

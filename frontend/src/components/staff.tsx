@@ -16,24 +16,36 @@ import {
   AlertDialogTrigger
 } from '~/components/ui/alert-dialog'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/components/ui/table'
-import { useDeleteDishQuery, useGetDishesQuery } from '~/hooks/data/menu.data'
-import useQueryParams from '~/hooks/useQueryParams'
+import { useDeleteDishQuery } from '~/hooks/data/menu.data'
+import { useGetStaffsQuery } from '~/hooks/data/staffs.data'
 import { cn } from '~/lib/utils'
-import { IMenuItem } from '~/models/menu.model'
 import CustomSheet from './custom-sheet'
 import { Checkbox } from './ui/checkbox'
-import { useGetStaffsQuery } from '~/hooks/data/staffs.data'
-import { TProfile } from '~/definitions/types'
 import { formatRole } from '~/utils/format-role'
+import { TProfile } from '~/definitions/types'
+
+// Enum để ánh xạ vị trí
+export enum PositionEmployeeType {
+  Waiter = 0, // Nhân viên phục vụ
+  Cashier, // Nhân viên thu ngân
+  Chef, // Nhân viên bếp
+  Cleaner, // Nhân viên dọn dẹp
+  Manager, // Quản lý
+  Security // Nhân viên bảo vệ
+}
+
+function getPositionLabel(position: number): string {
+  return PositionEmployeeType[position] || 'Unknown';
+}
 
 function TableStaff() {
-  const deleteDishMutation = useDeleteDishQuery()
+  const deleteStaffMutation = useDeleteDishQuery()
 
   const { data: staffs } = useGetStaffsQuery()
   console.log(staffs?.result?.employees)
   const handleDelete = async (id: string) => {
     try {
-      await deleteDishMutation.mutateAsync(id)
+      await deleteStaffMutation.mutateAsync(id)
       toast.success('Delete menu item successfully')
     } catch (_) {
       toast.error('Failed to delete menu item')
@@ -57,6 +69,7 @@ function TableStaff() {
             <TableHead>Phone</TableHead>
             <TableHead>Age</TableHead>
             <TableHead>Salary</TableHead>
+            <TableHead>Position</TableHead> {/* Thêm cột Position */}
             <TableHead>Timings</TableHead>
             <TableHead></TableHead>
           </TableRow>
@@ -90,17 +103,31 @@ function TableStaff() {
                     </div>
                   </TableCell>
                   <TableCell>
-                    <div className='flex flex-col'>{/* <span>{stock}</span> */}</div>
+                    <div className='flex flex-col'><span>{user.email}</span></div>
                   </TableCell>
                   <TableCell className='border-slate-400'>
                     <div className='flex flex-col'>
-                      <span>Category</span>
-                      <span>Chicken</span>
+                      <span>{user.contact_info|| 'Unknow'}</span>
                     </div>
                   </TableCell>
                   <TableCell>
-                    <div className='flex flex-col border-l border-l-slate-500 p-4'>
-                      {/* <span>{price} VND</span> */}
+                    <div className='flex flex-col border-l p-4'>
+                      <span>{user.age || 'Unknow'}</span>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div className='flex flex-col border-l p-4'>
+                      <span>{user.salary || 'Unknow'}</span>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div className='flex flex-col border-l p-4'>
+                      <span>{getPositionLabel(user.position ?? -1)}</span> {/* Hiển thị Position */}
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div className='flex flex-col border-l p-4'>
+                      <span>{user.timing || 'Unknow'}</span>
                     </div>
                   </TableCell>
                   <TableCell className='text-right'>
@@ -124,7 +151,6 @@ function TableStaff() {
                           </AlertDialogHeader>
                           <AlertDialogFooter>
                             <AlertDialogCancel>Cancel</AlertDialogCancel>
-                            <AlertDialogAction onClick={() => handleDelete(user._id)}>Continue</AlertDialogAction>
                           </AlertDialogFooter>
                         </AlertDialogContent>
                       </AlertDialog>

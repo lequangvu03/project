@@ -114,8 +114,11 @@ export type TProfile = {
   role: number
   avatar_url: string
   permissions: number[]
-  ip_address: string
-  ipAddress: string[]
+  position?: number
+  salary?: number
+  contact_info?: string
+  age?: number
+  timing?: string
 }
 
 export type TCategory = {
@@ -123,4 +126,12 @@ export type TCategory = {
   name: string
   description: string
   totalProducts: number
+}
+export enum PositionEmployeeType {
+  Waiter, // Nhân viên phục vụ
+  Cashier, // Nhân viên thu ngân
+  Chef, // Nhân viên bếp
+  Cleaner, // Nhân viên dọn dẹp
+  Manager, // Quản lý
+  Security // Nhân viên bảo vệ
 }
