@@ -12,6 +12,7 @@ class NotificationService {
     }
     const notifications = await databaseService.notifications
       .find(filter)
+      .sort({ created_at: -1 })
       .skip(limit * (page - 1))
       .limit(limit)
       .toArray()
@@ -26,10 +27,6 @@ class NotificationService {
     return result
   }
   async updateAllReadNotifications(ids: string[]) {
-    if (!Array.isArray(ids) || ids.length === 0) {
-      throw new Error('Invalid input: ids must be a non-empty array')
-    }
-
     // Chuyển đổi các id từ string sang ObjectId để sử dụng trong MongoDB
     const objectIds = ids.map((id) => new ObjectId(id))
     const result = await databaseService.notifications.updateMany(

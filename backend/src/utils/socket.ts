@@ -17,11 +17,11 @@ export const io = new Server(server, {
 export const userSocketMap = new Map<string, { role: string }>()
 // Sự kiện khi client kết nối
 io.on('connection', (socket) => {
-  const role = socket.handshake.query.role as string // Lấy role từ query
-  console.log(`A user connected: ${socket.id} with role: ${role}`)
+  const role = socket.handshake.query.role as string
   if (role) {
     userSocketMap.set(socket.id, { role })
   }
+  console.log('User connected:', socket.id, role)
   // Lắng nghe sự kiện tùy chỉnh, ví dụ: khi admin nhận được thông báo
   socket.on('disconnect', () => {
     console.log('User disconnected:', socket.id)
@@ -34,3 +34,10 @@ const PORT = 5000
 server.listen(PORT, () => {
   console.log(`Socket.IO server running on port ${PORT}`)
 })
+export const sendNotificationToRole = (role: string, notification: any) => {
+  for (const [socketId, userInfo] of userSocketMap.entries()) {
+    if (userInfo.role === role) {
+      io.to(socketId).emit('new_noti', notification)
+    }
+  }
+}
