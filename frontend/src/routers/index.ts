@@ -10,6 +10,7 @@ export const employeeRoutes = [
 export const adminRoutes = [
   { name: 'Dashboard', image: sidebarIcon.dashboard, redirect: '/admin/dashboard' },
   { name: 'Report', image: sidebarIcon.report, redirect: '/admin/report' },
+  { name: 'Staff', image: sidebarIcon.staff, redirect: '/admin/staff' },
   ...employeeRoutes
 ]
 

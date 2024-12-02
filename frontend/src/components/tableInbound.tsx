@@ -40,6 +40,7 @@ export default function InboundTable() {
     }
   }
   return (
+    <div>
     <section className='grid grid-cols-4 gap-8'>
       {orders?.map((order: InboundOrderType) => (
         <div key={order._id} className={'mt-4 flex max-w-[400px] flex-col gap-4 rounded-xl bg-[#292C2D] p-4 shadow-sm'}>
@@ -109,7 +110,7 @@ export default function InboundTable() {
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={() => handleDelete(order._id)}>Delete</AlertDialogAction>
+                    <AlertDialogAction onClick={() => order._id && handleDelete(order._id)}>Delete</AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>
@@ -117,8 +118,8 @@ export default function InboundTable() {
           </section>
         </div>
       ))}
-
-      <PaginationOrder page={page} setPage={setPage} totalPage={totalPage} />
-      </section>
+    </section>
+    <PaginationOrder page={page} setPage={setPage} totalPage={totalPage} />
+    </div>
   )
 }

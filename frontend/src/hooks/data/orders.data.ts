@@ -1,11 +1,11 @@
 import ordersServices from '~/services/orders.services'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
-export const useGetOrdersQuery = function ({ page }: { page: number }) {
+export const useGetOrdersQuery = function ({ page, status }: { page: number; status: number }) {
   return useQuery({
-    queryKey: ['ORDERS', page],
+    queryKey: ['ORDERS', page, status],
     queryFn: async () => {
-      return await ordersServices.getOrders({ page })
+      return await ordersServices.getOrders({ page, status })
     }
   })
 }
@@ -44,6 +44,18 @@ export const useDeleteOrderMutation = function () {
     onSuccess: function () {
       queryClient.invalidateQueries({
         queryKey: ['ORDERS']
+      })
+    }
+  })
+}
+export const usePaymentOrderMutation = function () {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: ordersServices.paymentOrder,
+    onSuccess: function () {
+      queryClient.invalidateQueries({
+        queryKey: ['PAYMENT_ORDERS']
       })
     }
   })
