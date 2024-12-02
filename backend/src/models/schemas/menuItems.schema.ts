@@ -46,7 +46,7 @@ export default class MenuItem {
     this.price = menuItem.price
     this.tag = menuItem.tag
     this.category_id = menuItem.category_id
-    this.stock = menuItem.stock
+    this.stock = menuItem.stock || 1
     this.image =
       menuItem.image ||
       'https://res.cloudinary.com/dflvvu32c/image/upload/v1733125769/menu-default-image_220606_web_m1zwe8.png'
