@@ -19,6 +19,7 @@ export default function Page() {
   })
   const handleMarkAllAsRead = async () => {
     const ids = notifications?.result.notifications.map((notification: NotificationType) => notification._id as string)
+    console.log('ids', ids)
     await markAllAsReadMutation.mutateAsync(ids)
   }
   const totalPage = Math.ceil((notifications?.result?.total || 0) / 12)
