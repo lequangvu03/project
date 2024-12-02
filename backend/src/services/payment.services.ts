@@ -1,6 +1,8 @@
 import { ObjectId } from 'mongodb'
-import { OrderStatus, PaymentStatus } from '~/constants/enums'
+import { notificationRoleType, NotificationStatus, NotificationType, OrderStatus, PaymentStatus } from '~/constants/enums'
+import Notification from '~/models/schemas/notifications.schema'
 import databaseService from '~/services/database.services'
+import { io } from '~/utils/socket'
 
 class PaymentService {
   async paymentOrder(id: string) {
@@ -26,7 +28,24 @@ class PaymentService {
       for (const ingredient of ingredients) {
         const ingredientId = new ObjectId(ingredient._id)
         const ingredientQuantity = ingredient.quantity * quantity // Số lượng cần trừ = quantity của order_item * quantity ingredient
-        await databaseService.ingredients.updateOne({ _id: ingredientId }, { $inc: { stock: -ingredientQuantity } })
+        const updatedIngredient = await databaseService.ingredients.findOneAndUpdate(
+          { _id: ingredientId },
+          { $inc: { stock: -ingredientQuantity } },
+          { returnDocument: 'after' }
+        )
+        if (updatedIngredient && updatedIngredient.stock <= 50) {
+          const notification = new Notification({
+            _id: new ObjectId(),
+            recipient: notificationRoleType.All,
+            message: `Nguyên liệu ${updatedIngredient.name} gần hết! Số lượng còn lại: ${updatedIngredient.stock}`,
+            title: 'Nguyên liệu sắp hết',
+            status: NotificationStatus.Unread
+          })
+          // Lưu thông báo vào cơ sở dữ liệu (nếu cần)
+          await databaseService.notifications.insertOne(notification)
+          // Gửi thông báo qua Socket.IO
+          io.emit('new_noti', { notification })
+        }
       }
     }
     return Order
