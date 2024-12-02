@@ -64,7 +64,6 @@ export function PaginationOrder({ page, setPage, totalPage }: Props) {
 
     return pages
   }
-
   return (
     <Pagination>
       <PaginationContent>
