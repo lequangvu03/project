@@ -28,7 +28,7 @@ function TableDishes() {
   const { data: dishesData } = useGetDishesQuery({
     categoryId: categoryId
   })
-  console.log(dishesData)
+
   const deleteDishMutation = useDeleteDishQuery()
   const dishes = (dishesData?.result?.menus as IMenuItem[]) || null
 

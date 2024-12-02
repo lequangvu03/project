@@ -6,6 +6,7 @@ import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css'
 import moment from 'moment'
+import { Button } from '~/components/ui/button'
 
 const localizer = momentLocalizer(moment) // Khởi tạo localizer với moment
 const DragAndDropCalendar = withDragAndDrop(Calendar)
@@ -50,7 +51,18 @@ const DragAndDrop: React.FC = () => {
   const defaultDate = useMemo(() => new Date(), [])
 
   return (
-    <div style={{ height: 600 }}>
+    <div className='flex flex-col gap-8'>
+      <header className='flex items-center justify-between'>
+        <div>
+          <Button className='bg-[#EA7C69]'>1st Floor</Button>
+          <Button className='bg-transparent text-white'>2st Floor</Button>
+          <Button className='bg-transparent text-white'>3st Floor</Button>
+        </div>
+        <div className='flex items-center gap-2'>
+          <Button className='bg-[#3D4142] text-white'>2st Floor</Button>
+          <Button className='bg-[#EA7C69]'>Add new reservation</Button>
+        </div>
+      </header>
       <DragAndDropCalendar
         defaultDate={defaultDate}
         defaultView={Views.WEEK}

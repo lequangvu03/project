@@ -15,6 +15,32 @@ export const useGetProfilesQuery = function () {
   })
 }
 
+export const useAddEmployeeAccount = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: profilesServices.addEmployeeAccount,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['PROFILES']
+      })
+    }
+  })
+}
+
+export const useUpdateEmployeeAccountMutation = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: profilesServices.updateEmployeeAccount,
+    onSuccess: function () {
+      queryClient.invalidateQueries({
+        queryKey: ['PROFILES']
+      })
+    }
+  })
+}
+
 export const useUpdateMyProfileMutation = () => {
   const queryClient = useQueryClient()
   return useMutation({
