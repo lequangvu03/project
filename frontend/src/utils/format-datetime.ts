@@ -17,6 +17,12 @@ export function formatDateTime(timestamp: number): string {
   const year = date.getFullYear();
   return `${dayName}, ${day}${suffix} ${month} ${year}`;
 }
+export function formatDateTimeMonth(timestamp: number): string {
+  const date = new Date(timestamp);
+  const month = date.toLocaleString('default', { month: 'long' });
+  const year = date.getFullYear();
+  return `${month} ${year}`;
+}
 
 
 export function formatTime(timestamp: number): string {

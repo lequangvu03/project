@@ -17,6 +17,12 @@ export const useGetNotificationAllQuery = function ({
     }
   })
 }
+export const useGetCountNotificationCountQuery = function () {
+  return useQuery({
+    queryKey: ['NOTIFICATIONS_COUNT'],
+    queryFn: notificationsService.getNotificationCount
+  })
+}
 export const useReadNotificationMutation = function () {
   const queryClient = useQueryClient()
   return useMutation({
@@ -34,7 +40,7 @@ export const useMarkAllAsReadMutation = function () {
     mutationFn: notificationsService.markAllAsRead,
     onSuccess: function () {
       queryClient.invalidateQueries({
-        queryKey: ['READALLNOTIFICATIONS']
+        queryKey: ['NOTIFICATIONS']
       })
     }
   })

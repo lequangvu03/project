@@ -6,7 +6,7 @@ import Link from 'next/link'
 import DashboardChart from '~/components/dashboard-chart'
 import { RecentOrder, TopSellingItem } from '~/definitions/types'
 import { useGetDashboardOverview } from '~/hooks/data/dashboard.data'
-import { formatDateTime } from '~/utils/format-datetime'
+import { formatDateTime, formatDateTimeMonth } from '~/utils/format-datetime'
 
 export default function DashboardPage() {
   const { data: dashboard } = useGetDashboardOverview()
@@ -100,7 +100,7 @@ export default function DashboardPage() {
             </div>
 
             <div className='flex items-end justify-between gap-4'>
-              <h3 className='text-[18px] text-gray-400'>{formatDateTime(new Date().getTime())}</h3>
+              <h3 className='text-[18px] text-gray-400'>{formatDateTimeMonth(new Date().getTime())}</h3>
 
               <div>
                 <svg width='240' height='100' viewBox='0 0 155 52' fill='none' xmlns='http://www.w3.org/2000/svg'>
@@ -185,7 +185,7 @@ export default function DashboardPage() {
             </div>
 
             <div className='flex items-end justify-between gap-4'>
-              <h3 className='text-[18px] text-gray-400'>{formatDateTime(new Date().getTime())}</h3>
+              <h3 className='text-[18px] text-gray-400'>{formatDateTimeMonth(new Date().getTime())}</h3>
 
               <div>
                 <svg width='240' height='100' viewBox='0 0 155 52' fill='none' xmlns='http://www.w3.org/2000/svg'>

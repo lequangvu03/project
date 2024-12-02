@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import {
   getAllNotificationController,
+  getcountNotificationController,
   updateAllStatusReadNotificationController,
   updateStatusReadNotificationController
 } from '~/controllers/notification.controllers'
@@ -18,6 +19,7 @@ export const notificationRouter = Router()
  **/
 
 notificationRouter.get('/', accessTokenValidator, wrapRequestHandler(getAllNotificationController))
+notificationRouter.get('/count', accessTokenValidator, wrapRequestHandler(getcountNotificationController))
 
 notificationRouter.put('/read/all', accessTokenValidator, wrapRequestHandler(updateAllStatusReadNotificationController))
 
