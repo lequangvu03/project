@@ -139,13 +139,12 @@ export default function Page() {
       formData.append('category_id', data.category_id)
       formData.append('stock', data.stock)
       formData.append('image', data.image as any)
-      formData.append('tag', data.tag.toString())
-
+      formData.append('tag', JSON.stringify(data.tag))
       const formatIngredients = Object.entries(ingredients).map(([_id, { quantity }]) => ({
         _id,
         quantity
       }))
-      formData.append('ingredients', formatIngredients.toString())
+      formData.append('ingredients', JSON.stringify(formatIngredients))
       const response = await addMenuItemMutation.mutateAsync(formData)
       menuItemForm.reset()
       setIngredients({})

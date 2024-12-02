@@ -47,7 +47,9 @@ export default class MenuItem {
     this.tag = menuItem.tag
     this.category_id = menuItem.category_id
     this.stock = menuItem.stock
-    this.image = menuItem.image || ''
+    this.image =
+      menuItem.image ||
+      'https://res.cloudinary.com/dflvvu32c/image/upload/v1733125769/menu-default-image_220606_web_m1zwe8.png'
     this.ingredients = menuItem.ingredients || []
     this.status = menuItem.status
     this.quantity_sold = menuItem.quantity_sold || 0
