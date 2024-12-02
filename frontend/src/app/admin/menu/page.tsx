@@ -445,7 +445,7 @@ export default function Page() {
                     <FormField
                       control={menuItemForm.control}
                       name='stock'
-                      render={({ field }) => <CustomInput label='Stock' field={field} />}
+                      render={({ field }) => <CustomInput type='number' label='Stock' field={field} />}
                     />
 
                     <div className='!mt-9 flex items-center justify-end gap-5'>
