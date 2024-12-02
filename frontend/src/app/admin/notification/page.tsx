@@ -63,7 +63,7 @@ export default function Page() {
             </Button>
           </div>
         </section>
-        {newOrderData._id ? (
+        {newOrderData&&newOrderData?._id ? (
           <section>
             <Notification notification={newOrderData} />
           </section>

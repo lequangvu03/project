@@ -27,12 +27,15 @@ class PaymentService {
       const ingredients = menu_item?.ingredients || []
       for (const ingredient of ingredients) {
         const ingredientId = new ObjectId(ingredient._id)
-        const ingredientQuantity = ingredient.quantity * quantity // Số lượng cần trừ = quantity của order_item * quantity ingredient
+        const ingredientQuantity = ingredient.quantity * quantity
+        console.log('ingredientId', ingredientId)
+        console.log('ingredientQuantity', ingredientQuantity)
         const updatedIngredient = await databaseService.ingredients.findOneAndUpdate(
           { _id: ingredientId },
           { $inc: { stock: -ingredientQuantity } },
           { returnDocument: 'after' }
         )
+        console.log('updatedIngredient', updatedIngredient)
         if (updatedIngredient && updatedIngredient.stock <= 50) {
           const notification = new Notification({
             _id: new ObjectId(),
