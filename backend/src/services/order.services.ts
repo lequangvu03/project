@@ -28,7 +28,7 @@ class OrderService {
     const sortQuery: { [key: string]: 1 | -1 } = {
       [sortBy || 'created_at']: sortOrder === 'ascend' ? 1 : -1
     }
-    if (status) {
+    if (status && status != -1) {
       matchFilter.order_status = +status
     }
     if (table_number) {
