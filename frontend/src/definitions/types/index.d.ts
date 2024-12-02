@@ -53,6 +53,7 @@ export type Product = {
   updated_at: number
   category_name: string
 }
+
 export enum NotificationRoleType {
   All,
   Admin,
