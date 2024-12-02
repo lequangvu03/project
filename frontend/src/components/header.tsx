@@ -10,6 +10,7 @@ import { routes } from '~/routers'
 import useAuthStore from '~/stores/auth.store'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import { Skeleton } from './ui/skeleton'
+import { IoIosNotifications } from 'react-icons/io'
 
 export const dynamic = 'force-dynamic'
 
@@ -43,6 +44,12 @@ export default function Header() {
       </section>
 
       <section className='flex items-center justify-end gap-[2px]'>
+        <Link href={'/admin/notification'} className='relative animate-pulse'>
+          <IoIosNotifications className='text-[30px]' />
+          <div className='absolute right-0 top-0 flex h-4 w-4 items-center justify-center rounded-full bg-[#EA7C69] text-[14px]'>
+            <span>1</span>
+          </div>
+        </Link>
         {myProfileData.isPending ? (
           <Skeleton className='h-[58px] w-[264px] rounded-full bg-[var(--bg-input)]' />
         ) : (
