@@ -193,7 +193,8 @@ class MenuService {
     data._id = new ObjectId()
     const newMenuItem = new MenuItem({
       ...data,
-      category_id: new ObjectId(data.category_id)
+      category_id: new ObjectId(data.category_id),
+      status: menuItemStatus.Available
     })
 
     await databaseService.menuItems.insertOne(newMenuItem)
