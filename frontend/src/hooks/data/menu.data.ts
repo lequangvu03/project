@@ -8,9 +8,10 @@ export const useGetDishesQuery = (args?: { categoryId?: string; tag?: string; pa
       return menuServices.getDishes({
         categoryId: args?.categoryId,
         tag: args?.tag,
-        page: args?.page 
+        page: args?.page
       })
-    }
+    },
+    placeholderData: (prev) => prev
   })
 }
 

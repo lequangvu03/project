@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import {
   Pagination,
   PaginationContent,
@@ -67,7 +68,6 @@ export function PaginationOrder({ page, setPage, totalPage }: Props) {
   return (
     <Pagination>
       <PaginationContent>
-        {/* Nút Previous */}
         <PaginationItem>
           <PaginationPrevious
             href='#'
@@ -78,11 +78,7 @@ export function PaginationOrder({ page, setPage, totalPage }: Props) {
             aria-disabled={page === 1}
           />
         </PaginationItem>
-
-        {/* Các nút số trang */}
         {renderPageLinks()}
-
-        {/* Nút Next */}
         <PaginationItem>
           <PaginationNext
             href='#'

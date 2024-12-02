@@ -15,14 +15,23 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger
 } from '~/components/ui/alert-dialog'
+import PlaceholderImage from '~/assets/images/inventory-placeholder.png'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/components/ui/table'
-import { useDeleteDishQuery } from '~/hooks/data/menu.data'
+import { useDeleteDishQuery, useGetDishesQuery } from '~/hooks/data/menu.data'
 import { useGetStaffsQuery } from '~/hooks/data/staffs.data'
 import { cn } from '~/lib/utils'
 import CustomSheet from './custom-sheet'
 import { Checkbox } from './ui/checkbox'
 import { formatRole } from '~/utils/format-role'
 import { TProfile } from '~/definitions/types'
+import { Button } from './ui/button'
+import CustomInput from './custom-input'
+import { Form, FormField } from './ui/form'
+import { useState } from 'react'
+import { ColumnFiltersState, SortingState, VisibilityState } from '@tanstack/react-table'
+import { useForm } from 'react-hook-form'
+import { TagType } from '~/definitions/constant/types.constant'
+import useQueryParams from '~/hooks/useQueryParams'
 
 // Enum để ánh xạ vị trí
 export enum PositionEmployeeType {
@@ -35,7 +44,7 @@ export enum PositionEmployeeType {
 }
 
 function getPositionLabel(position: number): string {
-  return PositionEmployeeType[position] || 'Unknown';
+  return PositionEmployeeType[position] || 'Unknown'
 }
 
 function TableStaff() {
@@ -55,6 +64,38 @@ function TableStaff() {
   const handleChoose = (id: string) => (checked: CheckedState) => {
     console.log(id, checked)
   }
+
+  const [sorting, setSorting] = useState<SortingState>([])
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
+  const [rowSelection, setRowSelection] = useState({})
+  const form = useForm<{
+    name: string
+    description: string
+    price: string
+    category_id: string
+    stock: string
+    image: File | string
+    tag: TagType
+  }>({
+    defaultValues: {
+      name: '',
+      image: '',
+      price: '',
+      category_id: '',
+      description: '',
+      stock: '',
+      tag: TagType.Normal
+    }
+  })
+  const { categoryId, tag } = useQueryParams()
+
+  const { data: dishesData, isPending } = useGetDishesQuery({
+    categoryId: categoryId,
+    tag: tag === 'ALL' ? '' : tag
+  })
+
+  const deleteDishMutation = useDeleteDishQuery()
 
   return (
     <div className='-mx-8'>
@@ -103,11 +144,13 @@ function TableStaff() {
                     </div>
                   </TableCell>
                   <TableCell>
-                    <div className='flex flex-col'><span>{user.email}</span></div>
+                    <div className='flex flex-col'>
+                      <span>{user.email}</span>
+                    </div>
                   </TableCell>
                   <TableCell className='border-slate-400'>
                     <div className='flex flex-col'>
-                      <span>{user.contact_info|| 'Unknow'}</span>
+                      <span>{user.contact_info || 'Unknow'}</span>
                     </div>
                   </TableCell>
                   <TableCell>
@@ -132,7 +175,98 @@ function TableStaff() {
                   </TableCell>
                   <TableCell className='text-right'>
                     <div className='flex items-center gap-4'>
-                      <CustomSheet isConfirmationRequired render={<div>Form</div>} title='Edit dish'>
+                      <CustomSheet
+                        isConfirmationRequired
+                        render={
+                          <div>
+                            <div className='mt-6 flex flex-col items-center justify-center gap-4'>
+                              <Image
+                                src={PlaceholderImage}
+                                alt='placeholder image'
+                                className='max-w-[240px] overflow-hidden rounded-[10px] bg-[var(--bg-input)]'
+                              />
+                              <p className='text-[var(--primary-color)] underline'>Change inventory image</p>
+                            </div>
+                            <Form {...form}>
+                              <div className='mt-8 space-y-6'>
+                                <div className='flex w-full items-center gap-5'>
+                                  <FormField
+                                    control={form.control}
+                                    name='name'
+                                    render={({ field }) => (
+                                      <CustomInput
+                                        className='flex-grow'
+                                        classNameInput='bg-[var(--bg-input)]'
+                                        label='Name'
+                                        field={field}
+                                      />
+                                    )}
+                                  />
+                                  <FormField
+                                    control={form.control}
+                                    name='description'
+                                    render={({ field }) => (
+                                      <CustomInput
+                                        className='flex-grow'
+                                        classNameInput='bg-[var(--bg-input)]'
+                                        label='Description'
+                                        field={field}
+                                      />
+                                    )}
+                                  />
+                                </div>
+                                <div className='flex w-full items-center gap-5'>
+                                  <FormField
+                                    control={form.control}
+                                    name='price'
+                                    render={({ field }) => (
+                                      <CustomInput
+                                        className='flex-grow'
+                                        classNameInput='bg-[var(--bg-input)]'
+                                        label='Price'
+                                        field={field}
+                                      />
+                                    )}
+                                  />
+                                  <FormField
+                                    control={form.control}
+                                    name='stock'
+                                    render={({ field }) => (
+                                      <CustomInput
+                                        className='flex-grow'
+                                        classNameInput='bg-[var(--bg-input)]'
+                                        label='Stock'
+                                        field={field}
+                                      />
+                                    )}
+                                  />
+                                </div>
+                                <FormField
+                                  control={form.control}
+                                  name='tag'
+                                  render={({ field }) => (
+                                    <CustomInput
+                                      className='flex-grow'
+                                      classNameInput='bg-[var(--bg-input)]'
+                                      label='Tag '
+                                      field={field}
+                                    />
+                                  )}
+                                />
+                                <div className='!mt-9 flex items-center justify-end gap-5'>
+                                  <Button className='h-auto bg-transparent px-12 py-3 text-base text-white underline transition-all hover:bg-transparent hover:text-[var(--primary-color)]'>
+                                    Cancel
+                                  </Button>
+                                  <Button className='h-auto bg-[var(--primary-color)] px-12 py-3 text-base text-white transition-all hover:bg-[#FAC1D9] hover:text-black hover:shadow-md hover:shadow-[#FAC1D9]'>
+                                    Save
+                                  </Button>
+                                </div>
+                              </div>
+                            </Form>
+                          </div>
+                        }
+                        title='Edit Staff'
+                      >
                         <div className='cursor-pointer hover:opacity-60 active:opacity-60'>
                           <Pencil />
                         </div>
