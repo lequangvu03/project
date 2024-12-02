@@ -1,6 +1,7 @@
 'use client'
 
-import { Image, X } from 'lucide-react'
+import Tippy from '@tippyjs/react/headless'
+import { Image, Minus, Plus, X } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
@@ -21,6 +22,7 @@ import TableDishes from './data-table'
 
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '~/components/ui/command'
 
+import { Input } from '~/components/ui/input'
 import { Label } from '~/components/ui/label'
 import { ScrollArea } from '~/components/ui/scroll-area'
 import {
@@ -34,6 +36,7 @@ import {
 } from '~/components/ui/select'
 import { Ingredient, TCategory } from '~/definitions/types'
 import { useGetAllIngredientsQuery } from '~/hooks/data/ingredients.data'
+import { omit, omitBy } from 'lodash'
 
 const Categories = dynamic(() => import('~/components/categories'), {
   loading: () => (
@@ -58,6 +61,16 @@ export default function Page() {
   const addMenuItemMutation = useAddMenuItemMutation()
   const getIngredientsQuery = useGetAllIngredientsQuery()
   const [preview, setPreview] = useState<string | null>(null)
+  const [ingredients, setIngredients] = useState<
+    Record<
+      string,
+      {
+        unit: string
+        quantity: number
+        name: string
+      }
+    >
+  >({})
   const categoryForm = useForm<{
     name: string
     description: string
@@ -76,7 +89,6 @@ export default function Page() {
     stock: string
     image: File | null
     tag: number[]
-    ingredients: { _id: string; quantity: number }[]
   }>({
     defaultValues: {
       name: '',
@@ -85,8 +97,7 @@ export default function Page() {
       category_id: '',
       stock: '',
       image: null,
-      tag: [],
-      ingredients: []
+      tag: [TagType.New, TagType.Normal]
     }
   })
 
@@ -129,9 +140,15 @@ export default function Page() {
       formData.append('stock', data.stock)
       formData.append('image', data.image as any)
       formData.append('tag', data.tag.toString())
-      formData.append('ingredients', data.ingredients.toString())
-      const response = await addMenuItemMutation.mutateAsync(formData)
 
+      const formatIngredients = Object.entries(ingredients).map(([_id, { quantity }]) => ({
+        _id,
+        quantity
+      }))
+      formData.append('ingredients', formatIngredients.toString())
+      const response = await addMenuItemMutation.mutateAsync(formData)
+      menuItemForm.reset()
+      setIngredients({})
       toast(response?.message)
     } catch (error) {
       console.log(error)
@@ -142,11 +159,50 @@ export default function Page() {
     ref.current?.click()
   }
 
-  const handleAddIngregients = (ingredient: { _id: string; quantity: number }) => {
-    const ingredients = menuItemForm.getValues('ingredients')
+  const modifyIngregients =
+    (ingredient: { _id: string; unit: string; name: string }, mode: 'SUBTRACT' | 'ADD' | 'MANUAL' | 'REMOVE') =>
+    (e: any) => {
+      setIngredients((prev) => {
+        switch (mode) {
+          case 'MANUAL':
+            return {
+              ...prev,
+              [ingredient._id]: {
+                quantity: +e?.target?.value,
+                unit: ingredient.unit,
+                name: ingredient.name
+              }
+            }
+          case 'ADD':
+            return {
+              ...prev,
+              [ingredient._id]: {
+                quantity: prev?.[ingredient._id] ? ++prev[ingredient._id].quantity : 1,
+                unit: ingredient.unit,
+                name: ingredient.name
+              }
+            }
+          case 'SUBTRACT':
+            return omitBy(
+              {
+                ...prev,
+                [ingredient._id]: {
+                  quantity:
+                    prev?.[ingredient._id] && prev[ingredient._id].quantity >= 1 ? --prev[ingredient._id].quantity : 0,
+                  unit: ingredient.unit,
+                  name: ingredient.name
+                }
+              },
+              (v) => v.quantity === 0
+            )
+          case 'REMOVE':
+            return omit(prev, [ingredient._id])
+          default:
+            return prev
+        }
+      })
+    }
 
-    menuItemForm.setValue('ingredients')
-  }
   return (
     <main className='flex flex-col gap-4'>
       <div className='h-[1px] w-full bg-slate-700 leading-[0px]' />
@@ -219,7 +275,7 @@ export default function Page() {
           </div>
 
           <CustomSheet
-            isConfirmationRequired
+            isConfirmationRequired={menuItemForm.formState.isDirty}
             title='New category'
             render={
               <>
@@ -266,13 +322,13 @@ export default function Page() {
                     <FormField
                       control={menuItemForm.control}
                       name='price'
-                      render={({ field }) => <CustomInput label='Price' field={field} />}
+                      render={({ field }) => <CustomInput label='Price' type='number' min={0} field={field} />}
                     />
                     <div>
                       <Label className='mb-2 block'>Category</Label>
                       <Select
+                        value={menuItemForm.watch('category_id')}
                         onValueChange={(id) => {
-                          console.log(id)
                           menuItemForm.setValue('category_id', id, {
                             shouldDirty: true
                           })
@@ -304,33 +360,88 @@ export default function Page() {
 
                     <div>
                       <Label className='mb-2 block'>Ingredients</Label>
-                      <ScrollArea className='relative h-[80px] w-full rounded-md bg-[var(--bg-input)]'>
-                        <div className='ingredients absolute left-0 right-0 top-full z-10 w-full'>
-                          <Command className='w-full rounded-lg border bg-[var(--bg-input)] text-white shadow-md'>
-                            <CommandInput placeholder='Search...' />
-                            <CommandList>
-                              <CommandEmpty>No results found.</CommandEmpty>
-                              <ScrollArea className='h-[200px] w-full rounded-md'>
-                                <CommandGroup>
-                                  {(getIngredientsQuery.data?.result as Ingredient[])?.map((ingre) => {
-                                    return (
-                                      <CommandItem
-                                        key={ingre._id}
-                                        className='flex h-auto items-center justify-between py-3 data-[selected="true"]:bg-[var(--secondary-color)]'
-                                      >
-                                        <span>{ingre.name}</span>
-                                        {/* <span className='block rounded-full bg-[var(--bg-input)] p-1'>
-                                        <X className='h-4 w-4' />
-                                      </span> */}
-                                      </CommandItem>
-                                    )
-                                  })}
-                                </CommandGroup>
-                              </ScrollArea>
-                            </CommandList>
-                          </Command>
-                        </div>
-                      </ScrollArea>
+                      <Tippy
+                        hideOnClick={false}
+                        offset={[0, 0]}
+                        interactive
+                        placement='bottom-start'
+                        render={(attrs) => (
+                          <div className='w-[340px]' tabIndex={-1} {...attrs}>
+                            <Command className='w-full rounded-lg border bg-[var(--bg-input)] text-white shadow-md'>
+                              <CommandInput placeholder='Search...' />
+                              <CommandList>
+                                <CommandEmpty>No results found.</CommandEmpty>
+                                <ScrollArea className='h-[160px] w-full rounded-md bg-[var(--bg-input)]'>
+                                  <CommandGroup>
+                                    {(getIngredientsQuery.data?.result as Ingredient[])?.map((ingre) => {
+                                      const params = { _id: ingre._id, name: ingre.name, unit: ingre.unit }
+                                      return (
+                                        <CommandItem
+                                          onClick={() => console.log(ingre)}
+                                          key={ingre._id}
+                                          className='group flex h-auto w-full items-center justify-between py-3 data-[selected=true]:bg-[var(--secondary-color)]'
+                                        >
+                                          <span>
+                                            {ingre.name} ({ingre.unit})
+                                          </span>
+                                          <div className='flex items-center gap-1'>
+                                            <span
+                                              className='block rounded-full bg-[var(--bg-input)] p-1 transition-all hover:opacity-80 active:opacity-80'
+                                              onClick={modifyIngregients(params, 'SUBTRACT')}
+                                            >
+                                              <Minus className='h-4 w-4' />
+                                            </span>
+                                            <Input
+                                              onChange={modifyIngregients(params, 'MANUAL')}
+                                              value={ingredients[ingre._id]?.quantity || 0}
+                                              defaultValue={0}
+                                              min={0}
+                                              type='number'
+                                              max={100}
+                                              className='min-w-[40px] bg-[var(--secondary-color)] text-center ring-0 ring-offset-0 group-data-[selected=true]:bg-[var(--bg-input)]'
+                                            />
+                                            <span
+                                              className='block rounded-full bg-[var(--bg-input)] p-1 transition-all hover:opacity-80 active:opacity-80'
+                                              onClick={modifyIngregients(params, 'ADD')}
+                                            >
+                                              <Plus className='h-4 w-4' />
+                                            </span>
+                                          </div>
+                                        </CommandItem>
+                                      )
+                                    })}
+                                  </CommandGroup>
+                                </ScrollArea>
+                              </CommandList>
+                            </Command>
+                          </div>
+                        )}
+                      >
+                        <ScrollArea className='h-[120px] min-h-[54px] w-full rounded-md bg-[var(--bg-input)] p-4'>
+                          <div className='flex flex-wrap gap-2'>
+                            {Object.entries(ingredients).map(([_id, { name, quantity, unit }]) => {
+                              return (
+                                <div
+                                  key={_id}
+                                  className='flex w-fit items-center gap-4 rounded-md bg-[var(--secondary-color)] px-4 py-2'
+                                >
+                                  <div className='flex items-center gap-1'>
+                                    <span className='max-w-[120px] truncate'>{name}</span>
+                                    <span className='rounded-sm bg-[var(--primary-color)] px-2'>{quantity}</span>
+                                    <span>{unit}</span>
+                                  </div>
+                                  <span
+                                    className='block rounded-full bg-[var(--bg-input)] p-1 transition-all hover:opacity-80 active:opacity-80'
+                                    onClick={modifyIngregients({ _id, name, unit }, 'REMOVE')}
+                                  >
+                                    <X className='h-4 w-4' />
+                                  </span>
+                                </div>
+                              )
+                            })}
+                          </div>
+                        </ScrollArea>
+                      </Tippy>
                     </div>
                     <FormField
                       control={menuItemForm.control}
@@ -344,7 +455,7 @@ export default function Page() {
                         onClick={handleAddMenuItem}
                         className='h-auto bg-[var(--primary-color)] px-12 py-3 text-base text-white transition-all hover:bg-[var(--primary-color)] hover:shadow-md hover:shadow-[var(--primary-color)]'
                       >
-                        Save Changes
+                        Add
                       </Button>
                     </div>
                   </Form>
