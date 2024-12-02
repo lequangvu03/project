@@ -23,7 +23,9 @@ export default function DashboardChart({ chartData }: { chartData: ChartData[] }
     <div className='rounded-2xl bg-[var(--secondary-color)] p-4'>
       <CardHeader>
         <CardTitle>Overview</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardDescription>
+          {chartData[0].month} - {chartData[chartData.length - 1].month}
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>

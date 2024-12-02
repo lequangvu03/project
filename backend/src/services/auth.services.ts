@@ -227,7 +227,8 @@ class AuthService {
     await databaseService.refreshTokens.insertOne(
       new RefreshToken({ user_id: new ObjectId(user_id), token: tokens.refresh_token })
     )
-    return tokens
+    const { exp } = await this.decodeAccessToken(tokens.access_token)
+    return { tokens, exp }
   }
 }
 

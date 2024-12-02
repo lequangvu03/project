@@ -50,16 +50,6 @@ export default function Notification({ notification }: Props) {
         </div>
         <p className='text-[16px] font-light text-gray-300'>{formatDateTime(notification.updated_at ?? 0)}</p>
       </section>
-
-      <Button className='flex items-center gap-4 border-[1px] border-solid border-[#EA7C69]'>
-        <svg width='14' height='16' viewBox='0 0 14 16' fill='none' xmlns='http://www.w3.org/2000/svg'>
-          <path
-            d='M3.12365 15.4285C2.70198 15.4285 2.34998 15.2873 2.06765 15.005C1.7847 14.722 1.64323 14.3697 1.64323 13.9481V2.59516H0.726562V1.67849H4.39323V0.972656H9.89323V1.67849H13.5599V2.59516H12.6432V13.9481C12.6432 14.3697 12.5021 14.7217 12.2197 15.0041C11.9368 15.287 11.5845 15.4285 11.1628 15.4285H3.12365ZM5.1339 12.6785H6.05056V4.42849H5.1339V12.6785ZM8.2359 12.6785H9.15256V4.42849H8.2359V12.6785Z'
-            fill='#E70000'
-          />
-        </svg>
-        <p>Delete</p>
-      </Button>
     </div>
   )
 }

@@ -11,6 +11,7 @@ import useAuthStore from '~/stores/auth.store'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import { Skeleton } from './ui/skeleton'
 import { IoIosNotifications } from 'react-icons/io'
+import { useGetCountNotificationCountQuery } from '~/hooks/data/notifications.data'
 
 export const dynamic = 'force-dynamic'
 
@@ -19,6 +20,7 @@ export default function Header() {
   const exactRoute = routes.find((route) => route.redirect.includes(pathname))
   const myProfileData = useGetMyProfileQuery()
   const authStore = useAuthStore()
+  const count = useGetCountNotificationCountQuery()
 
   useLayoutEffect(() => {
     if (myProfileData.data?.result) {
@@ -47,7 +49,7 @@ export default function Header() {
         <Link href={'/admin/notification'} className='relative animate-pulse'>
           <IoIosNotifications className='text-[30px]' />
           <div className='absolute right-0 top-0 flex h-4 w-4 items-center justify-center rounded-full bg-[#EA7C69] text-[14px]'>
-            <span>1</span>
+            <span>{count?.data?.result?.count ?? ''}</span>
           </div>
         </Link>
         {myProfileData.isPending ? (

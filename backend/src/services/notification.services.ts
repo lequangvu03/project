@@ -36,6 +36,12 @@ class NotificationService {
 
     return result
   }
+  async getCountReadNotifications() {
+    const count = await databaseService.notifications.countDocuments({
+      status: NotificationStatus.Unread
+    })
+    return { count }
+  }
 }
 const notificationService = new NotificationService()
 
