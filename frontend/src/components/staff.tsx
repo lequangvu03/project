@@ -23,7 +23,7 @@ import { IMenuItem } from '~/models/menu.model'
 import CustomSheet from './custom-sheet'
 import { Checkbox } from './ui/checkbox'
 import { useGetStaffsQuery } from '~/hooks/data/staffs.data'
-import { User } from '~/definitions/types'
+import { TProfile } from '~/definitions/types'
 import { formatRole } from '~/utils/format-role'
 
 function TableStaff() {
@@ -63,7 +63,7 @@ function TableStaff() {
         </TableHeader>
         <TableBody className='[&>tr]:border-none'>
           {staffs?.result?.employees &&
-            staffs?.result?.employees.map((user: User, index: number) => {
+            staffs?.result?.employees.map((user: TProfile, index: number) => {
               return (
                 <TableRow
                   className={cn('w-fit bg-[var(--secondary-color)]', {

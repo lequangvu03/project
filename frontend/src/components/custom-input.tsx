@@ -11,11 +11,23 @@ type Props = {
   label?: string
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   field: any
-  type?: 'text' | 'password'
+  type?: 'text' | 'password' | 'number'
   required?: boolean
+  min?: number
+  max?: number
 }
 
-function CustomInput({ className, required, placeholder, field, label, classNameInput, type = 'text' }: Props) {
+function CustomInput({
+  className,
+  required,
+  placeholder,
+  field,
+  label,
+  classNameInput,
+  type = 'text',
+  max,
+  min
+}: Props) {
   const [visible, setVisible] = useState<boolean>(false)
 
   const togglePasswordVisibility = () => {
@@ -30,7 +42,9 @@ function CustomInput({ className, required, placeholder, field, label, className
       <FormControl>
         <div className='relative'>
           <Input
-            type={type === 'password' ? (visible ? 'text' : 'password') : 'text'}
+            min={min}
+            max={max}
+            type={type === 'password' ? (visible ? 'text' : 'password') : type}
             className={cn(
               'h-auto border-none bg-[var(--bg-input)] px-6 py-4 text-base outline-none focus-visible:ring-0 focus-visible:ring-offset-0',
               classNameInput

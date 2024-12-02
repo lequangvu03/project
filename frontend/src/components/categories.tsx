@@ -18,7 +18,6 @@ function Categories() {
         <Category className='min-w-32' amount={totalDishes} name='All' />
         {categories &&
           categories.map(function (category, index: number) {
-            console.log(+category.totalProducts)
             return (
               <Category
                 className='min-w-32'

@@ -5,7 +5,7 @@ export interface OrderItem {
   item_price: number
 }
 export interface InboundOrderItem {
-  _id: ObjectId
+  _id: string
   quantity: number
   item_name: number
   item_price: number
@@ -33,7 +33,7 @@ export interface Order {
 }
 
 export interface InboundOrderType {
-  _id?: ObjectId
+  _id?: string
   inbound_order_items: InboundOrderItem[]
   total_price: number
   created_at?: number
@@ -54,9 +54,14 @@ export type Product = {
   category_name: string
 }
 
+export enum NotificationRoleType {
+  All,
+  Admin,
+  Employee
+}
 export interface NotificationType {
-  _id?: ObjectId
-  recipient: notificationRoleType
+  _id?: string
+  recipient: NotificationRoleType
   message: string
   title: string
   status: number
@@ -96,11 +101,11 @@ export type BusinessData = {
   chart_data: ChartData[]
 }
 
-export interface User {
+export type TProfile = {
   _id: string
   email: string
-  name: string
   password: string
+  name: string
   created_at: number
   updated_at: number
   email_verify_token: string
@@ -109,9 +114,13 @@ export interface User {
   role: number
   avatar_url: string
   permissions: number[]
-  position: string | null
-  salary: number | null
-  contact_info: string | null
-  age: number | null
-  timing: string | null
+  ip_address: string
+  ipAddress: string[]
+}
+
+export type TCategory = {
+  _id: string
+  name: string
+  description: string
+  totalProducts: number
 }

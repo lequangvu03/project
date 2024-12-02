@@ -27,3 +27,16 @@ export const useDeleteDishQuery = () => {
     }
   })
 }
+
+export const useAddMenuItemMutation = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: menuServices.addMenuItem,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['DISHES']
+      })
+    }
+  })
+}

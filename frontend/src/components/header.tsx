@@ -10,7 +10,6 @@ import { routes } from '~/routers'
 import useAuthStore from '~/stores/auth.store'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import { Skeleton } from './ui/skeleton'
-import Image from 'next/image'
 
 export const dynamic = 'force-dynamic'
 
@@ -33,7 +32,7 @@ export default function Header() {
       })
     }
   }, [myProfileData.data])
-  console.log(myProfileData.data)
+
   return (
     <header className='sticky top-8 z-10 flex h-[100px] items-center justify-between rounded-2xl bg-[var(--secondary-color)] px-4 shadow-sm shadow-border'>
       <section className='flex flex-col'>
