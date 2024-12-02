@@ -18,7 +18,7 @@ import { TagType } from '~/definitions/constant/types.constant'
 import { useAddCategoryMutation, useGetCategoriesQuery } from '~/hooks/data/categories.data'
 import { useAddMenuItemMutation } from '~/hooks/data/menu.data'
 import useQueryParams from '~/hooks/useQueryParams'
-import TableDishes from './data-table'
+const TableDishes = dynamic(() => import('./data-table'))
 
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '~/components/ui/command'
 
@@ -37,7 +37,7 @@ import {
 import { Ingredient, TCategory } from '~/definitions/types'
 import { useGetAllIngredientsQuery } from '~/hooks/data/ingredients.data'
 import { omit, omitBy } from 'lodash'
-
+console.log('RENDERING MENU PAGE')
 const Categories = dynamic(() => import('~/components/categories'), {
   loading: () => (
     <div className='flex gap-4'>
@@ -274,6 +274,9 @@ export default function Page() {
           </div>
 
           <CustomSheet
+            onConfirm={() => {
+              menuItemForm.reset()
+            }}
             isConfirmationRequired={menuItemForm.formState.isDirty}
             title='New category'
             render={
@@ -307,7 +310,7 @@ export default function Page() {
                   </div>
                 </div>
                 <div className='space-y-5'>
-                  <Form {...menuItemForm}>
+                  <Form {...menuItemForm} key={'form-add-menu'}>
                     <FormField
                       control={menuItemForm.control}
                       name='name'
@@ -393,7 +396,6 @@ export default function Page() {
                                             <Input
                                               onChange={modifyIngregients(params, 'MANUAL')}
                                               value={ingredients[ingre._id]?.quantity || 0}
-                                              defaultValue={0}
                                               min={0}
                                               type='number'
                                               max={100}
@@ -462,10 +464,7 @@ export default function Page() {
               </>
             }
           >
-            <Button
-              onClick={handleAddMenuItem}
-              className='bg-[#EA7C69] text-white transition-all hover:bg-[#EA7C69] hover:opacity-90'
-            >
+            <Button className='bg-[#EA7C69] text-white transition-all hover:bg-[#EA7C69] hover:opacity-90'>
               New item
             </Button>
           </CustomSheet>
