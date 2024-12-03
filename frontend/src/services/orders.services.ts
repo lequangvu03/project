@@ -31,7 +31,7 @@ const ordersServices = {
       }[]
     }
   }) {
-    return sendPut('/order' + id, body)
+    return sendPut('/order/' + id, body)
   },
 
   deleteOrder: function (id: string) {
