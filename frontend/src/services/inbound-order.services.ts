@@ -4,6 +4,9 @@ const inboundOrderService = {
   getInboundOrders: function ({ page = 1, limit = 12 }: { page: number; limit?: number }) {
     return sendGet(`/inboundOrder?page=${page}&limit=${limit}&sortBy=created_at&sortOrder=asc`)
   },
+  getInboundOrdersById: function (id: string) {
+    return sendGet(`/inboundOrder?id=${id}`)
+  },
 
   updateInboundOrder: function ({
     id,

@@ -4,6 +4,9 @@ const ordersServices = {
   getOrders: function ({ page = 1, limit = 9, status }: { page: number; limit?: number; status?: number }) {
     return sendGet(`/order?page=${page}&limit=${limit}&sortBy=created_at&sortOrder=asc&status=${status}`)
   },
+  getOrderById: function (id: string) {
+    return sendGet(`/order?id=${id}`)
+  },
 
   addOrder: function (body: {
     table_number: number

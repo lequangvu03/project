@@ -1,19 +1,24 @@
 'use client'
 
 import { X } from 'lucide-react'
+import { useParams } from 'next/navigation'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import Inventory from '~/components/inventory'
 import { Button } from '~/components/ui/button'
 import { Ingredient } from '~/definitions/types'
-import { useAddInboundOrderMutation } from '~/hooks/data/inbound-order.data'
+import { useAddInboundOrderMutation, useGetINboundByIdOrdersQuery } from '~/hooks/data/inbound-order.data'
 import { useGetAllIngredientsQuery, useGetIngredientsQuery } from '~/hooks/data/ingredients.data'
+import { useGetOrdersByIdQuery } from '~/hooks/data/orders.data'
 
 export default function Page() {
   const { data: ingredients } = useGetAllIngredientsQuery()
+  const { id } = useParams()
+  const { data } = useGetINboundByIdOrdersQuery(id?.toString() || '')
+  const order = data?.result?.inboundOrders[0]
   const [orderItems, setOrderItems] = useState<
-    Record<string, { ingredient: Ingredient; quantity: number; order: number }>
-  >({})
+  Record<string, { ingredient: Ingredient; quantity: number; order: number }>
+>({})
   const addInboundOrderMutation = useAddInboundOrderMutation()
   const handleSubmit = async () => {
     await addInboundOrderMutation.mutateAsync({
