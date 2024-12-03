@@ -189,10 +189,14 @@ class MenuService {
     if (dir) {
       data.image = dir
     }
-    console.log('data', data)
     data._id = new ObjectId()
+    const ingredients = data.ingredients.map((ingredients) => ({
+      ...ingredients,
+      item_id: new ObjectId(ingredients._id)
+    }))
     const newMenuItem = new MenuItem({
       ...data,
+      ingredients: ingredients,
       category_id: new ObjectId(data.category_id),
       status: menuItemStatus.Available
     })
