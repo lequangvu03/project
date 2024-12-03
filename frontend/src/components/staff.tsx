@@ -18,7 +18,7 @@ import {
 import PlaceholderImage from '~/assets/images/inventory-placeholder.png'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/components/ui/table'
 import { useDeleteDishQuery, useGetDishesQuery } from '~/hooks/data/menu.data'
-import { useGetStaffsQuery } from '~/hooks/data/staffs.data'
+import { useGetStaffsByIdQuery, useGetStaffsQuery, useUpdateStaffMutation } from '~/hooks/data/staffs.data'
 import { cn } from '~/lib/utils'
 import CustomSheet from './custom-sheet'
 import { Checkbox } from './ui/checkbox'
@@ -26,12 +26,14 @@ import { formatRole } from '~/utils/format-role'
 import { TProfile } from '~/definitions/types'
 import { Button } from './ui/button'
 import CustomInput from './custom-input'
-import { Form, FormField } from './ui/form'
-import { useState } from 'react'
+import { Form, FormField, FormItem, FormLabel } from './ui/form'
+import { useEffect, useState } from 'react'
 import { ColumnFiltersState, SortingState, VisibilityState } from '@tanstack/react-table'
 import { useForm } from 'react-hook-form'
 import { TagType } from '~/definitions/constant/types.constant'
 import useQueryParams from '~/hooks/useQueryParams'
+import Loading from '~/components/loading'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/ui/select'
 
 // Enum để ánh xạ vị trí
 export enum PositionEmployeeType {
@@ -49,7 +51,7 @@ function getPositionLabel(position: number): string {
 
 function TableStaff() {
   const deleteStaffMutation = useDeleteDishQuery()
-
+  const [id, setId] = useState<string>('')
   const { data: staffs } = useGetStaffsQuery()
   console.log(staffs?.result?.employees)
   const handleDelete = async (id: string) => {
@@ -64,28 +66,37 @@ function TableStaff() {
   const handleChoose = (id: string) => (checked: CheckedState) => {
     console.log(id, checked)
   }
-
-  const [sorting, setSorting] = useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = useState({})
-  const form = useForm<{
+  const updateStaffMutation = useUpdateStaffMutation()
+  const updateStaffQuery = useGetStaffsByIdQuery({
+    id: id,
+    enabled: !!id
+  })
+  useEffect(() => {
+    const item = updateStaffQuery.data?.result?.employees?.[0]
+    if (item) {
+      menuItemForm.setValue('name', item.name)
+      menuItemForm.setValue('contact_info', item.contact_info)
+      menuItemForm.setValue('position', item.position)
+      menuItemForm.setValue('salary', item.salary)
+      menuItemForm.setValue('age', item.age)
+      menuItemForm.setValue('timing', item.timing)
+    }
+  }, [updateStaffQuery.data])
+  const menuItemForm = useForm<{
     name: string
-    description: string
-    price: string
-    category_id: string
-    stock: string
-    image: File | string
-    tag: TagType
+    contact_info: string
+    position: number
+    salary: number
+    timing: string
+    age: number
   }>({
     defaultValues: {
       name: '',
-      image: '',
-      price: '',
-      category_id: '',
-      description: '',
-      stock: '',
-      tag: TagType.Normal
+      contact_info: '',
+      position: 0,
+      salary: 0,
+      age: 0,
+      timing: ''
     }
   })
   const { categoryId, tag } = useQueryParams()
@@ -94,7 +105,18 @@ function TableStaff() {
     categoryId: categoryId,
     tag: tag === 'ALL' ? '' : tag
   })
-
+  const handleUpdateStaff = menuItemForm.handleSubmit(async (data) => {
+    try {
+      const response = await updateStaffMutation.mutateAsync({
+        id: id,
+        body: data
+      })
+      menuItemForm.reset()
+      toast(response?.message)
+    } catch (error) {
+      console.log(error)
+    }
+  })
   const deleteDishMutation = useDeleteDishQuery()
 
   return (
@@ -176,105 +198,97 @@ function TableStaff() {
                   <TableCell className='text-right'>
                     <div className='flex items-center gap-4'>
                       <CustomSheet
-                        isConfirmationRequired
+                        onConfirm={() => {
+                          menuItemForm.reset()
+                        }}
+                        isConfirmationRequired={menuItemForm.formState.isDirty}
+                        title='New category'
                         render={
                           <div>
-                            <div className='mt-6 flex flex-col items-center justify-center gap-4'>
-                              <Image
-                                src={PlaceholderImage}
-                                alt='placeholder image'
-                                className='max-w-[240px] overflow-hidden rounded-[10px] bg-[var(--bg-input)]'
-                              />
-                              <p className='text-[var(--primary-color)] underline'>Change inventory image</p>
-                            </div>
-                            <Form {...form}>
-                              <div className='mt-8 space-y-6'>
-                                <div className='flex w-full items-center gap-5'>
-                                  <FormField
-                                    control={form.control}
-                                    name='name'
-                                    render={({ field }) => (
-                                      <CustomInput
-                                        className='flex-grow'
-                                        classNameInput='bg-[var(--bg-input)]'
-                                        label='Name'
-                                        field={field}
-                                      />
-                                    )}
-                                  />
-                                  <FormField
-                                    control={form.control}
-                                    name='description'
-                                    render={({ field }) => (
-                                      <CustomInput
-                                        className='flex-grow'
-                                        classNameInput='bg-[var(--bg-input)]'
-                                        label='Description'
-                                        field={field}
-                                      />
-                                    )}
-                                  />
-                                </div>
-                                <div className='flex w-full items-center gap-5'>
-                                  <FormField
-                                    control={form.control}
-                                    name='price'
-                                    render={({ field }) => (
-                                      <CustomInput
-                                        className='flex-grow'
-                                        classNameInput='bg-[var(--bg-input)]'
-                                        label='Price'
-                                        field={field}
-                                      />
-                                    )}
-                                  />
-                                  <FormField
-                                    control={form.control}
-                                    name='stock'
-                                    render={({ field }) => (
-                                      <CustomInput
-                                        className='flex-grow'
-                                        classNameInput='bg-[var(--bg-input)]'
-                                        label='Stock'
-                                        field={field}
-                                      />
-                                    )}
-                                  />
-                                </div>
-                                <FormField
-                                  control={form.control}
-                                  name='tag'
-                                  render={({ field }) => (
-                                    <CustomInput
-                                      className='flex-grow'
-                                      classNameInput='bg-[var(--bg-input)]'
-                                      label='Tag '
-                                      field={field}
-                                    />
-                                  )}
-                                />
-                                <div className='!mt-9 flex items-center justify-end gap-5'>
-                                  <Button className='h-auto bg-transparent px-12 py-3 text-base text-white underline transition-all hover:bg-transparent hover:text-[var(--primary-color)]'>
-                                    Cancel
-                                  </Button>
-                                  <Button className='h-auto bg-[var(--primary-color)] px-12 py-3 text-base text-white transition-all hover:bg-[#FAC1D9] hover:text-black hover:shadow-md hover:shadow-[#FAC1D9]'>
-                                    Save
-                                  </Button>
-                                </div>
+                            {updateStaffQuery.isPending ? (
+                              <div className='flex h-full w-full items-center justify-center'>
+                                <Loading />
                               </div>
-                            </Form>
+                            ) : (
+                              <>
+                                <div className='flex w-full justify-center'></div>
+                                <div className='space-y-5'>
+                                  <Form {...menuItemForm} key={'form-update-menu'}>
+                                    <FormField
+                                      control={menuItemForm.control}
+                                      name='name'
+                                      render={({ field }) => <CustomInput field={field} label='Name' />}
+                                    />
+                                    <FormField
+                                      control={menuItemForm.control}
+                                      name='age'
+                                      render={({ field }) => (
+                                        <CustomInput label='Age' type='number' min={0} field={field} />
+                                      )}
+                                    />
+                                    <FormField
+                                      control={menuItemForm.control}
+                                      name='contact_info'
+                                      render={({ field }) => <CustomInput label='Phone' field={field} />}
+                                    />
+                                    <FormField
+                                      control={menuItemForm.control}
+                                      name='position'
+                                      render={({ field }) => (
+                                        <FormItem>
+                                          <FormLabel>Position</FormLabel>
+                                          <Select
+                                            value={String(field.value)}
+                                            onValueChange={(value) => field.onChange(Number(value))}
+                                          >
+                                            <SelectTrigger className='min-h-[56px] bg-[var(--bg-input)]'>
+                                              <SelectValue placeholder='Position' />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                              {Object.entries(PositionEmployeeType)
+                                                .filter(([key, value]) => typeof value === 'number')
+                                                .map(([key, value]) => (
+                                                  <SelectItem key={value} value={String(value)}>
+                                                    {key}
+                                                  </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                          </Select>
+                                        </FormItem>
+                                      )}
+                                    />
+
+                                    <FormField
+                                      control={menuItemForm.control}
+                                      name='salary'
+                                      render={({ field }) => <CustomInput type='number' label='Salary' field={field} />}
+                                    />
+                                    <FormField
+                                      control={menuItemForm.control}
+                                      name='timing'
+                                      render={({ field }) => <CustomInput label='Timing' field={field} />}
+                                    />
+
+                                    <div className='!mt-9 flex items-center justify-end gap-5'>
+                                      <Button
+                                        type='button'
+                                        disabled={!menuItemForm.formState.isDirty || updateStaffMutation.isPending}
+                                        onClick={handleUpdateStaff}
+                                        className='h-auto bg-[var(--primary-color)] px-12 py-3 text-base text-white transition-all hover:bg-[var(--primary-color)] hover:shadow-md hover:shadow-[var(--primary-color)]'
+                                      >
+                                        Update
+                                      </Button>
+                                    </div>
+                                  </Form>
+                                </div>
+                              </>
+                            )}
                           </div>
                         }
-                        title='Edit Staff'
                       >
-                        <div className='cursor-pointer hover:opacity-60 active:opacity-60'>
-                          <Pencil />
-                        </div>
+                        <Pencil className='cursor-pointer' onClick={() => setId(user._id)} />
                       </CustomSheet>
                       <AlertDialog>
-                        <AlertDialogTrigger asChild className='cursor-pointer hover:opacity-60 active:opacity-60'>
-                          <Trash />
-                        </AlertDialogTrigger>
                         <AlertDialogContent className='bg-[var(--secondary-color)]'>
                           <AlertDialogHeader>
                             <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>

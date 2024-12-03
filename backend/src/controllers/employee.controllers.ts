@@ -8,7 +8,8 @@ export const getAllEmployeesController = async (req: Request, res: Response, err
   const sortBy = req.query.sortBy as string | undefined
   const sortOrder = req.query.sortOrder as 'asc' | 'desc' | undefined
   const name = (req.query.name as string) || ''
-  const result = await employeeService.getAllEmployees({ limit, page, sortBy, sortOrder, name })
+  const id = (req.query.id as string) || ''
+  const result = await employeeService.getAllEmployees({ limit, page, sortBy, sortOrder, name, id })
   return res.status(200).json({ message: EMPLOYEE_MESSAGE.GET_ALL_EMPLOYEE_SUCCESS, result })
 }
 

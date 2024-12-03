@@ -4,6 +4,11 @@ const staffsServices = {
   getStaff() {
     return sendGet('/employee')
   },
+  getStaffById(id: string) {
+    return sendGet('/employee/',{
+      id: id
+    })
+  },
   updateStaff({
     id,
     body
