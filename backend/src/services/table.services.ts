@@ -9,10 +9,10 @@ class TableService {
   }
   async getAllTables(id?: string) {
     if (id) {
-      const table = await databaseService.tables.findOne({ _id: new ObjectId(id) })
+      const table = await databaseService.tables.findOne({ _id: new ObjectId(id), status: TableStatus.Empty })
       return table
     }
-    const tables = await databaseService.tables.find().toArray()
+    const tables = await databaseService.tables.find({ status: TableStatus.Empty }).toArray()
     const total = await databaseService.tables.countDocuments()
     return { tables, total }
   }
