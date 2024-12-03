@@ -26,6 +26,9 @@ export const useAddOrderMutation = function () {
       queryClient.invalidateQueries({
         queryKey: ['ORDERS']
       })
+      queryClient.invalidateQueries({
+        queryKey: ['TABLES']
+      })
     }
   })
 }
