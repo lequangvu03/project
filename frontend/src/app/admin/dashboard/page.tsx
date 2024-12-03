@@ -4,6 +4,7 @@ import { formatDate } from 'date-fns'
 import Image from 'next/image'
 import Link from 'next/link'
 import DashboardChart from '~/components/dashboard-chart'
+import { ScrollArea } from '~/components/ui/scroll-area'
 import { RecentOrder, TopSellingItem } from '~/definitions/types'
 import { useGetDashboardOverview } from '~/hooks/data/dashboard.data'
 import { formatDateTime, formatDateTimeMonth } from '~/utils/format-datetime'
@@ -223,7 +224,7 @@ export default function DashboardPage() {
                 See All
               </Link>
             </header>
-            <aside className='flex h-[300px] flex-col gap-4 overflow-y-auto overflow-x-hidden'>
+            <ScrollArea className='flex h-[300px] flex-col gap-4 overflow-y-auto overflow-x-hidden'>
               {dashboard?.result?.top_selling_items?.map(function (topSellingItem: TopSellingItem, index: number) {
                 return (
                   <div className='flex items-center justify-between rounded-xl bg-[#262728] p-1' key={index}>
@@ -252,7 +253,7 @@ export default function DashboardPage() {
                   </div>
                 )
               })}
-            </aside>
+            </ScrollArea>
           </div>
           <div className='flex flex-col gap-4 rounded-xl bg-[var(--secondary-color)] p-6'>
             <header className='flex items-center justify-between'>
@@ -261,7 +262,7 @@ export default function DashboardPage() {
                 See All
               </Link>
             </header>
-            <aside className='flex h-[300px] flex-col gap-4 overflow-x-hidden overflow-y-scroll'>
+            <ScrollArea className='flex h-[300px] flex-col gap-4 overflow-x-hidden'>
               {dashboard?.result?.recent_orders?.map(function (recentOrder: RecentOrder, index: number) {
                 return (
                   <div className='flex items-center justify-between rounded-xl bg-[#262728] p-1' key={index}>
@@ -281,7 +282,7 @@ export default function DashboardPage() {
                   </div>
                 )
               })}
-            </aside>
+            </ScrollArea>
           </div>
         </section>
 
