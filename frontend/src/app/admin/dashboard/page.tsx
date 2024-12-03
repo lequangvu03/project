@@ -8,6 +8,7 @@ import { ScrollArea } from '~/components/ui/scroll-area'
 import { RecentOrder, TopSellingItem } from '~/definitions/types'
 import { useGetDashboardOverview } from '~/hooks/data/dashboard.data'
 import { formatDateTime, formatDateTimeMonth } from '~/utils/format-datetime'
+import { formatOrderStatus } from '~/utils/format-status'
 
 export default function DashboardPage() {
   const { data: dashboard } = useGetDashboardOverview()
@@ -225,34 +226,36 @@ export default function DashboardPage() {
               </Link>
             </header>
             <ScrollArea className='flex h-[300px] flex-col gap-4 overflow-y-auto overflow-x-hidden'>
-              {dashboard?.result?.top_selling_items?.map(function (topSellingItem: TopSellingItem, index: number) {
-                return (
-                  <div className='flex items-center justify-between rounded-xl bg-[#262728] p-1' key={index}>
-                    <div className='flex items-start gap-4'>
-                      <div className='h-[60px] w-[90px] rounded-md bg-slate-400'>
-                        <Image
-                          src={topSellingItem.image}
-                          className='h-full w-full rounded-md object-cover'
-                          width={90}
-                          height={60}
-                          alt=''
-                        />
+              <div className='pr-2'>
+                {dashboard?.result?.top_selling_items?.map(function (topSellingItem: TopSellingItem, index: number) {
+                  return (
+                    <div className='mt-2 flex items-center justify-between rounded-xl bg-[#262728] p-1' key={index}>
+                      <div className='flex items-start gap-4'>
+                        <div className='h-[60px] w-[90px] rounded-md bg-slate-400'>
+                          <Image
+                            src={topSellingItem.image}
+                            className='h-full w-full rounded-md object-cover'
+                            width={90}
+                            height={60}
+                            alt=''
+                          />
+                        </div>
+                        <div className='flex flex-col gap-1 p-1'>
+                          <h2 className='text-[16px] text-white'>{topSellingItem.name}</h2>
+                          <p className='text-[14px] font-normal leading-[21px] text-gray-300'>
+                            Price : ${topSellingItem.price}
+                          </p>
+                        </div>
                       </div>
-                      <div className='flex flex-col gap-1 p-1'>
-                        <h2 className='text-[16px] text-white'>{topSellingItem.name}</h2>
-                        <p className='text-[14px] font-normal leading-[21px] text-gray-300'>
-                          Price : ${topSellingItem.price}
-                        </p>
-                      </div>
-                    </div>
 
-                    <div className='mr-2 flex flex-col gap-2'>
-                      <h2 className='text-[14px] text-[#EA7C69]'>Quantity Sold</h2>
-                      <p className='text-[14px] font-medium text-gray-300'>{topSellingItem.quantity_sold}</p>
+                      <div className='mr-2 flex flex-col gap-2'>
+                        <h2 className='text-[14px] text-[#EA7C69]'>Quantity Sold</h2>
+                        <p className='text-[14px] font-medium text-gray-300'>{topSellingItem.quantity_sold}</p>
+                      </div>
                     </div>
-                  </div>
-                )
-              })}
+                  )
+                })}
+              </div>
             </ScrollArea>
           </div>
           <div className='flex flex-col gap-4 rounded-xl bg-[var(--secondary-color)] p-6'>
@@ -262,26 +265,28 @@ export default function DashboardPage() {
                 See All
               </Link>
             </header>
-            <ScrollArea className='flex h-[300px] flex-col gap-4 overflow-x-hidden'>
-              {dashboard?.result?.recent_orders?.map(function (recentOrder: RecentOrder, index: number) {
-                return (
-                  <div className='flex items-center justify-between rounded-xl bg-[#262728] p-1' key={index}>
-                    <div className='flex items-start gap-4'>
-                      <div className='flex flex-col gap-1 p-1'>
-                        <h2 className='text-[16px] text-white'>Table {recentOrder.table_number}</h2>
-                        <p className='text-[14px] font-normal leading-[21px] text-gray-300'>
-                          Order Status : {recentOrder.order_status}
-                        </p>
+            <ScrollArea className='flex h-[300px] flex-col overflow-x-hidden'>
+              <div className='pr-2'>
+                {dashboard?.result?.recent_orders?.map(function (recentOrder: RecentOrder, index: number) {
+                  return (
+                    <div className='mt-2 flex items-center justify-between rounded-xl bg-[#262728] p-1' key={index}>
+                      <div className='flex items-start gap-4'>
+                        <div className='flex flex-col gap-1 p-1'>
+                          <h2 className='text-[16px] text-white'>Table {recentOrder.table_number}</h2>
+                          <p className='text-[14px] font-normal leading-[21px] text-gray-300'>
+                            Order Status : {formatOrderStatus(recentOrder.order_status)}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className='mr-2 flex flex-col gap-2'>
+                        <h2 className='text-[14px] text-[#EA7C69]'>In Stock</h2>
+                        <p className='text-[14px] font-medium text-gray-300'>$ {recentOrder.total_price}</p>
                       </div>
                     </div>
-
-                    <div className='mr-2 flex flex-col gap-2'>
-                      <h2 className='text-[14px] text-[#EA7C69]'>In Stock</h2>
-                      <p className='text-[14px] font-medium text-gray-300'>$ {recentOrder.total_price}</p>
-                    </div>
-                  </div>
-                )
-              })}
+                  )
+                })}
+              </div>
             </ScrollArea>
           </div>
         </section>
