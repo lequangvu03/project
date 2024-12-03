@@ -7,6 +7,13 @@ export const useGetStaffsQuery = () => {
     queryFn: staffsServices.getStaff
   })
 }
+export const useGetStaffsByIdQuery = (params: { id?: string; enabled?: boolean }) => {
+  return useQuery({
+    queryKey: ['STAFFS', params?.id],
+    queryFn: () => staffsServices.getStaffById(params?.id as string),
+    enabled: params?.enabled
+  })
+}
 
 export const useUpdateStaffMutation = () => {
   const queryClient = useQueryClient()

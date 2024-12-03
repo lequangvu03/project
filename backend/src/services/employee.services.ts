@@ -8,13 +8,15 @@ class EmployeeService {
     page,
     sortBy,
     sortOrder,
-    name
+    name,
+    id
   }: {
     limit: number
     page: number
     sortBy?: string
     sortOrder?: string
     name?: string
+    id?: string
   }) {
     const matchFilter: any = {
       role: RoleType.Employee
@@ -26,6 +28,9 @@ class EmployeeService {
     }
     if (name) {
       matchFilter.name = { $regex: new RegExp(name, 'i') }
+    }
+    if (id) {
+      matchFilter._id = new ObjectId(id)
     }
     const employees = await databaseService.users
       .find(matchFilter)
