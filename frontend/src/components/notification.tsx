@@ -45,7 +45,7 @@ export default function Notification({ notification }: Props) {
             {notification.title}
           </h3>
           <p className={`text-[16px] font-light ${isRead ? 'text-gray-500' : 'text-gray-300'}`}>
-            {formatDateTime(notification.updated_at ?? 0)}
+            {notification.message}
           </p>
         </div>
         <p className='text-[16px] font-light text-gray-300'>{formatDateTime(notification.updated_at ?? 0)}</p>
