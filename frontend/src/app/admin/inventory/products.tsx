@@ -16,7 +16,7 @@ import {
 import { Table, TableBody, TableCaption, TableCell, TableRow } from '~/components/ui/table'
 import SheetInventory from './sheet-inventory'
 import { Product } from '~/definitions/types'
-import { PaginationOrder } from '~/components/pagination-order'
+import CustomPagination from '~/components/custom-pagination'
 import { useDeleteProductMutation } from '~/hooks/data/products.data'
 import { toast } from 'sonner'
 
@@ -39,7 +39,7 @@ function ProductList({ products, page, setPage, totalPage }: Props) {
   return (
     <Table className='overflow-hidden rounded-[10px] bg-[var(--secondary-color)] text-white'>
       <TableCaption>
-        <PaginationOrder page={page} totalPage={totalPage} setPage={setPage} />
+        <CustomPagination page={page} totalPage={totalPage} setPage={setPage} />
       </TableCaption>
       <TableBody className='[&>tr]:border-none'>
         {products.map(function (product: Product, index: number) {

@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Notification from '~/components/notification'
-import { PaginationOrder } from '~/components/pagination-order'
+import CustomPagination from '~/components/custom-pagination'
 import { Button } from '~/components/ui/button'
 import { NotificationType } from '~/definitions/types'
 import { useGetNotificationAllQuery, useMarkAllAsReadMutation } from '~/hooks/data/notifications.data'
@@ -64,7 +64,7 @@ export default function Page() {
             </Button>
           </div>
         </section>
-        {newOrderData&&newOrderData?._id ? (
+        {newOrderData && newOrderData?._id ? (
           <section>
             <Notification notification={newOrderData} />
           </section>
@@ -75,7 +75,7 @@ export default function Page() {
           })}
         </section>
         <section>
-        <PaginationOrder page={page} setPage={setPage} totalPage={totalPage} />
+          <CustomPagination age={page} setPage={setPage} totalPage={totalPage} />
         </section>
       </main>
     )

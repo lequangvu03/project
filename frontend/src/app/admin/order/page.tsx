@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { PaginationOrder } from '~/components/pagination-order'
+import CustomPagination from '~/components/custom-pagination'
 import Table from '~/components/table'
 import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
@@ -64,7 +64,7 @@ export default function OrderPage() {
             return <Table order={order} key={index} />
           })}
         </section>
-        <PaginationOrder page={page} setPage={setPage} totalPage={Math.ceil(orders?.result?.total / 6)} />
+        <CustomPagination page={page} setPage={setPage} totalPage={Math.ceil(orders?.result?.total / 6)} />
       </main>
     )
   }

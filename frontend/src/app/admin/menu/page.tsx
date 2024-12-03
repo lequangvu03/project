@@ -22,6 +22,7 @@ const TableDishes = dynamic(() => import('./data-table'))
 
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '~/components/ui/command'
 
+import { omit, omitBy } from 'lodash'
 import { Input } from '~/components/ui/input'
 import { Label } from '~/components/ui/label'
 import { ScrollArea } from '~/components/ui/scroll-area'
@@ -36,8 +37,7 @@ import {
 } from '~/components/ui/select'
 import { Ingredient, TCategory } from '~/definitions/types'
 import { useGetAllIngredientsQuery } from '~/hooks/data/ingredients.data'
-import { omit, omitBy } from 'lodash'
-console.log('RENDERING MENU PAGE')
+
 const Categories = dynamic(() => import('~/components/categories'), {
   loading: () => (
     <div className='flex gap-4'>
@@ -86,7 +86,6 @@ export default function Page() {
     description: string
     price: string
     category_id: string
-    stock: string
     image: File | null
     tag: number[]
   }>({
@@ -95,7 +94,6 @@ export default function Page() {
       description: '',
       price: '',
       category_id: '',
-      stock: '',
       image: null,
       tag: [TagType.New, TagType.Normal]
     }
@@ -137,12 +135,15 @@ export default function Page() {
       formData.append('description', data.description)
       formData.append('price', data.price)
       formData.append('category_id', data.category_id)
-      formData.append('stock', data.stock)
-      formData.append('image', data.image as any)
+      if (data.image) {
+        formData.append('image', data.image as any)
+      }
       formData.append('tag', JSON.stringify(data.tag))
-      const formatIngredients = Object.entries(ingredients).map(([_id, { quantity }]) => ({
+      const formatIngredients = Object.entries(ingredients).map(([_id, { name, quantity, unit }]) => ({
         _id,
-        quantity
+        quantity,
+        unit,
+        name
       }))
       formData.append('ingredients', JSON.stringify(formatIngredients))
       const response = await addMenuItemMutation.mutateAsync(formData)
@@ -444,11 +445,6 @@ export default function Page() {
                         </ScrollArea>
                       </Tippy>
                     </div>
-                    <FormField
-                      control={menuItemForm.control}
-                      name='stock'
-                      render={({ field }) => <CustomInput type='number' label='Stock' field={field} />}
-                    />
 
                     <div className='!mt-9 flex items-center justify-end gap-5'>
                       <Button
