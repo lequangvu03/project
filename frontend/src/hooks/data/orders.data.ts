@@ -11,12 +11,13 @@ export const useGetOrdersQuery = function ({ page, status, limit }: { page: numb
 }
 export const useGetOrdersByIdQuery = function (id: string) {
   return useQuery({
-    queryKey: ['ORDERS', id],
+    queryKey: ['ORDER', id],
     queryFn: async () => {
       return await ordersServices.getOrderById(id)
     }
   })
 }
+
 export const useAddOrderMutation = function () {
   const queryClient = useQueryClient()
 
