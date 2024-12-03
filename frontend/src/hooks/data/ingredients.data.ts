@@ -1,13 +1,13 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import ingredientsServices from "~/services/ingredients.services"
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import ingredientsServices from '~/services/ingredients.services'
 
-export const useGetIngredientsQuery = function ({ page }: { page?: number }) {
-    return useQuery({
-        queryKey: ["INGREDIENTS"],
-        queryFn: async () => {
-          return await ingredientsServices.getIngredients({ page })
-        }
-    })
+export const useGetIngredientsQuery = function ({ page, limit }: { page?: number; limit?: number }) {
+  return useQuery({
+    queryKey: ['INGREDIENTS', page, limit],
+    queryFn: async () => {
+      return await ingredientsServices.getIngredients({ page, limit })
+    }
+  })
 }
 export const useGetIngredientsDetailQuery = (params: { id?: string; enabled?: boolean }) => {
   return useQuery({
@@ -18,46 +18,45 @@ export const useGetIngredientsDetailQuery = (params: { id?: string; enabled?: bo
 }
 export const useGetAllIngredientsQuery = function () {
   return useQuery({
-      queryKey: ["INGREDIENTS"],
-      queryFn: () => ingredientsServices.getAllIngredients()
-      
+    queryKey: ['INGREDIENTS'],
+    queryFn: () => ingredientsServices.getAllIngredients()
   })
 }
 
 export const useAddIngredientMutation = function () {
     const queryClient = useQueryClient()
 
-    return useMutation({
-        mutationFn: ingredientsServices.addIngredient,
-        onSuccess: function () {
-            queryClient.invalidateQueries({
-                queryKey: ["INGREDIENTS"],
-            })
-        }
-    })
+  return useMutation({
+    mutationFn: ingredientsServices.addIngredient,
+    onSuccess: function () {
+      queryClient.invalidateQueries({
+        queryKey: ['INGREDIENTS']
+      })
+    }
+  })
 }
 
 export const useUpdateIngredientMutation = function () {
-    const queryClient = useQueryClient()
-    return useMutation({
-        mutationFn: ingredientsServices.updateIngredient,
-        onSuccess: function () {
-            queryClient.invalidateQueries({
-                queryKey: ["INGREDIENTS"],
-            })
-        }
-    })
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ingredientsServices.updateIngredient,
+    onSuccess: function () {
+      queryClient.invalidateQueries({
+        queryKey: ['INGREDIENTS']
+      })
+    }
+  })
 }
 
 export const useDeleteIngredientQuery = function () {
-    const queryClient = useQueryClient()
+  const queryClient = useQueryClient()
 
-    return useMutation({
-        mutationFn: ingredientsServices.deleteIngredient,
-        onSuccess: function () {
-            queryClient.invalidateQueries({
-                queryKey: ["INGREDIENTS"]
-            })
-        }
-    })
+  return useMutation({
+    mutationFn: ingredientsServices.deleteIngredient,
+    onSuccess: function () {
+      queryClient.invalidateQueries({
+        queryKey: ['INGREDIENTS']
+      })
+    }
+  })
 }
