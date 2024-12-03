@@ -9,6 +9,13 @@ export const useGetIngredientsQuery = function ({ page }: { page?: number }) {
         }
     })
 }
+export const useGetIngredientsDetailQuery = (params: { id?: string; enabled?: boolean }) => {
+  return useQuery({
+    queryKey: ['DISHE_DETAILS', params?.id],
+    queryFn: () => ingredientsServices.getIngredientsDetail(params?.id as string),
+    enabled: params?.enabled
+  })
+}
 export const useGetAllIngredientsQuery = function () {
   return useQuery({
       queryKey: ["INGREDIENTS"],
@@ -17,7 +24,7 @@ export const useGetAllIngredientsQuery = function () {
   })
 }
 
-export const useAddIngredientQuery = function () {
+export const useAddIngredientMutation = function () {
     const queryClient = useQueryClient()
 
     return useMutation({
