@@ -23,3 +23,8 @@ export enum PermissionType {
   Customers,
   Settings
 }
+
+export enum TableStatus {
+  Empty,
+  Busy
+}

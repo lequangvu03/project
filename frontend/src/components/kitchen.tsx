@@ -13,7 +13,7 @@ type Props = {
 
 export default function Kichen({ image, price, name, onAdd, onRemove }: Props) {
   return (
-    <main className='flex justify-between rounded-xl bg-[#292C2D] px-3 py-4 shadow-2xl'>
+    <div className='flex gap-4 rounded-xl bg-[#292C2D] px-3 py-4 shadow-2xl'>
       <Image
         src={image}
         width={150}
@@ -22,7 +22,9 @@ export default function Kichen({ image, price, name, onAdd, onRemove }: Props) {
         className='max-h-[100px] max-w-[100px] rounded-[10px]'
       />
       <div>
-        <div className='mt-2 text-[16px] font-semibold leading-[21px] text-gray-300'>{name}</div>
+        <div className='mt-2 min-w-[120px] max-w-[120px] truncate text-[16px] font-semibold leading-[21px] text-gray-300'>
+          {name}
+        </div>
         <div className='mt-1 text-[15px] font-normal leading-[21px] text-gray-500'>{price}</div>
 
         <div className='mt-6 flex justify-end gap-2'>
@@ -61,6 +63,6 @@ export default function Kichen({ image, price, name, onAdd, onRemove }: Props) {
           </Button>
         </div>
       </div>
-    </main>
+    </div>
   )
 }
