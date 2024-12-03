@@ -9,7 +9,14 @@ export const useGetINboundOrdersQuery = function ({ page }: { page: number }) {
     }
   })
 }
-
+export const useGetINboundByIdOrdersQuery = function (id: string) {
+  return useQuery({
+    queryKey: ['INBOUND_ORDERS', id],
+    queryFn: async () => {
+      return await inboundOrderService.getInboundOrdersById(id)
+    }
+  })
+}
 export const useAddInboundOrderMutation = () => {
   const queryClient = useQueryClient()
 

@@ -1,28 +1,86 @@
-import { foods } from '~/data/foods'
-import { kitchens } from '~/data/kitchens'
+'use client'
+import { useMemo, useState } from 'react'
 import Food from '~/components/food-item'
 import Kitchen from '~/components/kitchen'
-import Foods from '~/components/foods'
+import { kitchens } from '~/data/kitchens'
+import { useGetCategoriesQuery } from '~/hooks/data/categories.data'
+import { useGetDishesQuery } from '~/hooks/data/menu.data'
+import { cn } from '~/lib/utils'
+import { ICategory } from '~/models/categories.module'
 
 export default function Page() {
+  const { data: categoriesData } = useGetCategoriesQuery()
+  const categories = (categoriesData?.result?.categories as ICategory[]) || null
+
+  const totalDishes = useMemo(() => {
+    return categories?.reduce((total, category) => total + category.totalProducts, 0) || 0
+  }, [categoriesData])
+
+  const [activeTab, setActiveTab] = useState<string>('All')
+  const [categoryId, setCategoryId] = useState<string | null>(null)
+
+  const { data: dishesData } = useGetDishesQuery({ categoryId: categoryId || undefined })
+
+  const handleTabClick = (id: string | null) => {
+    setActiveTab(id || 'All')
+    setCategoryId(id)
+  }
+
   return (
     <main className=''>
       <aside className='flex gap-4'>
         <section className='flex flex-[0.7] flex-col gap-4'>
-          <Foods />
+          <div className='flex flex-wrap gap-4'>
+            <div
+              onClick={() => handleTabClick(null)}
+              className={cn(
+                'block min-h-[124px] min-w-[150px] cursor-pointer rounded-xl border-2 border-transparent bg-[var(--secondary-color)] px-3 py-4 shadow-2xl transition-all hover:border-[var(--primary-color)]',
+                activeTab === 'All' ? 'bg-[var(--primary-color)]' : ''
+              )}
+            >
+              <section>
+                <h2
+                  className={cn(
+                    'text-[16px] font-medium leading-[24px] text-gray-300 transition-all',
+                    activeTab === 'All' ? 'text-secondary' : ''
+                  )}
+                >
+                  All
+                </h2>
+                <p className='text-[16px] font-light leading-[24px] text-gray-500'>{totalDishes + ' items'}</p>
+              </section>
+            </div>
+            {categories &&
+              categories.map((category) => (
+                <div
+                  key={category._id}
+                  onClick={() => handleTabClick(category._id)}
+                  className={cn(
+                    'block min-w-[150px] cursor-pointer rounded-xl border-2 border-transparent bg-[var(--secondary-color)] px-3 py-4 shadow-2xl transition-all hover:border-[var(--primary-color)]',
+                    activeTab === category._id ? 'bg-[var(--primary-color)]' : ''
+                  )}
+                >
+                  <section>
+                    <h2
+                      className={cn(
+                        'text-[16px] font-medium leading-[24px] text-gray-300 transition-all',
+                        activeTab === category._id ? 'text-secondary' : ''
+                      )}
+                    >
+                      {category.name}
+                    </h2>
+                    <p className='text-[16px] font-light leading-[24px] text-gray-500'>
+                      {category.totalProducts + ' items'}
+                    </p>
+                  </section>
+                </div>
+              ))}
+          </div>
           <div className='h-[1px] bg-slate-500 leading-[0px]' />
           <div className='grid grid-cols-4 gap-3'>
-            {kitchens.map(function (kitchen, index: number) {
-              return (
-                <Kitchen
-                  amount={kitchen.amount}
-                  key={index}
-                  path={kitchen.path}
-                  price={kitchen.price}
-                  title={kitchen.title}
-                />
-              )
-            })}
+            {dishesData?.result?.menus?.map((dish: any, index: any) => (
+              <Kitchen key={index} name={dish.name} image={dish.image} price={dish.price} />
+            ))}
           </div>
         </section>
         <div className='flex flex-[0.3] flex-col gap-4 rounded-xl bg-[#292C2D] p-4'>
@@ -76,7 +134,7 @@ export default function Page() {
               </button>
             </div>
           </footer>
-        </div>
+          </div>
       </aside>
     </main>
   )

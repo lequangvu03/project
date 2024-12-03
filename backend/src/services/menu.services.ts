@@ -11,7 +11,13 @@ import cloudinary from '~/utils/cloudinary'
 import { getNameFromFullname } from '~/utils/file'
 
 class MenuService {
-  async checkNameExists(name: string) {
+  async checkNameExists(name: string, id?: string) {
+    if (id) {
+      const categories = await databaseService.menuItems.findOne({ _id: new ObjectId(id) })
+      if (categories?.name == name) {
+        return false
+      }
+    }
     const menuItem = await databaseService.menuItems.findOne({ name, status: menuItemStatus.Available })
     return menuItem
   }

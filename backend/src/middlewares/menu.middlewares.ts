@@ -123,10 +123,10 @@ export const updateMenuItemValidator = validate(
           errorMessage: MENU_MESSAGES.MENU_ITEM_NAME_MUST_BE_A_STRING
         },
         custom: {
-          options: async (value) => {
+          options: async (value, { req }) => {
             if (value) {
               // Chỉ kiểm tra khi có giá trị
-              const isExistCategory = await menuService.checkNameExists(value)
+              const isExistCategory = await menuService.checkNameExists(value, req?.params?.id ?? '')
               if (isExistCategory) {
                 throw new Error(MENU_MESSAGES.MENU_ITEM_NAME_IS_EXIST)
               }
@@ -182,7 +182,7 @@ export const updateMenuItemValidator = validate(
         optional: { options: { nullable: true } } // Cho phép không có giá trị
       }
     },
-    ['body']
+    ['body', 'params']
   )
 )
 export const deleteMenuItemValidator = validate(

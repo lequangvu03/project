@@ -17,7 +17,7 @@ type Props = {
   setPage: React.Dispatch<React.SetStateAction<number>>
 }
 
-export function PaginationOrder({ page, setPage, totalPage }: Props) {
+export default function CustomPagination({ page, setPage, totalPage }: Props) {
   const handlePageChange = (newPage: number) => {
     if (newPage > 0 && newPage <= totalPage) {
       setPage(newPage)

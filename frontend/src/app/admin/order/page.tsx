@@ -1,7 +1,8 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { PaginationOrder } from '~/components/pagination-order'
+import CustomPagination from '~/components/custom-pagination'
 import Table from '~/components/table'
 import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
@@ -11,6 +12,7 @@ import { useGetOrdersQuery } from '~/hooks/data/orders.data'
 export default function OrderPage() {
   const [page, setPage] = useState<number>(1)
   const [status, setStatus] = useState<number>(-1)
+  const routes = useRouter()
   const { data: orders } = useGetOrdersQuery({ page: page, status: status })
   if (orders?.result) {
     return (
@@ -55,7 +57,9 @@ export default function OrderPage() {
 
           <div className='flex items-center gap-4'>
             <Input className='' />
-            <Button className=''>Add new order</Button>
+            <Button onClick={()=>{
+              routes.push('/admin/table')
+            }} className=''>Add new order</Button>
           </div>
         </section>
 
@@ -64,7 +68,7 @@ export default function OrderPage() {
             return <Table order={order} key={index} />
           })}
         </section>
-        <PaginationOrder page={page} setPage={setPage} totalPage={Math.ceil(orders?.result?.total / 6)} />
+        <CustomPagination page={page} setPage={setPage} totalPage={Math.ceil(orders?.result?.total / 6)} />
       </main>
     )
   }

@@ -9,7 +9,14 @@ export const useGetOrdersQuery = function ({ page, status }: { page: number; sta
     }
   })
 }
-
+export const useGetOrdersByIdQuery = function (id: string) {
+  return useQuery({
+    queryKey: ['ORDERS', id],
+    queryFn: async () => {
+      return await ordersServices.getOrderById(id)
+    }
+  })
+}
 export const useAddOrderMutation = function () {
   const queryClient = useQueryClient()
 

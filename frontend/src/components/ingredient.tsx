@@ -33,7 +33,7 @@ import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/components/ui/table'
 import { useDeleteIngredientQuery, useGetIngredientsQuery } from '~/hooks/data/ingredients.data'
-import { PaginationOrder } from '~/components/pagination-order'
+import CustomPagination from '~/components/custom-pagination'
 
 export type Ingredient = {
   _id: string
@@ -189,7 +189,7 @@ export default function IngredientTable() {
             </TableBody>
           </Table>
         )}
-        <PaginationOrder page={page} setPage={setPage} totalPage={totalPage} />
+        <CustomPagination page={page} setPage={setPage} totalPage={totalPage} />
       </div>
     </div>
   )
