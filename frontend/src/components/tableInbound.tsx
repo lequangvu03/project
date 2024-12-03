@@ -18,8 +18,8 @@ import {
 } from '~/components/ui/alert-dialog'
 import { useGetINboundOrdersQuery } from '~/hooks/data/inbound-order.data'
 import { useState } from 'react'
-import { PaginationOrder } from '~/components/pagination-order'
 import { useRouter } from 'next/navigation'
+import CustomPagination from '~/components/custom-pagination'
 
 type Props = {
   order: InboundOrderType
@@ -128,7 +128,7 @@ export default function InboundTable() {
           </div>
         ))}
       </section>
-      <PaginationOrder page={page} setPage={setPage} totalPage={totalPage} />
+      <CustomPagination page={page} setPage={setPage} totalPage={totalPage} />
     </div>
   )
 }

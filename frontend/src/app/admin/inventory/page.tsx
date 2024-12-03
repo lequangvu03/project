@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { useGetINboundOrdersQuery } from '~/hooks/data/inbound-order.data'
 import Table from '~/components/table'
-import { PaginationOrder } from '~/components/pagination-order'
+import CustomPagination from '~/components/custom-pagination'
 import { InboundOrderType, Ingredient } from '~/definitions/types'
 import InboundTable from '~/components/tableInbound'
 import { useGetIngredientsQuery } from '~/hooks/data/ingredients.data'
@@ -34,7 +34,10 @@ function InventoryPage() {
           >
             Inbound Order
           </Button>
-          <Button onClick={toggleTable} className={`bg-[#EA7C69] text-white ${showIngredients ? '' : 'bg-transparent'}`}>
+          <Button
+            onClick={toggleTable}
+            className={`bg-[#EA7C69] text-white ${showIngredients ? '' : 'bg-transparent'}`}
+          >
             Ingredient
           </Button>
         </div>

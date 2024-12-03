@@ -1,14 +1,15 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import menuServices from '~/services/menu.services'
 
-export const useGetDishesQuery = (args?: { categoryId?: string; tag?: string; page?: number }) => {
+export const useGetDishesQuery = (args?: { categoryId?: string; tag?: string; page?: number; limit?: number }) => {
   return useQuery({
-    queryKey: ['DISHES', args?.categoryId, args?.tag, args?.page],
+    queryKey: ['DISHES', args?.categoryId, args?.tag, args?.page, args?.limit],
     queryFn: () => {
       return menuServices.getDishes({
         categoryId: args?.categoryId,
         tag: args?.tag,
-        page: args?.page
+        page: args?.page,
+        limit: args?.limit
       })
     },
     placeholderData: (prev) => prev
@@ -47,7 +48,7 @@ export const useUpdateMenuItemMutation = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: menuServices.addMenuItem,
+    mutationFn: menuServices.updateMenuItem,
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['DISHES']
