@@ -17,6 +17,7 @@ import {
   AlertDialogTrigger
 } from '~/components/ui/alert-dialog'
 import Link from 'next/link'
+import { ScrollArea } from './ui/scroll-area'
 
 type Props = {
   order: Order
@@ -55,15 +56,15 @@ export default function Table({ order }: Props) {
     }
   }
   return (
-    <div className={'flex flex-col gap-4 rounded-xl bg-[#292C2D] p-4 shadow-sm'}>
+    <div className={'flex flex-col gap-4 rounded-xl bg-[var(--secondary-color)] p-4 shadow-sm'}>
       <section className='flex flex-col gap-4'>
         <div className='flex items-center justify-between gap-2'>
           <div className='flex h-12 w-12 items-center justify-center rounded-xl bg-[#EA7C69] p-2 text-[16px]'>
             {order.table_number}
           </div>
           <div className='flex flex-1 flex-col'>
-            <h2 className='text-[16px] font-light leading-8'>Order {order.table_number}</h2>
-            <p className='text-[12px] leading-6 text-gray-400'>Order # {order._id}</p>
+            <h2 className='text-[16px] font-light leading-8'>Table {order.table_number}</h2>
+            <p className='truncate text-[12px] leading-6 text-gray-400'>Order #{order._id.slice(-1, 10)}</p>
           </div>
           <div className='flex flex-col gap-2'>
             <div className='flex items-center gap-1 rounded-lg bg-[#FFEDBE] px-4 py-1'>
@@ -76,19 +77,6 @@ export default function Table({ order }: Props) {
                 />
               </svg>
               <p className='text-gray-800'>{getStatusFromValue(order.order_status)}</p>
-            </div>
-
-            <div className='flex items-center gap-4'>
-              <div className='h-2 w-2 rounded-full bg-[#FFBD0F]'></div>
-              <div className='text-[14px] leading-6 text-gray-300'>Cooking</div>
-              <svg width='13' height='13' viewBox='0 0 13 13' fill='none' xmlns='http://www.w3.org/2000/svg'>
-                <path
-                  d='M3.25 4.875L6.5 8.125L9.75 4.875'
-                  stroke='white'
-                  stroke-linecap='round'
-                  stroke-linejoin='round'
-                />
-              </svg>
             </div>
           </div>
         </div>
@@ -104,17 +92,22 @@ export default function Table({ order }: Props) {
           <div className='flex-1 overflow-hidden text-ellipsis whitespace-nowrap'>Items</div>
           <div>Price</div>
         </header>
-        <aside className='flex max-h-[100px] min-h-[100px] flex-col gap-2 overflow-auto'>
-          {order.order_items.map(function (orderItem: OrderItem, index: number) {
-            return (
-              <div key={index} className='flex items-center justify-between gap-4 text-[14px] font-light text-gray-200'>
-                <div>{orderItem.quantity}</div>
-                <div className='flex-1'>{orderItem.item_name}</div>
-                <div>$ {orderItem.item_price}</div>
-              </div>
-            )
-          })}
-        </aside>
+        <ScrollArea className='h-[86px]'>
+          <div className='px-4'>
+            {order.order_items.map(function (orderItem: OrderItem, index: number) {
+              return (
+                <div
+                  key={index}
+                  className='flex items-center justify-between gap-4 text-[14px] font-light text-gray-200'
+                >
+                  <div>{orderItem.quantity}</div>
+                  <div className='flex-1'>{orderItem.item_name}</div>
+                  <div>$ {orderItem.item_price}</div>
+                </div>
+              )
+            })}
+          </div>
+        </ScrollArea>
       </section>
       <div className={'h-[0.5px] w-full bg-slate-500'} />
       <section className={'flex flex-col gap-4'}>
@@ -164,13 +157,27 @@ export default function Table({ order }: Props) {
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
-          <Button
-            onClick={() => handlePayment(order._id)}
-            disabled={order.order_status == 0 ? false : true}
-            className='flex flex-1 items-center justify-center border-[1px] bg-[#EA7C69] text-white'
-          >
-            Pay Bill
-          </Button>
+
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button
+                disabled={order.order_status == 0 ? false : true}
+                className='flex flex-1 items-center justify-center border-[1px] bg-[#EA7C69] text-white'
+              >
+                Pay Bill
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent className='bg-[var(--secondary-color)]'>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogDescription>This action cannot be undone.</AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={() => handlePayment(order._id)}>Confirm</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </footer>
       </section>
     </div>

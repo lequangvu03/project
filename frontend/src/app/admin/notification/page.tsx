@@ -1,30 +1,50 @@
 'use client'
 
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import Notification from '~/components/notification'
-import CustomPagination from '~/components/custom-pagination'
+import { PaginationWithLinks } from '~/components/custom-pagination'
 import { Button } from '~/components/ui/button'
 import { NotificationType } from '~/definitions/types'
 import { useGetNotificationAllQuery, useMarkAllAsReadMutation } from '~/hooks/data/notifications.data'
 import useSocket from '~/hooks/useSocket'
+import usePaginationParams from '~/hooks/usePaginationParams'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 export default function Page() {
-  const [page, setPage] = useState<number>(1)
   const [status, setStatus] = useState<number>(-1)
   const markAllAsReadMutation = useMarkAllAsReadMutation()
+  const { limit, page } = usePaginationParams()
   const { data: notifications } = useGetNotificationAllQuery({
-    page: page,
-    limit: 12,
+    page: +page,
+    limit: +limit,
     status: status
   })
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+
+  const buildLink = useCallback(
+    (newPage: number) => {
+      const key = 'page'
+      if (!searchParams) return `${pathname}?${key}=${newPage}`
+      const newSearchParams = new URLSearchParams(searchParams)
+      newSearchParams.set(key, String(newPage))
+      return `${pathname}?${newSearchParams.toString()}`
+    },
+    [searchParams, pathname]
+  )
   const handleMarkAllAsRead = async () => {
     const ids = notifications?.result.notifications.map((notification: NotificationType) => notification._id as string)
-    console.log('ids', ids)
     await markAllAsReadMutation.mutateAsync(ids)
   }
-  const totalPage = Math.ceil((notifications?.result?.total || 0) / 12)
+
+  const totalPage = (notifications?.result?.total || 0) as number
+  const handleSelectStatus = (status: number) => {
+    setStatus(status)
+    router.push(buildLink(1))
+  }
   const newOrderData: NotificationType = useSocket('new_noti')
-  console.log('newOrderData', newOrderData)
+
   if (notifications?.result) {
     return (
       <main className='bg-[var(--secondary-color)]'>
@@ -33,8 +53,7 @@ export default function Page() {
             <Button
               className={`${status === -1 ? 'bg-[#EA7C69] text-white' : 'bg-transparent text-gray-400'}`}
               onClick={() => {
-                setStatus(-1)
-                setPage(1)
+                handleSelectStatus(-1)
               }}
             >
               All
@@ -42,8 +61,7 @@ export default function Page() {
             <Button
               className={`${status === 1 ? 'bg-[#EA7C69] text-white' : 'bg-transparent text-gray-400'}`}
               onClick={() => {
-                setStatus(1)
-                setPage(1)
+                handleSelectStatus(1)
               }}
             >
               Read
@@ -51,8 +69,7 @@ export default function Page() {
             <Button
               className={`${status === 0 ? 'bg-[#EA7C69] text-white' : 'bg-transparent text-gray-400'}`}
               onClick={() => {
-                setStatus(0)
-                setPage(1)
+                handleSelectStatus(0)
               }}
             >
               Unread
@@ -75,7 +92,7 @@ export default function Page() {
           })}
         </section>
         <section>
-          <CustomPagination age={page} setPage={setPage} totalPage={totalPage} />
+          <PaginationWithLinks page={+page} pageSize={+limit} totalCount={totalPage} />
         </section>
       </main>
     )

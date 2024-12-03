@@ -5,17 +5,10 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-import { TagType } from '~/definitions/constant/types.constant'
-import useQueryParams from '~/hooks/useQueryParams'
 
-import { Input } from '~/components/ui/input'
-
-import Tippy from '@tippyjs/react/headless'
-import { omit, omitBy } from 'lodash'
-import { Image as IconImage, Minus, Pencil, Plus, Trash, X } from 'lucide-react'
-import Image from 'next/image'
+import { Pencil, Trash } from 'lucide-react'
 import CustomInput from '~/components/custom-input'
-import CustomPagination from '~/components/custom-pagination'
+import { PaginationWithLinks } from '~/components/custom-pagination'
 import CustomSheet from '~/components/custom-sheet'
 import Loading from '~/components/loading'
 import {
@@ -29,44 +22,22 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger
 } from '~/components/ui/alert-dialog'
-import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar'
 import { Button } from '~/components/ui/button'
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '~/components/ui/command'
 import { Form, FormField } from '~/components/ui/form'
-import { Label } from '~/components/ui/label'
-import { ScrollArea } from '~/components/ui/scroll-area'
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue
-} from '~/components/ui/select'
-import { Ingredient, TCategory } from '~/definitions/types'
-import { useGetCategoriesQuery } from '~/hooks/data/categories.data'
 import {
   useDeleteIngredientQuery,
-  useGetAllIngredientsQuery,
   useGetIngredientsDetailQuery,
   useGetIngredientsQuery,
   useUpdateIngredientMutation
 } from '~/hooks/data/ingredients.data'
-import {
-  useDeleteDishQuery,
-  useGetDishesQuery,
-  useGetMenuItemDetailQuery,
-  useUpdateMenuItemMutation
-} from '~/hooks/data/menu.data'
-import { IMenuItem } from '~/models/menu.model'
+import usePaginationParams from '~/hooks/usePaginationParams'
 
 export default function IngredientTable() {
-  const [page, setPage] = useState<number>(1)
+  const { page, limit } = usePaginationParams()
   const [id, setId] = useState<string>('')
   const ref = useRef<HTMLInputElement | null>(null)
 
-  const { data: dishesData, isPending } = useGetIngredientsQuery({ page })
+  const { data: dishesData, isPending } = useGetIngredientsQuery({ page: +page, limit: +limit })
   const totalPage = Math.ceil((dishesData?.result?.total || 0) / 10)
   const updateMenuItemQuery = useGetIngredientsDetailQuery({
     id: id,
@@ -220,7 +191,6 @@ export default function IngredientTable() {
                                           )}
                                         />
 
-
                                         <div className='!mt-9 flex items-center justify-end gap-5'>
                                           <Button
                                             type='button'
@@ -268,7 +238,7 @@ export default function IngredientTable() {
                 })}
               </TableBody>
             </Table>
-            {dishes?.length > 0 && <CustomPagination page={page} setPage={setPage} totalPage={totalPage} />}
+            {dishes?.length > 0 && <PaginationWithLinks page={+page} pageSize={+limit} totalCount={totalPage} />}
           </>
         )}
       </div>
