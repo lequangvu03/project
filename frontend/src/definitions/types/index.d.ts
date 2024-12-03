@@ -135,3 +135,11 @@ export enum PositionEmployeeType {
   Manager, // Quản lý
   Security // Nhân viên bảo vệ
 }
+
+export type TTable = {
+  _id: string
+  table_number: number
+  status: number
+  capacity: number
+  location: string
+}

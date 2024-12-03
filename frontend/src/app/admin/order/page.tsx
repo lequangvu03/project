@@ -1,7 +1,7 @@
 'use client'
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { PaginationWithLinks } from '~/components/custom-pagination'
 import Loading from '~/components/loading'
 import Table from '~/components/table'
@@ -10,6 +10,7 @@ import { Input } from '~/components/ui/input'
 import { Order } from '~/definitions/types'
 import { useGetOrdersQuery } from '~/hooks/data/orders.data'
 import usePaginationParams from '~/hooks/usePaginationParams'
+import useSocket from '~/hooks/useSocket'
 import { cn } from '~/lib/utils'
 
 export default function OrderPage() {
@@ -31,7 +32,10 @@ export default function OrderPage() {
     },
     [searchParams, pathname]
   )
-
+  const newOrder = useSocket('new_order')
+  useEffect(() => {
+    console.log(newOrder)
+  }, [])
   const handleSelectStatus = (status: number) => {
     setStatus(status)
     router.push(buildLink(1))

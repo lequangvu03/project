@@ -2,7 +2,7 @@ import { sendDelete, sendGet, sendPost, sendPut } from '~/api/request'
 
 const tablesServices = {
   getTables: () => {
-    return sendGet('/tables')
+    return sendGet('/table')
   },
   getTableById: (id: string) => {
     return sendGet('/table/' + id)

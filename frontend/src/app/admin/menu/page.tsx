@@ -465,7 +465,9 @@ export default function Page() {
             </Button>
           </CustomSheet>
         </div>
-        <TableDishes />
+        <div className='px-8'>
+          <TableDishes />
+        </div>
       </section>
     </main>
   )
