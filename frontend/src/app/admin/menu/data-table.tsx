@@ -15,7 +15,7 @@ import { omit, omitBy } from 'lodash'
 import { Image as IconImage, Minus, Pencil, Plus, Trash, X } from 'lucide-react'
 import Image from 'next/image'
 import CustomInput from '~/components/custom-input'
-import CustomPagination from '~/components/custom-pagination'
+import { PaginationWithLinks } from '~/components/custom-pagination'
 import CustomSheet from '~/components/custom-sheet'
 import Loading from '~/components/loading'
 import {
@@ -54,21 +54,22 @@ import {
   useUpdateMenuItemMutation
 } from '~/hooks/data/menu.data'
 import { IMenuItem } from '~/models/menu.model'
+import usePaginationParams from '~/hooks/usePaginationParams'
 
 export default function TableDishes() {
-  const [page, setPage] = useState<number>(1)
   const [id, setId] = useState<string>('')
   const ref = useRef<HTMLInputElement | null>(null)
   const getCategoriesQuery = useGetCategoriesQuery()
 
   const { categoryId, tag } = useQueryParams()
-
+  const { limit, page } = usePaginationParams()
   const { data: dishesData, isPending } = useGetDishesQuery({
     categoryId: categoryId,
     tag: tag === 'ALL' ? '' : tag,
-    page: page
+    page: +page,
+    limit: +limit
   })
-  const totalPage = Math.ceil((dishesData?.result?.total || 0) / 10)
+  const totalPages = dishesData?.result?.total || 0
   const updateMenuItemQuery = useGetMenuItemDetailQuery({
     id: id,
     enabled: !!id
@@ -210,6 +211,11 @@ export default function TableDishes() {
           default:
             return prev
         }
+      })
+
+      const description = menuItemForm.getValues('description')
+      menuItemForm.setValue('description', description, {
+        shouldDirty: true
       })
     }
 
@@ -532,7 +538,7 @@ export default function TableDishes() {
                 })}
               </TableBody>
             </Table>
-            {dishes?.length > 0 && <CustomPagination page={page} setPage={setPage} totalPage={totalPage} />}
+            {dishes?.length > 0 && <PaginationWithLinks totalCount={totalPages} pageSize={+limit} page={+page} />}
           </>
         )}
       </div>

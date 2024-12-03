@@ -1,11 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import inboundOrderService from '~/services/inbound-order.services'
 
-export const useGetINboundOrdersQuery = function ({ page }: { page: number }) {
+export const useGetINboundOrdersQuery = function ({ page, limit }: { page: number; limit: number }) {
   return useQuery({
-    queryKey: ['INBOUND_ORDERS', page],
+    queryKey: ['INBOUND_ORDERS', page, limit],
     queryFn: async () => {
-      return await inboundOrderService.getInboundOrders({ page })
+      return await inboundOrderService.getInboundOrders({ page, limit })
     }
   })
 }

@@ -1,26 +1,19 @@
 'use client'
 
-import { Button } from '~/components/ui/button'
 import Link from 'next/link'
 import { useState } from 'react'
-import { useGetINboundOrdersQuery } from '~/hooks/data/inbound-order.data'
-import Table from '~/components/table'
-import CustomPagination from '~/components/custom-pagination'
-import { InboundOrderType, Ingredient } from '~/definitions/types'
-import InboundTable from '~/components/tableInbound'
-import { useAddIngredientMutation, useGetIngredientsQuery } from '~/hooks/data/ingredients.data'
-import IngredientTable from '~/components/ingredient'
-import CustomSheet from '~/components/custom-sheet'
-import { Form, FormField } from '~/components/ui/form'
-import CustomInput from '~/components/custom-input'
-import Loading from '~/components/loading'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
+import CustomInput from '~/components/custom-input'
+import CustomSheet from '~/components/custom-sheet'
+import IngredientTable from '~/components/ingredient'
+import InboundTable from '~/components/tableInbound'
+import { Button } from '~/components/ui/button'
+import { Form, FormField } from '~/components/ui/form'
+import { useAddIngredientMutation } from '~/hooks/data/ingredients.data'
 
 function InventoryPage() {
   const [showIngredients, setShowIngredients] = useState<boolean>(false)
-
-  // const { data: ingredients } = useGetIngredientsQuery( { page })
 
   const toggleTable = () => {
     setShowIngredients(true)
