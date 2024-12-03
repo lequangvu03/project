@@ -14,9 +14,7 @@ const ordersServices = {
     order_items: {
       item_id: string
       quantity: number
-    }
-    payment_status: string
-    order_status: string
+    }[]
   }) {
     return sendPost(`/order`, body)
   },
