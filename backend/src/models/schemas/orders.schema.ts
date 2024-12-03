@@ -35,8 +35,8 @@ export default class Order {
     this.table_number = order.table_number
     this.order_items = order.order_items
     this.total_price = order.total_price
-    this.payment_status = order.payment_status
-    this.order_status = order.order_status
+    this.payment_status = order.payment_status || PaymentStatus.Unpaid
+    this.order_status = order.order_status || OrderStatus.Pending
     this.created_at = order.created_at || date
     this.updated_at = order.updated_at || date
   }

@@ -2,7 +2,7 @@ import Order from '~/models/schemas/orders.schema'
 
 import databaseService from './database.services'
 import { Filter, ObjectId } from 'mongodb'
-import { OrderStatus, PaymentStatus } from '~/constants/enums'
+import { OrderStatus, PaymentStatus, TableStatus } from '~/constants/enums'
 
 class OrderService {
   async getAllOrders({
@@ -155,6 +155,16 @@ class OrderService {
       updated_at: Date.now()
     })
     await databaseService.orders.insertOne(newOrder)
+    await databaseService.tables.updateOne(
+      {
+        table_number: data.table_number
+      },
+      {
+        $set: {
+          status: TableStatus.Busy
+        }
+      }
+    )
     return newOrder
   }
 

@@ -1,5 +1,12 @@
 import { ObjectId } from 'mongodb'
-import { notificationRoleType, NotificationStatus, NotificationType, OrderStatus, PaymentStatus } from '~/constants/enums'
+import {
+  notificationRoleType,
+  NotificationStatus,
+  NotificationType,
+  OrderStatus,
+  PaymentStatus,
+  TableStatus
+} from '~/constants/enums'
 import Notification from '~/models/schemas/notifications.schema'
 import databaseService from '~/services/database.services'
 import { io } from '~/utils/socket'
@@ -14,6 +21,18 @@ class PaymentService {
     const order = await databaseService.orders.findOne({
       _id: new ObjectId(id)
     })
+    if (Order && Order.table_number) {
+      await databaseService.tables.updateOne(
+        {
+          table_number: Order.table_number
+        },
+        {
+          $set: {
+            status: TableStatus.Empty
+          }
+        }
+      )
+    }
     const orderItems = order ? order.order_items || [] : []
     for (const item of orderItems) {
       const menuItemId = new ObjectId(item.item_id)
@@ -28,14 +47,11 @@ class PaymentService {
       for (const ingredient of ingredients) {
         const ingredientId = new ObjectId(ingredient._id)
         const ingredientQuantity = ingredient.quantity * quantity
-        console.log('ingredientId', ingredientId)
-        console.log('ingredientQuantity', ingredientQuantity)
         const updatedIngredient = await databaseService.ingredients.findOneAndUpdate(
           { _id: ingredientId },
           { $inc: { stock: -ingredientQuantity } },
           { returnDocument: 'after' }
         )
-        console.log('updatedIngredient', updatedIngredient)
         if (updatedIngredient && updatedIngredient.stock <= 50) {
           const notification = new Notification({
             _id: new ObjectId(),
