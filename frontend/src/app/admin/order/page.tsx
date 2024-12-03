@@ -33,9 +33,11 @@ export default function OrderPage() {
     [searchParams, pathname]
   )
   const newOrder = useSocket('new_order')
+
   useEffect(() => {
     console.log(newOrder)
   }, [])
+
   const handleSelectStatus = (status: number) => {
     setStatus(status)
     router.push(buildLink(1))

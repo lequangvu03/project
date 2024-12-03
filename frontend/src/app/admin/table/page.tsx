@@ -2,6 +2,7 @@
 import { X } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { toast } from 'sonner'
+import DateTime from '~/components/date-time'
 import Kitchen from '~/components/kitchen'
 import { Button } from '~/components/ui/button'
 import { Label } from '~/components/ui/label'
@@ -196,10 +197,7 @@ export default function Page() {
         <div className='flex h-fit flex-[0.3] flex-col gap-4 rounded-xl bg-[#292C2D] p-4'>
           <header className='flex flex-col gap-1'>
             <h3 className='text-2xl font-bold'>Order</h3>
-            <p className='flex items-center justify-between'>
-              <span>DATE</span>
-              <span>TIME</span>
-            </p>
+            <DateTime />
           </header>
           <div>
             <Label className='mb-2 block'>Table</Label>

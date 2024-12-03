@@ -1,17 +1,38 @@
 'use client'
-import { useMemo, useState } from 'react'
-import Food from '~/components/food-item'
+import { omit, omitBy } from 'lodash'
+import { X } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useEffect, useMemo, useState } from 'react'
+import { toast } from 'sonner'
+import DateTime from '~/components/date-time'
 import Kitchen from '~/components/kitchen'
-import { kitchens } from '~/data/kitchens'
+import { Button } from '~/components/ui/button'
+import { Label } from '~/components/ui/label'
+import { ScrollArea } from '~/components/ui/scroll-area'
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '~/components/ui/select'
+import { TableStatus } from '~/definitions/constant/types.constant'
+import { Order, Product, TTable } from '~/definitions/types'
 import { useGetCategoriesQuery } from '~/hooks/data/categories.data'
 import { useGetDishesQuery } from '~/hooks/data/menu.data'
+import { useAddOrderMutation, useGetOrdersByIdQuery, useUpdateOrderMutation } from '~/hooks/data/orders.data'
+import { useGetTablesQuery, useUpdateTableQuery } from '~/hooks/data/tables.data'
 import { cn } from '~/lib/utils'
 import { ICategory } from '~/models/categories.module'
+import { IMenuItem } from '~/models/menu.model'
 
-export default function Page() {
+type Props = {
+  params: {
+    id: string
+  }
+}
+
+export default function Page({ params: { id } }: Props) {
   const { data: categoriesData } = useGetCategoriesQuery()
+  const getOrderByIdQuery = useGetOrdersByIdQuery(id)
+  const updateOrderMutation = useUpdateOrderMutation()
+  const [tableNumber, setTableNumber] = useState<string>('')
+  const router = useRouter()
   const categories = (categoriesData?.result?.categories as ICategory[]) || null
-
   const totalDishes = useMemo(() => {
     return categories?.reduce((total, category) => total + category.totalProducts, 0) || 0
   }, [categoriesData])
@@ -19,15 +40,117 @@ export default function Page() {
   const [activeTab, setActiveTab] = useState<string>('All')
   const [categoryId, setCategoryId] = useState<string | null>(null)
 
+  const [orderItems, setOrderItems] = useState<
+    Record<
+      string,
+      {
+        quantity: number
+        item_name: string
+        item_price: number
+      }
+    >
+  >({})
+
+  const getTablesQuery = useGetTablesQuery()
   const { data: dishesData } = useGetDishesQuery({ categoryId: categoryId || undefined })
+
+  const price = useMemo(() => {
+    return Object.entries(orderItems).reduce((acc, [_, { item_price, quantity }]) => acc + item_price * quantity, 0)
+  }, [orderItems])
+
+  useEffect(() => {
+    const order = getOrderByIdQuery.data?.result?.orders?.[0] as Order
+    if (order) {
+      setTableNumber(order.table_number.toString())
+      const items = order.order_items.map((i) => [
+        i.item_id,
+        {
+          quantity: i.quantity,
+          item_name: i.item_name,
+          item_price: i.item_price
+        }
+      ])
+
+      if (items) {
+        setOrderItems(Object.fromEntries(items))
+      }
+    }
+  }, [getOrderByIdQuery.data])
 
   const handleTabClick = (id: string | null) => {
     setActiveTab(id || 'All')
     setCategoryId(id)
   }
 
+  const handleSubmit = async () => {
+    try {
+      const items = Object.entries(orderItems)?.map(([item_id, { quantity }]) => {
+        return {
+          item_id,
+          quantity
+        }
+      })
+      const body = {
+        table_number: +tableNumber,
+        total_price: price,
+        order_items: items
+      }
+
+      if (!body.table_number || items.length === 0) {
+        toast('Please select table and get dishes!')
+        return
+      }
+      const response = await updateOrderMutation.mutateAsync({
+        id: id,
+        body
+      })
+      toast(response?.message)
+      setTableNumber('')
+      setOrderItems({})
+      router.push('/admin/order')
+    } catch (error) {
+      toast('Failed to update order')
+    }
+  }
+
+  const handleDeleteItem = (item_id: string) => {
+    setOrderItems((prev) => {
+      return omit(prev, [item_id])
+    })
+  }
+
+  const handleAddItem = (item: IMenuItem) => {
+    setOrderItems((prev) => {
+      return {
+        ...prev,
+        [item._id]: {
+          quantity: prev[item._id] ? ++prev[item._id].quantity : 1,
+          item_price: item.price,
+          item_name: item.name
+        }
+      }
+    })
+  }
+
+  const handleSubtractItem = (item_id: string) => {
+    setOrderItems((prev) => {
+      if (!prev?.[item_id]) return prev
+
+      return omitBy(
+        {
+          ...prev,
+          [item_id]: {
+            ...prev?.[item_id],
+            quantity: prev?.[item_id] && prev[item_id].quantity >= 1 ? --prev[item_id].quantity : 0
+          }
+        },
+        (v) => v.quantity === 0
+      )
+    })
+  }
+
   return (
-    <main className=''>
+    <main>
       <aside className='flex gap-4'>
         <section className='flex flex-[0.7] flex-col gap-4'>
           <div className='flex flex-wrap gap-4'>
@@ -56,8 +179,10 @@ export default function Page() {
                   key={category._id}
                   onClick={() => handleTabClick(category._id)}
                   className={cn(
-                    'block min-w-[150px] cursor-pointer rounded-xl border-2 border-transparent bg-[var(--secondary-color)] px-3 py-4 shadow-2xl transition-all hover:border-[var(--primary-color)]',
-                    activeTab === category._id ? 'bg-[var(--primary-color)]' : ''
+                    'block min-h-[124px] min-w-[150px] cursor-pointer rounded-xl border-2 border-transparent bg-[var(--secondary-color)] px-3 py-4 shadow-2xl transition-all hover:border-[var(--primary-color)]',
+                    {
+                      'bg-[var(--primary-color)]': activeTab === category._id
+                    }
                   )}
                 >
                   <section>
@@ -78,63 +203,102 @@ export default function Page() {
           </div>
           <div className='h-[1px] bg-slate-500 leading-[0px]' />
           <div className='grid grid-cols-4 gap-3'>
-            {dishesData?.result?.menus?.map((dish: any, index: any) => (
-              <Kitchen key={index} name={dish.name} image={dish.image} price={dish.price} />
+            {dishesData?.result?.menus?.map((dish: IMenuItem, index: any) => (
+              <Kitchen
+                key={index}
+                name={dish.name}
+                image={dish.image}
+                price={dish.price}
+                onAdd={() => handleAddItem(dish)}
+                onRemove={() => handleSubtractItem(dish._id)}
+              />
             ))}
           </div>
         </section>
-        <div className='flex flex-[0.3] flex-col gap-4 rounded-xl bg-[#292C2D] p-4'>
-          <header className='flex items-start justify-between'>
-            <section className='flex flex-col text-gray-400'>
-              <h2 className='text-[20px] font-medium'>Table 01</h2>
-              <p className='text-[12px]'>Le Quang Vu</p>
-            </section>
-            <section>
-              <svg width='22' height='22' viewBox='0 0 22 22' fill='none' xmlns='http://www.w3.org/2000/svg'>
-                <path
-                  d='M3.66406 15.7736V17.8755C3.66406 17.9971 3.71235 18.1136 3.79831 18.1996C3.88426 18.2856 4.00084 18.3338 4.1224 18.3338H6.2289C6.35022 18.3338 6.46658 18.2857 6.55248 18.2L15.2131 9.53935L12.4631 6.78935L3.79881 15.45C3.7128 15.5358 3.66433 15.6521 3.66406 15.7736ZM13.598 5.6536L16.348 8.4036L17.6863 7.06526C17.8582 6.89336 17.9547 6.66025 17.9547 6.41718C17.9547 6.17411 17.8582 5.941 17.6863 5.7691L16.2334 4.31526C16.0615 4.14341 15.8284 4.04687 15.5853 4.04688C15.3422 4.04687 15.1091 4.14341 14.9372 4.31526L13.598 5.6536Z'
-                  fill='white'
-                />
-              </svg>
-            </section>
+        <div className='flex h-fit flex-[0.3] flex-col gap-4 rounded-xl bg-[#292C2D] p-4'>
+          <header className='flex flex-col gap-1'>
+            <h3 className='text-2xl font-bold'>Order</h3>
+            <DateTime />
           </header>
-
-          <aside className='flex h-[400px] flex-col items-center gap-3 overflow-x-auto overflow-y-auto'>
-            <Food />
-          </aside>
-          <footer className='flex flex-col items-center justify-between gap-4 rounded-xl bg-[#3D4142] p-4'>
-            <section className='flex w-full flex-col gap-4'>
-              <div className='flex items-center justify-between'>
-                <p>Subtotal</p>
-                <p>$116.5</p>
-              </div>
-              <div className='flex items-center justify-between'>
-                <p>Tax 5%</p>
-                <p>$116.5</p>
-              </div>
-              <div className='border-dash w-full border-[1px] border-gray-500' />
-              <footer className='flex items-center justify-between'>
-                <p>Total</p>
-                <p>$116.5</p>
-              </footer>
-            </section>
-
-            <div className='flex w-full flex-col items-center justify-center'>
-              {/* <div className='flex flex-col gap-4'>
-                <section>Payment Method</section>
-                <section className='flex items-center justify-center rounded-lg border-[1px] border-solid border-gray-300 p-4'>
-                  <svg width='94' height='94' viewBox='0 0 94 94' fill='none' xmlns='http://www.w3.org/2000/svg'>
-                    <rect x='0.304688' y='0.304688' width='92.9302' height='92.9302' fill='white' />
-                  </svg>
-                </section>
-                <section>Scan QR Code</section>
-              </div> */}
-              <button className='mt-4 flex h-12 w-full items-center justify-center rounded-xl bg-slate-700 text-center text-white'>
-                Send To Token
-              </button>
-            </div>
-          </footer>
+          <div>
+            <Label className='mb-2 block'>Table</Label>
+            <Select
+              value={tableNumber}
+              onValueChange={(table) => {
+                setTableNumber(table)
+              }}
+            >
+              <SelectTrigger className='h-auto w-full bg-[var(--bg-input)] py-4 focus:ring-0 focus:ring-offset-0'>
+                <SelectValue placeholder='Table' />
+              </SelectTrigger>
+              <SelectContent className='bg-[var(--bg-input)]'>
+                <ScrollArea className='h-[200px] w-full rounded-md'>
+                  <SelectGroup>
+                    {(getTablesQuery.data?.result?.tables as TTable[])?.map((table) => {
+                      return table.status === TableStatus.Empty ||
+                        getOrderByIdQuery.data?.result?.orders[0]?.table_number === table.table_number ? (
+                        <SelectItem
+                          key={table._id}
+                          className='h-auto py-3 focus:bg-[var(--secondary-color)]'
+                          value={table.table_number.toString()}
+                        >
+                          Table {table.table_number}
+                        </SelectItem>
+                      ) : null
+                    })}
+                  </SelectGroup>
+                </ScrollArea>
+              </SelectContent>
+            </Select>
           </div>
+          <ScrollArea className='h-96'>
+            {Object.values(orderItems).length === 0 && (
+              <div className='flex h-full items-center justify-center'>Add dishes now!</div>
+            )}
+            <div className='space-y-2 overflow-x-hidden px-4'>
+              {Object.entries(orderItems).map(([_id, { item_name, item_price, quantity }], index) => (
+                <div key={_id} className='flex items-center justify-between rounded-md bg-[#3D414266] px-4 py-3'>
+                  <div className='flex flex-1 items-center gap-3'>
+                    <div className='flex h-8 w-8 items-center justify-center rounded-full bg-[#EA7C69]'>
+                      <span>{index}</span>
+                    </div>
+                    <div className='truncate'>{item_name}</div>
+                  </div>
+                  <div className='flex w-16 items-center justify-center'>
+                    <span className='opacity-70'>x{quantity}</span>
+                  </div>
+                  <div className='flex w-28 items-center justify-between'>
+                    <div className='flex-1 text-right'>{item_price * quantity}</div>
+                    <button
+                      onClick={() => {
+                        handleDeleteItem(_id)
+                      }}
+                      className='ml-2 text-red-500 hover:text-red-700'
+                    >
+                      <X />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </ScrollArea>
+          <div className='flex flex-col gap-3 rounded-md bg-[#3D414266] p-4'>
+            <section className='flex items-center justify-between'>
+              <div>Total</div>
+              <div className='text-xl font-bold'>
+                {price}
+                VND
+              </div>
+            </section>
+            <Button
+              onClick={handleSubmit}
+              className='bg-[#EA7C69] text-[16px] font-medium text-white'
+              disabled={Object.keys(orderItems).length === 0 || !tableNumber}
+            >
+              Complete
+            </Button>
+          </div>
+        </div>
       </aside>
     </main>
   )
