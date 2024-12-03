@@ -1,4 +1,4 @@
-import { sendDelete, sendGet, sendPost } from '~/api/request'
+import { sendDelete, sendGet, sendPost, sendPut } from '~/api/request'
 import { identity, pickBy } from 'lodash'
 const menuServices = {
   getDishes: ({
@@ -25,11 +25,19 @@ const menuServices = {
       )
     )
   },
+  updateMenuItem: ({ id, body }: { id: string; body: FormData }) => {
+    return sendPut(`/menu/${id}`, body)
+  },
   deleteDish: (id: string) => {
     return sendDelete(`/menu/${id}`)
   },
   addMenuItem: (body: FormData) => {
     return sendPost('/menu', body)
+  },
+  getDishDetail: (id: string) => {
+    return sendGet(`/menu`, {
+      id: id
+    })
   }
 }
 

@@ -1,12 +1,21 @@
+import { TagType } from '~/definitions/constant/types.constant'
+
 export interface IMenuItem {
   _id: string
   name: string
   description: string
   price: number
+  tag: TagType[]
   category_id: string
-  category_name: string
   stock: number
   image: string
+  ingredients: {
+    quantity: number
+    _id: string
+  }[]
   created_at: number
   updated_at: number
+  status: number
+  quantity_sold: number
+  category_name: string
 }

@@ -1,4 +1,5 @@
 import { ObjectId } from 'mongodb'
+import { menuItemStatus } from '~/constants/enums'
 import databaseService from '~/services/database.services'
 
 class CategoryService {
@@ -30,7 +31,7 @@ class CategoryService {
         throw new Error('Invalid ID format') // Báo lỗi nếu id không hợp lệ
       }
     }
-
+  
     pipeline.push(
       {
         $lookup: {
@@ -46,7 +47,12 @@ class CategoryService {
             $filter: {
               input: '$products',
               as: 'product',
-              cond: { $eq: ['$$product.category_id', '$_id'] }
+              cond: {
+                $and: [
+                  { $eq: ['$$product.category_id', '$_id'] },
+                  { $eq: ['$$product.status', 0] } // Điều kiện status = 0
+                ]
+              }
             }
           }
         }
@@ -60,16 +66,17 @@ class CategoryService {
         }
       }
     )
-
+  
     const categories = await databaseService.categories.aggregate(pipeline).toArray()
-
+  
     // Tính tổng số lượng
     const total = id
       ? categories.length // Nếu có id, chỉ tính số kết quả tìm được
       : await databaseService.categories.countDocuments()
-
+  
     return { categories, total }
   }
+  
 
   // async getAllCategories(id?: string) {
   //   if (id) {

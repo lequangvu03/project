@@ -42,3 +42,24 @@ export const useAddMenuItemMutation = () => {
     }
   })
 }
+
+export const useUpdateMenuItemMutation = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: menuServices.addMenuItem,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['DISHES']
+      })
+    }
+  })
+}
+
+export const useGetMenuItemDetailQuery = (params: { id?: string; enabled?: boolean }) => {
+  return useQuery({
+    queryKey: ['DISHE_DETAILS', params?.id],
+    queryFn: () => menuServices.getDishDetail(params?.id as string),
+    enabled: params?.enabled
+  })
+}
