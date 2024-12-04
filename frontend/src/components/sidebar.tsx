@@ -4,9 +4,11 @@ import usePermissions from '~/hooks/usePermissions'
 import { adminRoutes, employeeRoutes } from '~/routers'
 import ButtonLogout from './button-logout'
 import SidebarOption from './side-option'
+import useAuthStore from '~/stores/auth.store'
 
 export default function Sidebar() {
   const { isAdmin } = usePermissions()
+  const { permissions } = useAuthStore()
   const routes = isAdmin ? adminRoutes : employeeRoutes
 
   return (
@@ -36,12 +38,14 @@ export default function Sidebar() {
         <section className='flex-1 items-start'>
           {routes.map(function (publicRoute, index: number) {
             return (
-              <SidebarOption
-                key={index}
-                image={publicRoute.image}
-                name={publicRoute.name}
-                redirect={publicRoute.redirect}
-              />
+              permissions.includes(publicRoute.key) && (
+                <SidebarOption
+                  key={index}
+                  image={publicRoute.image}
+                  name={publicRoute.name}
+                  redirect={publicRoute.redirect}
+                />
+              )
             )
           })}
         </section>
