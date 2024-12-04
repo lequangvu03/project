@@ -15,3 +15,12 @@ export const AuthSchema = z.object({
 })
 
 export type TLoginForm = z.infer<typeof AuthSchema>
+
+export const AuthForgotSchema = z.object({
+  email: z
+    .string()
+    .min(1, 'Email is required!')
+    .regex(/^\w+([\\.-]?\w+)*@\w+([\\.-]?\w+)*(\.\w{2,3})+$/, 'Email is not valid!')
+})
+
+export type TForgotForm = z.infer<typeof AuthForgotSchema>

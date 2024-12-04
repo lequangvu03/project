@@ -221,7 +221,7 @@ export default function DashboardPage() {
           <div className='flex flex-col gap-4 rounded-xl bg-[var(--secondary-color)] p-6'>
             <header className='flex items-center justify-between'>
               <h3 className='text-[20px] font-medium leading-[36px] text-white'>Popular Dishes</h3>
-              <Link className='text-[16px] font-normal leading-6 text-[#EA7C69] underline' href={'/'}>
+              <Link className='text-[16px] font-normal leading-6 text-[#EA7C69] underline' href={'/admin/menu'}>
                 See All
               </Link>
             </header>
@@ -261,7 +261,7 @@ export default function DashboardPage() {
           <div className='flex flex-col gap-4 rounded-xl bg-[var(--secondary-color)] p-6'>
             <header className='flex items-center justify-between'>
               <h3 className='text-[20px] font-medium leading-[36px] text-white'>Recent Order</h3>
-              <Link className='text-[16px] font-normal leading-6 text-[#EA7C69] underline' href={'/'}>
+              <Link className='text-[16px] font-normal leading-6 text-[#EA7C69] underline' href={'/admin/order'}>
                 See All
               </Link>
             </header>
