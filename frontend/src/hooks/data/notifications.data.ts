@@ -11,7 +11,7 @@ export const useGetNotificationAllQuery = function ({
   status: number
 }) {
   return useQuery({
-    queryKey: ['NOTIFICATIONS', page, status],
+    queryKey: ['NOTIFICATIONS', page, status, limit],
     queryFn: function () {
       return notificationsService.getNotifications({ limit: limit, page: page, status: status })
     }

@@ -3,6 +3,7 @@ import { TableStatus, UserVerifyStatus } from '~/constants/enums'
 import User from '~/models/schemas/user.schema'
 import databaseService from '~/services/database.services'
 import cloudinary from '~/utils/cloudinary'
+import { hashPassword } from '~/utils/crypto'
 
 class UserService {
   async checkExistUserById(id: string) {
@@ -19,7 +20,7 @@ class UserService {
     return user
   }
   async addProfile({ name, email, password, role }: { name: string; email: string; password: string; role: number }) {
-    const user = new User({ name, email, password, role, verify: UserVerifyStatus.Verified })
+    const user = new User({ name, email, password: hashPassword(password), role, verify: UserVerifyStatus.Verified })
     const result = await databaseService.users.insertOne(user)
     return result
   }

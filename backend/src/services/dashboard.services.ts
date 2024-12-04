@@ -2,7 +2,7 @@ import { RoleType, TableStatus } from '~/constants/enums'
 import databaseService from '~/services/database.services'
 
 class DashboardService {
-  async getDashboardOverview() {
+  async getDashboardOverview({ month, day, week }: { month?: number; day?: number; week?: number }) {
     const today = new Date()
     const startOfDay = new Date(today.setHours(0, 0, 0, 0)).getTime()
     const endOfDay = new Date(today.setHours(23, 59, 59, 999)).getTime()
@@ -62,31 +62,66 @@ class DashboardService {
     // Lấy danh sách order gần đây
     const recentOrders = await databaseService.orders.find({}).sort({ created_at: -1 }).limit(10).toArray()
 
-    // Dữ liệu biểu đồ 7 tháng gần nhất
-    const todayYear = today.getFullYear()
-    const todayMonth = today.getMonth()
+    // Tính dữ liệu biểu đồ theo tham số truyền vào
+    let timeUnits = 7 // Mặc định 7 tháng
+    let interval = 'month' // Mặc định là tháng
 
-    const lastSevenMonthsData = Array.from({ length: 7 }, (_, i) => {
-      const date = new Date(todayYear, todayMonth - (6 - i), 1) // Lùi tháng
-      return {
-        startOfMonth: date.getTime(),
-        endOfMonth: new Date(date.getFullYear(), date.getMonth() + 1, 0, 23, 59, 59, 999).getTime(),
-        month: date.toLocaleString('en-US', { month: 'long', year: 'numeric' }) // VD: "May 2024"
+    if (month) {
+      timeUnits = month
+      interval = 'month'
+    } else if (week) {
+      timeUnits = week
+      interval = 'week'
+    } else if (day) {
+      timeUnits = day
+      interval = 'day'
+    }
+
+    const lastPeriodsData = Array.from({ length: timeUnits }, (_, i) => {
+      const date = new Date(today)
+      if (interval === 'month') {
+        date.setMonth(date.getMonth() - (timeUnits - i - 1))
+        return {
+          start: new Date(date.getFullYear(), date.getMonth(), 1).getTime(),
+          end: new Date(date.getFullYear(), date.getMonth() + 1, 0, 23, 59, 59, 999).getTime(),
+          label: date.toLocaleString('en-US', { month: 'long', year: 'numeric' }) // VD: "May 2024"
+        }
+      } else if (interval === 'week') {
+        const startOfWeek = new Date(date.setDate(date.getDate() - 7 * (timeUnits - i - 1)))
+        startOfWeek.setHours(0, 0, 0, 0)
+        const endOfWeek = new Date(startOfWeek)
+        endOfWeek.setDate(endOfWeek.getDate() + 6)
+        endOfWeek.setHours(23, 59, 59, 999)
+        return {
+          start: startOfWeek.getTime(),
+          end: endOfWeek.getTime(),
+          label: `Week ${i + 1}`
+        }
+      } else {
+        const specificDay = new Date(date.setDate(date.getDate() - (timeUnits - i - 1)))
+        specificDay.setHours(0, 0, 0, 0)
+        const endOfSpecificDay = new Date(specificDay)
+        endOfSpecificDay.setHours(23, 59, 59, 999)
+        return {
+          start: specificDay.getTime(),
+          end: endOfSpecificDay.getTime(),
+          label: specificDay.toLocaleDateString()
+        }
       }
     })
 
     const chartData = []
-    for (const { startOfMonth, endOfMonth, month } of lastSevenMonthsData) {
+    for (const { start, end, label } of lastPeriodsData) {
       const revenue = await databaseService.orders
         .aggregate([
-          { $match: { order_time: { $gte: startOfMonth, $lte: endOfMonth } } },
+          { $match: { order_time: { $gte: start, $lte: end } } },
           { $group: { _id: null, total: { $sum: '$total_price' } } }
         ])
         .toArray()
 
       const ingredientCost = await databaseService.inboundOrders
         .aggregate([
-          { $match: { created_at: { $gte: startOfMonth, $lte: endOfMonth } } },
+          { $match: { created_at: { $gte: start, $lte: end } } },
           { $group: { _id: null, total: { $sum: '$total_price' } } }
         ])
         .toArray()
@@ -97,7 +132,7 @@ class DashboardService {
             $match: {
               role: { $in: [RoleType.Employee] },
               position: { $exists: true },
-              created_at: { $lte: endOfMonth } // Chỉ tính nhân viên được tạo trước hoặc trong tháng
+              created_at: { $lte: end }
             }
           },
           { $group: { _id: null, total: { $sum: '$salary' } } }
@@ -109,7 +144,7 @@ class DashboardService {
       const totalSalaryCost = salaryCost[0]?.total || 0
       const profit = totalRevenue - (totalIngredientCost + totalSalaryCost)
 
-      chartData.push({ month, revenue: totalRevenue, profit })
+      chartData.push({ label, revenue: totalRevenue, profit })
     }
 
     return {
@@ -130,7 +165,7 @@ class DashboardService {
         total_price: order.total_price,
         created_at: order.created_at
       })),
-      chart_data: chartData // Dữ liệu biểu đồ 7 tháng gần nhất
+      chart_data: chartData // Dữ liệu biểu đồ dựa trên tham số truyền vào
     }
   }
 }

@@ -17,10 +17,10 @@ export enum OrderStatus {
 
 export enum PermissionType {
   Dashboard,
-  Reports,
+  Menu,
+  Staff,
   Inventory,
-  Orders,
-  Customers,
+  Order,
   Settings
 }
 
