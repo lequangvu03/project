@@ -63,10 +63,10 @@ export enum ChangeType {
 }
 export enum permissionType {
   Dashboard,
-  Reposts,
+  Menu,
+  Staff,
   Inventory,
-  Orders,
-  Customers,
+  Order,
   Settings
 }
 export enum TagType {

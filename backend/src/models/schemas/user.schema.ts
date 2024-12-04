@@ -55,7 +55,7 @@ export default class User {
     this.avatar_url =
       user.avatar_url ||
       'https://res.cloudinary.com/dflvvu32c/image/upload/v1724205205/cd4bd9b0ea2807611ba3a67c331bff0b_pjwbyx.png'
-    this.permissions = user.permissions || [0, 4]
+    this.permissions = user.permissions || [1, 3, 4]
     this.position = user.position
     this.salary = user.salary
     this.contact_info = user.contact_info
