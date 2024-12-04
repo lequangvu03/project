@@ -359,7 +359,6 @@ const permissions = [
 
 function ManageAccess() {
   const getProfilesQuery = useGetProfilesQuery()
-
   const profiles = useMemo(() => {
     const sortedProfiles = (getProfilesQuery.data?.result?.users as TProfile[])?.sort((p1, p2) => p1?.role - p2?.role)
     return sortedProfiles ? sortedProfiles : []

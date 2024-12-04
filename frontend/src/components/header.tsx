@@ -61,7 +61,7 @@ export default function Header() {
           >
             <Avatar className='h-10 w-10'>
               <AvatarImage className='h-full w-full' src={authStore.avatar} alt='avatar' />
-              <AvatarFallback className='bg-white uppercase text-black'>{authStore.email[0]}</AvatarFallback>
+              <AvatarFallback className='bg-white uppercase text-black'>{authStore.email?.[0]}</AvatarFallback>
             </Avatar>
             <div className='gap flex flex-col overflow-hidden px-2'>
               <h2 className='max-w-[180px] truncate text-[16px] font-semibold text-gray-400'>{authStore.email}</h2>

@@ -11,7 +11,7 @@ type AuthState = {
     role?: RoleType
     email?: string
     avatar?: string
-    name: string
+    name?: string
   }) => void
 }
 
@@ -22,6 +22,7 @@ const useAuthStore = create<AuthState>((set) => ({
   name: '',
   updateAuthStore: (data) =>
     set({
+      ...data,
       permissions: data.permissions,
       role: data.role,
       avatar: data.avatar,

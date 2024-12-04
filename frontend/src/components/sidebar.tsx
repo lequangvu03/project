@@ -1,15 +1,12 @@
 'use client'
 
-import usePermissions from '~/hooks/usePermissions'
-import { adminRoutes, employeeRoutes } from '~/routers'
+import { adminRoutes } from '~/routers'
+import useAuthStore from '~/stores/auth.store'
 import ButtonLogout from './button-logout'
 import SidebarOption from './side-option'
-import useAuthStore from '~/stores/auth.store'
 
 export default function Sidebar() {
-  const { isAdmin } = usePermissions()
   const { permissions } = useAuthStore()
-  const routes = isAdmin ? adminRoutes : employeeRoutes
 
   return (
     <main className='sticky bottom-0 left-0 top-0 z-10 h-screen min-w-[110px] overflow-y-auto overflow-x-hidden rounded-br-[30px] rounded-tr-[30px] bg-[var(--secondary-color)] shadow-border'>
@@ -36,7 +33,7 @@ export default function Sidebar() {
           </svg>
         </section>
         <section className='flex-1 items-start'>
-          {routes.map(function (publicRoute, index: number) {
+          {adminRoutes.map(function (publicRoute, index: number) {
             return (
               permissions.includes(publicRoute.key) && (
                 <SidebarOption

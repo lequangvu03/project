@@ -231,7 +231,7 @@ export default function Page() {
           </div>
           <ScrollArea className='h-96'>
             {Object.values(orderItems).length === 0 && (
-              <div className='flex h-full items-center justify-center'>Add dishes now!</div>
+              <div className='flex h-full items-center justify-center'>Add inventory now!</div>
             )}
             <div className='space-y-2 overflow-x-hidden px-4'>
               {Object.values(orderItems)
