@@ -208,7 +208,7 @@ export default function Page({ params: { id } }: Props) {
                 key={index}
                 name={dish.name}
                 image={dish.image}
-                price={dish.price}
+                price={dish.price.toString()}
                 onAdd={() => handleAddItem(dish)}
                 onRemove={() => handleSubtractItem(dish._id)}
               />
