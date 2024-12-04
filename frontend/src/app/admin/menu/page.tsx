@@ -37,6 +37,7 @@ import {
 } from '~/components/ui/select'
 import { Ingredient, TCategory } from '~/definitions/types'
 import { useGetAllIngredientsQuery } from '~/hooks/data/ingredients.data'
+import usePermissions from '~/hooks/usePermissions'
 
 const Categories = dynamic(() => import('~/components/categories'), {
   loading: () => (
@@ -61,6 +62,7 @@ export default function Page() {
   const addMenuItemMutation = useAddMenuItemMutation()
   const getIngredientsQuery = useGetAllIngredientsQuery()
   const [preview, setPreview] = useState<string | null>(null)
+  const { isAdmin } = usePermissions()
   const [ingredients, setIngredients] = useState<
     Record<
       string,
@@ -208,39 +210,41 @@ export default function Page() {
       <div className='h-[1px] w-full bg-slate-700 leading-[0px]' />
       <section className='flex items-center justify-between'>
         <h2 className='text-[20px] font-semibold text-white'>Categories</h2>
-        <CustomSheet
-          isConfirmationRequired={categoryForm.formState.isDirty}
-          title='New category'
-          render={
-            <div className='h-full space-y-5 py-9'>
-              <Form {...categoryForm}>
-                <FormField
-                  control={categoryForm.control}
-                  name='name'
-                  render={({ field }) => <CustomInput required field={field} label='Name' />}
-                />
+        {isAdmin && (
+          <CustomSheet
+            isConfirmationRequired={categoryForm.formState.isDirty}
+            title='New category'
+            render={
+              <div className='h-full space-y-5 py-9'>
+                <Form {...categoryForm}>
+                  <FormField
+                    control={categoryForm.control}
+                    name='name'
+                    render={({ field }) => <CustomInput required field={field} label='Name' />}
+                  />
 
-                <FormField
-                  control={categoryForm.control}
-                  name='description'
-                  render={({ field }) => <CustomInput label='Description' field={field} />}
-                />
-                <div className='!mt-9 flex items-center justify-end gap-5'>
-                  <Button
-                    onClick={handleAddCategory}
-                    className='h-auto bg-[var(--primary-color)] px-12 py-3 text-base text-white transition-all hover:bg-[var(--primary-color)] hover:shadow-md hover:shadow-[var(--primary-color)]'
-                  >
-                    Add
-                  </Button>
-                </div>
-              </Form>
-            </div>
-          }
-        >
-          <Button className='bg-[#EA7C69] text-white transition-all hover:bg-[#EA7C69] hover:opacity-90'>
-            New category
-          </Button>
-        </CustomSheet>
+                  <FormField
+                    control={categoryForm.control}
+                    name='description'
+                    render={({ field }) => <CustomInput label='Description' field={field} />}
+                  />
+                  <div className='!mt-9 flex items-center justify-end gap-5'>
+                    <Button
+                      onClick={handleAddCategory}
+                      className='h-auto bg-[var(--primary-color)] px-12 py-3 text-base text-white transition-all hover:bg-[var(--primary-color)] hover:shadow-md hover:shadow-[var(--primary-color)]'
+                    >
+                      Add
+                    </Button>
+                  </div>
+                </Form>
+              </div>
+            }
+          >
+            <Button className='bg-[#EA7C69] text-white transition-all hover:bg-[#EA7C69] hover:opacity-90'>
+              New category
+            </Button>
+          </CustomSheet>
+        )}
       </section>
       <Categories />
       <h2 className='mt-4 text-[20px] font-medium text-white'>Special menu all items</h2>
@@ -274,196 +278,198 @@ export default function Page() {
             </Tabs>
           </div>
 
-          <CustomSheet
-            onConfirm={() => {
-              menuItemForm.reset()
-            }}
-            isConfirmationRequired={menuItemForm.formState.isDirty}
-            title='New category'
-            render={
-              <>
-                <div className='flex w-full justify-center'>
-                  <div
-                    className='relative mt-8 h-fit w-fit rounded-lg transition-all hover:opacity-85'
-                    onClick={openFileDialog}
-                  >
-                    <Avatar className='relative h-[140px] w-[140px]'>
-                      <AvatarImage src={preview as any} alt='avatar' />
-                      <AvatarFallback className='uppercase text-black'>{'A'}</AvatarFallback>
-                    </Avatar>
-                    <button className='absolute bottom-0 right-5 z-10'>
-                      <Image className='size-5' />
-                      <input
-                        onChange={(e) => {
-                          const file = e.target.files?.[0]
-                          if (file) {
-                            menuItemForm.setValue('image', file, {
+          {isAdmin && (
+            <CustomSheet
+              onConfirm={() => {
+                menuItemForm.reset()
+              }}
+              isConfirmationRequired={menuItemForm.formState.isDirty}
+              title='New menu item'
+              render={
+                <>
+                  <div className='flex w-full justify-center'>
+                    <div
+                      className='relative mt-8 h-fit w-fit rounded-lg transition-all hover:opacity-85'
+                      onClick={openFileDialog}
+                    >
+                      <Avatar className='relative h-[140px] w-[140px]'>
+                        <AvatarImage src={preview as any} alt='avatar' />
+                        <AvatarFallback className='uppercase text-black'>{'A'}</AvatarFallback>
+                      </Avatar>
+                      <button className='absolute bottom-0 right-5 z-10'>
+                        <Image className='size-5' />
+                        <input
+                          onChange={(e) => {
+                            const file = e.target.files?.[0]
+                            if (file) {
+                              menuItemForm.setValue('image', file, {
+                                shouldDirty: true
+                              })
+                            }
+                          }}
+                          ref={ref}
+                          type='file'
+                          accept='image/*'
+                          hidden
+                        />
+                      </button>
+                    </div>
+                  </div>
+                  <div className='space-y-5'>
+                    <Form {...menuItemForm} key={'form-add-menu'}>
+                      <FormField
+                        control={menuItemForm.control}
+                        name='name'
+                        render={({ field }) => <CustomInput field={field} label='Name' />}
+                      />
+                      <FormField
+                        control={menuItemForm.control}
+                        name='description'
+                        render={({ field }) => <CustomInput label='Description' field={field} />}
+                      />
+                      <FormField
+                        control={menuItemForm.control}
+                        name='price'
+                        render={({ field }) => <CustomInput label='Price' type='number' min={0} field={field} />}
+                      />
+                      <div>
+                        <Label className='mb-2 block'>Category</Label>
+                        <Select
+                          value={menuItemForm.watch('category_id')}
+                          onValueChange={(id) => {
+                            menuItemForm.setValue('category_id', id, {
                               shouldDirty: true
                             })
-                          }
-                        }}
-                        ref={ref}
-                        type='file'
-                        accept='image/*'
-                        hidden
-                      />
-                    </button>
-                  </div>
-                </div>
-                <div className='space-y-5'>
-                  <Form {...menuItemForm} key={'form-add-menu'}>
-                    <FormField
-                      control={menuItemForm.control}
-                      name='name'
-                      render={({ field }) => <CustomInput field={field} label='Name' />}
-                    />
-                    <FormField
-                      control={menuItemForm.control}
-                      name='description'
-                      render={({ field }) => <CustomInput label='Description' field={field} />}
-                    />
-                    <FormField
-                      control={menuItemForm.control}
-                      name='price'
-                      render={({ field }) => <CustomInput label='Price' type='number' min={0} field={field} />}
-                    />
-                    <div>
-                      <Label className='mb-2 block'>Category</Label>
-                      <Select
-                        value={menuItemForm.watch('category_id')}
-                        onValueChange={(id) => {
-                          menuItemForm.setValue('category_id', id, {
-                            shouldDirty: true
-                          })
-                        }}
-                      >
-                        <SelectTrigger className='h-auto w-full bg-[var(--bg-input)] py-4 focus:ring-0 focus:ring-offset-0'>
-                          <SelectValue placeholder='Category' />
-                        </SelectTrigger>
-                        <SelectContent className='bg-[var(--bg-input)]'>
-                          <ScrollArea className='h-[200px] w-full rounded-md'>
-                            <SelectGroup>
-                              <SelectLabel className='flex items-center gap-2'>Category</SelectLabel>
-                              {(getCategoriesQuery.data?.result?.categories as TCategory[])?.map((category) => {
+                          }}
+                        >
+                          <SelectTrigger className='h-auto w-full bg-[var(--bg-input)] py-4 focus:ring-0 focus:ring-offset-0'>
+                            <SelectValue placeholder='Category' />
+                          </SelectTrigger>
+                          <SelectContent className='bg-[var(--bg-input)]'>
+                            <ScrollArea className='h-[200px] w-full rounded-md'>
+                              <SelectGroup>
+                                <SelectLabel className='flex items-center gap-2'>Category</SelectLabel>
+                                {(getCategoriesQuery.data?.result?.categories as TCategory[])?.map((category) => {
+                                  return (
+                                    <SelectItem
+                                      key={category._id}
+                                      className='h-auto py-3 focus:bg-[var(--secondary-color)]'
+                                      value={category._id}
+                                    >
+                                      {category.name}
+                                    </SelectItem>
+                                  )
+                                })}
+                              </SelectGroup>
+                            </ScrollArea>
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      <div>
+                        <Label className='mb-2 block'>Ingredients</Label>
+                        <Tippy
+                          hideOnClick={false}
+                          offset={[0, 0]}
+                          interactive
+                          placement='bottom-start'
+                          render={(attrs) => (
+                            <div className='w-[340px]' tabIndex={-1} {...attrs}>
+                              <Command className='w-full rounded-lg border bg-[var(--bg-input)] text-white shadow-md'>
+                                <CommandInput placeholder='Search...' />
+                                <CommandList>
+                                  <CommandEmpty>No results found.</CommandEmpty>
+                                  <ScrollArea className='h-[160px] w-full rounded-md bg-[var(--bg-input)]'>
+                                    <CommandGroup>
+                                      {(getIngredientsQuery.data?.result as Ingredient[])?.map((ingre) => {
+                                        const params = { _id: ingre._id, name: ingre.name, unit: ingre.unit }
+                                        return (
+                                          <CommandItem
+                                            onClick={() => console.log(ingre)}
+                                            key={ingre._id}
+                                            className='group flex h-auto w-full items-center justify-between py-3 data-[selected=true]:bg-[var(--secondary-color)]'
+                                          >
+                                            <span>
+                                              {ingre.name} ({ingre.unit})
+                                            </span>
+                                            <div className='flex items-center gap-1'>
+                                              <span
+                                                className='block rounded-full bg-[var(--bg-input)] p-1 transition-all hover:opacity-80 active:opacity-80'
+                                                onClick={modifyIngregients(params, 'SUBTRACT')}
+                                              >
+                                                <Minus className='h-4 w-4' />
+                                              </span>
+                                              <Input
+                                                onChange={modifyIngregients(params, 'MANUAL')}
+                                                value={ingredients[ingre._id]?.quantity || 0}
+                                                min={0}
+                                                type='number'
+                                                max={100}
+                                                className='min-w-[40px] bg-[var(--secondary-color)] text-center ring-0 ring-offset-0 group-data-[selected=true]:bg-[var(--bg-input)]'
+                                              />
+                                              <span
+                                                className='block rounded-full bg-[var(--bg-input)] p-1 transition-all hover:opacity-80 active:opacity-80'
+                                                onClick={modifyIngregients(params, 'ADD')}
+                                              >
+                                                <Plus className='h-4 w-4' />
+                                              </span>
+                                            </div>
+                                          </CommandItem>
+                                        )
+                                      })}
+                                    </CommandGroup>
+                                  </ScrollArea>
+                                </CommandList>
+                              </Command>
+                            </div>
+                          )}
+                        >
+                          <ScrollArea className='h-[120px] min-h-[54px] w-full rounded-md bg-[var(--bg-input)] p-4'>
+                            <div className='flex flex-wrap gap-2'>
+                              {Object.entries(ingredients).map(([_id, { name, quantity, unit }]) => {
                                 return (
-                                  <SelectItem
-                                    key={category._id}
-                                    className='h-auto py-3 focus:bg-[var(--secondary-color)]'
-                                    value={category._id}
+                                  <div
+                                    key={_id}
+                                    className='flex w-fit items-center gap-4 rounded-md bg-[var(--secondary-color)] px-4 py-2'
                                   >
-                                    {category.name}
-                                  </SelectItem>
+                                    <div className='flex items-center gap-1'>
+                                      <span className='max-w-[120px] truncate'>{name}</span>
+                                      <span className='rounded-sm bg-[var(--primary-color)] px-2'>{quantity}</span>
+                                      <span>{unit}</span>
+                                    </div>
+                                    <span
+                                      className='block rounded-full bg-[var(--bg-input)] p-1 transition-all hover:opacity-80 active:opacity-80'
+                                      onClick={modifyIngregients({ _id, name, unit }, 'REMOVE')}
+                                    >
+                                      <X className='h-4 w-4' />
+                                    </span>
+                                  </div>
                                 )
                               })}
-                            </SelectGroup>
+                            </div>
                           </ScrollArea>
-                        </SelectContent>
-                      </Select>
-                    </div>
+                        </Tippy>
+                      </div>
 
-                    <div>
-                      <Label className='mb-2 block'>Ingredients</Label>
-                      <Tippy
-                        hideOnClick={false}
-                        offset={[0, 0]}
-                        interactive
-                        placement='bottom-start'
-                        render={(attrs) => (
-                          <div className='w-[340px]' tabIndex={-1} {...attrs}>
-                            <Command className='w-full rounded-lg border bg-[var(--bg-input)] text-white shadow-md'>
-                              <CommandInput placeholder='Search...' />
-                              <CommandList>
-                                <CommandEmpty>No results found.</CommandEmpty>
-                                <ScrollArea className='h-[160px] w-full rounded-md bg-[var(--bg-input)]'>
-                                  <CommandGroup>
-                                    {(getIngredientsQuery.data?.result as Ingredient[])?.map((ingre) => {
-                                      const params = { _id: ingre._id, name: ingre.name, unit: ingre.unit }
-                                      return (
-                                        <CommandItem
-                                          onClick={() => console.log(ingre)}
-                                          key={ingre._id}
-                                          className='group flex h-auto w-full items-center justify-between py-3 data-[selected=true]:bg-[var(--secondary-color)]'
-                                        >
-                                          <span>
-                                            {ingre.name} ({ingre.unit})
-                                          </span>
-                                          <div className='flex items-center gap-1'>
-                                            <span
-                                              className='block rounded-full bg-[var(--bg-input)] p-1 transition-all hover:opacity-80 active:opacity-80'
-                                              onClick={modifyIngregients(params, 'SUBTRACT')}
-                                            >
-                                              <Minus className='h-4 w-4' />
-                                            </span>
-                                            <Input
-                                              onChange={modifyIngregients(params, 'MANUAL')}
-                                              value={ingredients[ingre._id]?.quantity || 0}
-                                              min={0}
-                                              type='number'
-                                              max={100}
-                                              className='min-w-[40px] bg-[var(--secondary-color)] text-center ring-0 ring-offset-0 group-data-[selected=true]:bg-[var(--bg-input)]'
-                                            />
-                                            <span
-                                              className='block rounded-full bg-[var(--bg-input)] p-1 transition-all hover:opacity-80 active:opacity-80'
-                                              onClick={modifyIngregients(params, 'ADD')}
-                                            >
-                                              <Plus className='h-4 w-4' />
-                                            </span>
-                                          </div>
-                                        </CommandItem>
-                                      )
-                                    })}
-                                  </CommandGroup>
-                                </ScrollArea>
-                              </CommandList>
-                            </Command>
-                          </div>
-                        )}
-                      >
-                        <ScrollArea className='h-[120px] min-h-[54px] w-full rounded-md bg-[var(--bg-input)] p-4'>
-                          <div className='flex flex-wrap gap-2'>
-                            {Object.entries(ingredients).map(([_id, { name, quantity, unit }]) => {
-                              return (
-                                <div
-                                  key={_id}
-                                  className='flex w-fit items-center gap-4 rounded-md bg-[var(--secondary-color)] px-4 py-2'
-                                >
-                                  <div className='flex items-center gap-1'>
-                                    <span className='max-w-[120px] truncate'>{name}</span>
-                                    <span className='rounded-sm bg-[var(--primary-color)] px-2'>{quantity}</span>
-                                    <span>{unit}</span>
-                                  </div>
-                                  <span
-                                    className='block rounded-full bg-[var(--bg-input)] p-1 transition-all hover:opacity-80 active:opacity-80'
-                                    onClick={modifyIngregients({ _id, name, unit }, 'REMOVE')}
-                                  >
-                                    <X className='h-4 w-4' />
-                                  </span>
-                                </div>
-                              )
-                            })}
-                          </div>
-                        </ScrollArea>
-                      </Tippy>
-                    </div>
-
-                    <div className='!mt-9 flex items-center justify-end gap-5'>
-                      <Button
-                        disabled={!menuItemForm.formState.isDirty}
-                        onClick={handleAddMenuItem}
-                        className='h-auto bg-[var(--primary-color)] px-12 py-3 text-base text-white transition-all hover:bg-[var(--primary-color)] hover:shadow-md hover:shadow-[var(--primary-color)]'
-                      >
-                        Add
-                      </Button>
-                    </div>
-                  </Form>
-                </div>
-              </>
-            }
-          >
-            <Button className='bg-[#EA7C69] text-white transition-all hover:bg-[#EA7C69] hover:opacity-90'>
-              New item
-            </Button>
-          </CustomSheet>
+                      <div className='!mt-9 flex items-center justify-end gap-5'>
+                        <Button
+                          disabled={!menuItemForm.formState.isDirty}
+                          onClick={handleAddMenuItem}
+                          className='h-auto bg-[var(--primary-color)] px-12 py-3 text-base text-white transition-all hover:bg-[var(--primary-color)] hover:shadow-md hover:shadow-[var(--primary-color)]'
+                        >
+                          Add
+                        </Button>
+                      </div>
+                    </Form>
+                  </div>
+                </>
+              }
+            >
+              <Button className='bg-[#EA7C69] text-white transition-all hover:bg-[#EA7C69] hover:opacity-90'>
+                New item
+              </Button>
+            </CustomSheet>
+          )}
         </div>
         <div className='px-8'>
           <TableDishes />

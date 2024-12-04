@@ -336,20 +336,20 @@ const permissions = [
     key: PermissionType.Dashboard
   },
   {
-    label: 'Reports',
-    key: PermissionType.Reports
+    label: 'Staff',
+    key: PermissionType.Staff
   },
   {
     label: 'Inventory',
     key: PermissionType.Inventory
   },
   {
-    label: 'Orders',
-    key: PermissionType.Orders
+    label: 'Order',
+    key: PermissionType.Order
   },
   {
-    label: 'Customers',
-    key: PermissionType.Customers
+    label: 'Menu',
+    key: PermissionType.Menu
   },
   {
     label: 'Settings',
