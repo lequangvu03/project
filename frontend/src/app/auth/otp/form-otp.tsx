@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { signIn } from 'next-auth/react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Button } from '~/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/components/ui/card'
@@ -23,6 +23,10 @@ import CustomInput from '../../../components/custom-input'
 import { Checkbox } from '../../../components/ui/checkbox'
 import { Form, FormField } from '../../../components/ui/form'
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from '~/components/ui/input-otp'
+import { useQuery } from '@tanstack/react-query'
+import useQueryParams from '~/hooks/useQueryParams'
+import { useresetPasswordMutation, usesendVerifyOTPMutation } from '~/hooks/data/auth.data'
+import { toast } from 'sonner'
 
 type Props = {
   className?: string
@@ -30,56 +34,46 @@ type Props = {
 
 export default function FormOTP({ className, ...props }: Props) {
   const router = useRouter()
-  const form = useForm<TLoginForm>({
+  const { otp_id ,email} = useQueryParams()
+  const [otp, setOtp] = useState<string>('')
+  const { mutateAsync: sendVerifyOTP } = usesendVerifyOTPMutation()
+  const { mutateAsync: resetPassword } = useresetPasswordMutation()
+  const [isVerified, setIsVerified] = useState<boolean>(false)
+  const form = useForm({
     defaultValues: {
-      email: '',
       password: '',
-      remember: false
+      confirm_password: ''
     },
     resolver: zodResolver(AuthSchema)
   })
-
-  useEffect(() => {
-    const remember = getRememberMeFromCS()
-    if (remember) {
-      form.setValue('remember', remember)
-      const account = getAuthFromCS()
-
-      if (account) {
-        const { email, password } = account
-        form.setValue('email', email)
-        form.setValue('password', password)
-      }
+  const handleOtpChange = (value: string) => {
+    setOtp(value)
+    if (value.length === 6) {
+      // Gọi API khi OTP đủ 6 ký tự
+      sendVerifyOTP(
+        { otp_id, otp: value },
+        {
+          onSuccess: () => {
+            setIsVerified(true)
+          },
+          onError: (error: any) => {
+            handleErrorAPI({ error })
+          }
+        }
+      )
     }
-  }, [])
-
-  const onSubmit = async function (body: TLoginForm) {
+  }
+  const handleResetPassword = async (data: { password: string; confirm_password: string }) => {
     try {
-      const response = await signIn('credentials', {
-        ...body,
-        redirect: false
+      await resetPassword({
+        otp_id,
+        email: email,
+        ...data
       })
-
-      if (response?.error) {
-        throw JSON.parse(response?.error)
-      }
-      const { email, password, remember } = body
-      if (remember) {
-        setRememberMeToCS(remember)
-        setAuthToCS({
-          email,
-          password
-        })
-      } else {
-        removeRememberMeToCS()
-        removeAuthToCS()
-      }
-      router.replace('/admin/menu')
+      toast.success('Reset password successfully')
+      router.replace('/auth/login')
     } catch (error: any) {
-      handleErrorAPI({
-        error: error,
-        setError: form.setError
-      })
+      handleErrorAPI({ error }) // Xử lý lỗi nếu có
     }
   }
 
@@ -96,7 +90,7 @@ export default function FormOTP({ className, ...props }: Props) {
         <CardDescription className='text-center'>Please enter your credentials below to continue</CardDescription>
       </CardHeader>
       <CardContent className='flex items-center justify-center'>
-        <InputOTP maxLength={6}>
+        <InputOTP onChange={handleOtpChange} maxLength={6}>
           <InputOTPGroup>
             <InputOTPSlot index={0} />
             <InputOTPSlot index={1} />
@@ -110,9 +104,30 @@ export default function FormOTP({ className, ...props }: Props) {
           </InputOTPGroup>
         </InputOTP>
       </CardContent>
-      <Button className='h-auto w-full bg-[var(--primary-color)] py-3 text-xl transition-all hover:bg-[var(--primary-color)] hover:shadow-md hover:shadow-[var(--primary-color)]'>
-        Reset Password
-      </Button>
+      {isVerified && (
+        <Form {...form}>
+          <form className='mb-10 space-y-8'>
+            <FormField
+              control={form.control}
+              name='password'
+              render={({ field }) => <CustomInput label='Password' field={field} />}
+            />
+            <FormField
+              control={form.control}
+              name='confirm_password'
+              render={({ field }) => <CustomInput label='Confirm Password' type='password' field={field} />}
+            />
+          </form>
+          <Button
+            onClick={() => {
+              handleResetPassword(form.getValues())
+            }}
+            className='h-auto w-full bg-[var(--primary-color)] py-3 text-xl transition-all hover:bg-[var(--primary-color)] hover:shadow-md hover:shadow-[var(--primary-color)]'
+          >
+            Reset Password
+          </Button>
+        </Form>
+      )}
     </Card>
   )
 }

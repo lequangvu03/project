@@ -12,6 +12,8 @@ import { cn, handleErrorAPI } from '~/lib/utils'
 import { AuthForgotSchema, TForgotForm } from '~/schemaValidations/auth.schema'
 import CustomInput from '../../../components/custom-input'
 import { Form, FormField } from '../../../components/ui/form'
+import { useSendOtpMutation } from '~/hooks/data/auth.data'
+import Loading from '~/components/loading'
 
 type Props = {
   className?: string
@@ -26,9 +28,24 @@ export default function FormForgotPassword({ className, ...props }: Props) {
     resolver: zodResolver(AuthForgotSchema)
   })
 
+  const { mutate: sendOtp, isPending } = useSendOtpMutation()
   const onSubmit = async function (body: TForgotForm) {
     try {
-      router.replace('/auth/otp')
+      sendOtp(
+        { email: body.email },
+        {
+          onSuccess: (response: { message: string; result: string }) => {
+            const otpId = response.result
+            router.replace(`/auth/otp?email=${body.email}&otp_id=${otpId}`)
+          },
+          onError: (error: any) => {
+            handleErrorAPI({
+              error: error,
+              setError: form.setError
+            })
+          }
+        }
+      )
     } catch (error: any) {
       handleErrorAPI({
         error: error,
