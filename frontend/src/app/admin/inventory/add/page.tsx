@@ -89,13 +89,13 @@ export default function Page() {
     })
   }
 
-  if (ingredients?.result?.ingredients) {
+  if (ingredients?.result) {
     return (
       <div className='flex h-full justify-between gap-8'>
         <div className='flex flex-[0.65] flex-col gap-8'>
           <div className='h-[1px] w-full bg-slate-600' />
           <div className='grid grid-cols-4 gap-8'>
-            {ingredients?.result?.ingredients?.map((ingredient: Ingredient, index: number) => (
+            {ingredients?.result?.map((ingredient: Ingredient, index: number) => (
               <Inventory
                 ingredient={ingredient}
                 key={index}
