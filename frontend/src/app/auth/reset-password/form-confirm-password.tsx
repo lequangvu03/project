@@ -27,7 +27,7 @@ type Props = {
   className?: string
 }
 
-export default function FormLogin({ className, ...props }: Props) {
+export default function FormConfirmPassword({ className, ...props }: Props) {
   const router = useRouter()
   const form = useForm<TLoginForm>({
     defaultValues: {
@@ -91,7 +91,7 @@ export default function FormLogin({ className, ...props }: Props) {
       {...props}
     >
       <CardHeader className='flex items-center justify-center'>
-        <CardTitle className='text-4xl'>Login</CardTitle>
+        <CardTitle className='text-4xl'>Reset Password</CardTitle>
         <CardDescription className='text-center'>Please enter your credentials below to continue</CardDescription>
       </CardHeader>
       <CardContent className='mt-6 grid gap-4'>
@@ -99,43 +99,17 @@ export default function FormLogin({ className, ...props }: Props) {
           <form method='POST' onSubmit={form.handleSubmit(onSubmit, console.log)} className='space-y-8'>
             <FormField
               control={form.control}
-              name='email'
-              render={({ field }) => <CustomInput label='Email' field={field} />}
+              name='password'
+              render={({ field }) => <CustomInput label='Password' field={field} />}
             />
             <FormField
               control={form.control}
               name='password'
-              render={({ field }) => <CustomInput label='Password' type='password' field={field} />}
+              render={({ field }) => <CustomInput label='Confirm Password' type='password' field={field} />}
             />
-            <FormField
-              control={form.control}
-              name='remember'
-              render={({ field }) => (
-                <div className='flex items-center justify-between'>
-                  <div className='flex items-center space-x-2'>
-                    <Checkbox
-                      onCheckedChange={() => field.onChange(!field.value)}
-                      checked={field.value}
-                      className='border-[var(--primary-color)] data-[state=checked]:bg-[#292C2D] data-[state=checked]:text-[var(--primary-color)]'
-                      id='remember'
-                    />
-                    <label
-                      htmlFor='remember'
-                      className='text-sm font-medium leading-none text-[var(--primary-color)] peer-disabled:cursor-not-allowed peer-disabled:opacity-70'
-                    >
-                      Remember me
-                    </label>
-                  </div>
-                  <div>
-                    <Link href={'/auth/forgot-password'} className='text-[var(--primary-color)] underline'>
-                      Forgot Password?
-                    </Link>
-                  </div>
-                </div>
-              )}
-            ></FormField>
+
             <Button className='h-auto w-full bg-[var(--primary-color)] py-3 text-xl transition-all hover:bg-[var(--primary-color)] hover:shadow-md hover:shadow-[var(--primary-color)]'>
-              Login
+              Reset Password
             </Button>
           </form>
         </Form>
