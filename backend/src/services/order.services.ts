@@ -201,7 +201,7 @@ class OrderService {
   }
 
   async deleteOrder(orderId: string) {
-    await databaseService.orders.deleteOne({ _id: new ObjectId(orderId) })
+    await databaseService.inboundOrders.deleteOne({ _id: new ObjectId(orderId) })
     return { message: 'Order deleted successfully' }
   }
 }
