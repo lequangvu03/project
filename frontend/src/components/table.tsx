@@ -113,12 +113,7 @@ export default function Table({ order }: Props) {
       <section className={'flex flex-col gap-4'}>
         <header className='flex items-center justify-between'>
           <h2 className='text-[16px] font-light leading-[24px] text-white'>SubTotal</h2>
-          <p className='text-[16px] font-light leading-[24px] text-white'>
-            $
-            {order.order_items.reduce(function (total: number, amount: OrderItem) {
-              return total + amount.quantity
-            }, 0)}
-          </p>
+          <p className='text-[16px] font-light leading-[24px] text-white'>{order?.total_price}VNĐ</p>
         </header>
         <footer className='flex items-center gap-2'>
           <Link className='flex flex-[0.25] items-center justify-center' href={'/admin/table/' + order._id}>
