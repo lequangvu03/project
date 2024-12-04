@@ -16,7 +16,7 @@ export default function Notification({ notification }: Props) {
   const handleClick = async (id: string, orderId?: string) => {
     await useReadNotification.mutateAsync(id)
     if (orderId) {
-      router.replace(`/admin/order/${orderId}`)
+      router.replace(`/admin/table/${orderId}`)
     }
   }
   return (

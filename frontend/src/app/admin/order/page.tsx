@@ -115,7 +115,7 @@ export default function OrderPage() {
             })}
           </section>
           {orders?.result?.orders?.length > 0 ? (
-            <PaginationWithLinks page={+page} pageSize={+limit} totalCount={(orders?.result?.total || 0) as number} />
+            <PaginationWithLinks page={+page} pageSize={12} totalCount={(orders?.result?.total || 0) as number} />
           ) : (
             <div className='min-h-60 w-full'>No result</div>
           )}

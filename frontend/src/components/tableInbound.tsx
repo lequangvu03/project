@@ -39,7 +39,7 @@ export default function InboundTable() {
     }
   }
   const handleEdit = async (id: string) => {
-    route.push(`/admin/inventory/add/${id}`)
+    route.push(`/admin/inventory/${id}`)
   }
   return (
     <div>

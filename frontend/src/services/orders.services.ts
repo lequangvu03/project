@@ -1,7 +1,7 @@
 import { sendDelete, sendGet, sendPost, sendPut } from '~/api/request'
 
 const ordersServices = {
-  getOrders: function ({ page = 1, limit = 9, status }: { page: number; limit?: number; status?: number }) {
+  getOrders: function ({ page = 1, limit = 12, status }: { page: number; limit?: number; status?: number }) {
     return sendGet(`/order?page=${page}&limit=${limit}&sortBy=created_at&sortOrder=asc&status=${status}`)
   },
   getOrderById: function (id: string) {

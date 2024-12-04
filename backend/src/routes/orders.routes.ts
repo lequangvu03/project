@@ -78,10 +78,4 @@ ordersRouter.put('/:id', accessTokenValidator, isAdmin, updateOrderValidator, wr
  * Response:
  * - { deleted: boolean } indicates whether the deletion was successful.
  */
-ordersRouter.delete(
-  '/:id',
-  accessTokenValidator,
-  isAdmin,
-  deleteOrderValidator,
-  wrapRequestHandler(deleteOrderController)
-)
+ordersRouter.delete('/:id', accessTokenValidator, isAdmin, wrapRequestHandler(deleteOrderController))
